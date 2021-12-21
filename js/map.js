@@ -525,27 +525,24 @@ export class MapProcessor{
 	}
 	hitboxCollision(){
 		// caso tipo box
-		let entities = this.entities;
+		let entities = this.entities.filter(elem => {
+			if(!elem.hitbox.enable) return false;
+			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert,2)) return false;
+			return true;
+		});
 		
 		// console.log(entities);
 		let counter = 0;
 		let d = Date.now();
 
 		for(let i=0; i<entities.length-1; i++){
-			let entity1 = this.entities[i];
-
-			if(!entity1.hitbox.enable) continue;
-			if(Math.pow(entity1.x - this.player.x,2) + Math.pow(entity1.y - this.player.y,2) > Math.pow(this.player.alert,2)) continue; //37675
+			let entity1 = entities[i];
 
 			for(let j=i+1; j<entities.length; j++){
 				counter++;
-				let entity2 = this.entities[j];
-
-				if(!entity2.hitbox.enable) continue;
-
+				let entity2 = entities[j];
 				
 				if(entity1 instanceof Wall && entity2 instanceof Wall) continue; // è irrilevante se 2 muri collidono
-				// if(Math.pow(entity2.x - this.player.x,2) + Math.pow(entity2.y - this.player.y,2) > Math.pow(this.player.alert,2)) continue;
 
 				let r1 = Math.pow(entity1.x-entity2.x,2) + Math.pow(entity1.y-entity2.y,2);
 				let r2 = entity1.hitbox.radius+entity2.hitbox.radius;

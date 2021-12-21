@@ -103,7 +103,7 @@ export class Player extends Entity{
 		}
 
 		
-		// this.hitbox.render(ctx);
+		this.hitbox.render(ctx);
 		return this;
 	}
 
@@ -228,7 +228,7 @@ export class Bullet extends Entity{
 	render(ctx){
 		if(this.toBeDeleted) return;
 		draw(ctx).bullet(this.x,this.y,this.angle);
-		// this.hitbox.render(ctx);
+		this.hitbox.render(ctx);
 		return this;
 	}
 
