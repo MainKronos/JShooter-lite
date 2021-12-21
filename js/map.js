@@ -23,8 +23,8 @@ export class MapProcessor{
 		this.TextMap = [
 			'W W W W W W W W W W W W W W W W W W W W',
 			'W       W                             W',
-			'W   E   W           E           E     W',
-			'W   E   W                             W',
+			'W   P   W           E           E     W',
+			'W       W                             W',
 			'W       W           E     W W W W W W W',
 			'W     W W                             W',
 			'W                   E                 W',
@@ -37,7 +37,7 @@ export class MapProcessor{
 			'W W W W W W W             W           W',
 			'W                         W           W',
 			'W               W W W W W W           W',
-			'W   P                     W           W',
+			'W                         W           W',
 			'W                                     W',
 			'W         W W W                       W',
 			'W           W                         W',
@@ -117,7 +117,7 @@ export class MapProcessor{
 			'W W W W W W W             W           W',
 			'W                         W           W',
 			'W               W W W W W W           W',
-			'W   P                     W           W',
+			'W                         W           W',
 			'W                                     W',
 			'W         W W W                       W',
 			'W           W                         W',
@@ -532,14 +532,14 @@ export class MapProcessor{
 		});
 		
 		// console.log(entities);
-		let counter = 0;
-		let d = Date.now();
+		// let counter = 0;
+		// let d = Date.now();
 
 		for(let i=0; i<entities.length-1; i++){
 			let entity1 = entities[i];
 
 			for(let j=i+1; j<entities.length; j++){
-				counter++;
+				// counter++;
 				let entity2 = entities[j];
 				
 				if(entity1 instanceof Wall && entity2 instanceof Wall) continue; // è irrilevante se 2 muri collidono
@@ -563,7 +563,7 @@ export class MapProcessor{
 				}
 			}
 		}
-		console.log(Date.now()-d, counter);
+		// console.log(Date.now()-d, counter);
 	}
 	update(dt){
 			
@@ -577,7 +577,8 @@ export class MapProcessor{
 			if(entity.toBeDeleted) this.deleteEntity(entity);
 		}
 	}
-	render(ctx, radius){
+	render(ctx){
+		
 
 		for(let entity of this.entities){
 

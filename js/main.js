@@ -40,18 +40,22 @@ class GameBoard{
 		// renderizza tutti gli elementi
 		draw(this.ctx).clear(this.canvas.width, this.canvas.height);
 
+		// draw(this.ctx).background(0,0,this.canvas.width,this.canvas.height);
+		
+
 		// gestione camera
 		this.ctx.save();
+		
 		this.ctx.translate(this.canvas.width/2,this.canvas.height/2);
 		let scale = Math.min(this.canvas.width/1000, this.canvas.height/1000);
 		scale = Math.max(scale, 0.5); // fattore scala massimo
 		this.ctx.scale(scale,scale);
 		this.ctx.translate(-this.map.player.x, -this.map.player.y); // mette il giocatore al centro della mappa
-
-		let radius = Math.max(this.canvas.width/2,this.canvas.height/2) / scale;
+		
+		
 		
 		// gestione elementi mappa
-		this.map.render(this.ctx, radius);
+		this.map.render(this.ctx);
 		this.ctx.restore();
 	}
 

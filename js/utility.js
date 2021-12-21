@@ -1,6 +1,15 @@
 export default ()=>{};
 
+
+var bg = new Image();
+bg.src = './res/pattern.png';
+// bg = ctx.createPattern(bg, 'repeat');
+
 export function draw(ctx){
+
+	// let bg = new Image();
+	// bg.src = './res/pattern.png';
+	// let bag = ctx.createPattern(bg, 'repeat');
 	
 	function human(x,y,angle){
 		const color = {
@@ -440,6 +449,15 @@ export function draw(ctx){
 
 		ctx.restore();
 	}
+	function background(x,y,width,height){		
+		ctx.save();
+		ctx.beginPath();
+		ctx.rect(0,0,width,height);
+		ctx.fillStyle = ctx.createPattern(bg, 'repeat');
+		ctx.fill();
+		ctx.stroke();
+		ctx.restore();
+	}
 	function clear(width,height,x=0,y=0){
 		// ripulisce il canvas
 		ctx.clearRect(x, y, width, height);
@@ -454,6 +472,7 @@ export function draw(ctx){
 		wall: wall,
 		healthBar: healthBar,
 		hitBox: hitBox,
+		background: background,
 		clear: clear
 	};
 }
