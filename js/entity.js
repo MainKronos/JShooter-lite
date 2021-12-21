@@ -24,25 +24,31 @@ export class Player extends Entity{
 
 		this.hitbox = new HitBox(this,83,120);
 
-		this.speed = 5;
+		this.speed = 500; // px/s
 		this.health = 100;
 
 		this.inputs = inputs;
+		this.alert = 500; // raggio di allerta dei nemici
 
-		this.timeReload = 20; // tempo di ricarica
+		this.timeReload = 1; // tempo di ricarica in secondi
 		this.reload = 0;  // tempo passato dallo sparo
 		this.knockback = 0.01; // valore di spinta
 
 	}
 
-	update(){
+	update(dt){
 		// aggiorna il giocatore
 		if (this.health<=0) return;
 
 		// this.health -= (this.health!=0);
 
-		let currentSpeed = this.speed;
-		currentSpeed /= (this.inputs.key.up != this.inputs.key.down) && (this.inputs.key.right != this.inputs.key.left) ? Math.SQRT2 : 1;
+		let distance = this.speed * dt; // distanza percorsa
+		distance /= (this.inputs.key.up != this.inputs.key.down) && (this.inputs.key.right != this.inputs.key.left) ? Math.SQRT2 : 1;
+
+		let move = { // vettore spostamento
+			x: distance*(this.inputs.key.right - this.inputs.key.left),
+			y: distance*(this.inputs.key.down - this.inputs.key.up)
+		};
 
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
@@ -51,13 +57,17 @@ export class Player extends Entity{
 					this.health -= entity.damage;
 				}
 				if(entity instanceof Player || entity instanceof Enemy || entity instanceof Bullet){
-					this.x -= (entity.x - this.x)*entity.speed*entity.knockback;
-					this.y -= (entity.y - this.y)*entity.speed*entity.knockback;
+					move.x -= (entity.x - this.x)*entity.speed*entity.knockback;
+					move.y -= (entity.y - this.y)*entity.speed*entity.knockback;
 				}
 				if(entity instanceof Wall){
 					// TODO: da sistemare perchè vibra
-					this.x -= (entity.x - this.x >= 0)? currentSpeed : -currentSpeed;
-					this.y -= (entity.y - this.y >= 0)? currentSpeed : -currentSpeed;
+					// if(Math.sign(entity.x - this.x) == Math.sign(move.x) || move.x==0) move.x = -Math.sign(entity.x - this.x);
+					// if(Math.sign(entity.y - this.y) == Math.sign(move.y) || move.y==0) move.y = -Math.sign(entity.y - this.y);
+					if(Math.sign(entity.x - this.x) == Math.sign(move.x)) move.x = 0;
+					if(Math.sign(entity.y - this.y) == Math.sign(move.y)) move.y = 0;
+					// this.x -= (entity.x - this.x >= 0)? distance : -distance;
+					// this.y -= (entity.y - this.y >= 0)? distance : -distance;
 				}
 			}
 			this.hitbox.collision = [];
@@ -65,17 +75,17 @@ export class Player extends Entity{
 
 		// aggiornamento posizione
 		
-		// this.x += currentSpeed*((this.inputs.key.right - this.inputs.key.left)*Math.cos(this.inputs.mouse.angle)-(this.inputs.key.down - this.inputs.key.up)*Math.sin(this.inputs.mouse.angle));
-		// this.y += currentSpeed*((this.inputs.key.right - this.inputs.key.left)*Math.sin(this.inputs.mouse.angle)+(this.inputs.key.down - this.inputs.key.up)*Math.cos(this.inputs.mouse.angle));
-		this.x += currentSpeed*(this.inputs.key.right - this.inputs.key.left);
-		this.y += currentSpeed*(this.inputs.key.down - this.inputs.key.up);
+		// this.x += distance*((this.inputs.key.right - this.inputs.key.left)*Math.cos(this.inputs.mouse.angle)-(this.inputs.key.down - this.inputs.key.up)*Math.sin(this.inputs.mouse.angle));
+		// this.y += distance*((this.inputs.key.right - this.inputs.key.left)*Math.sin(this.inputs.mouse.angle)+(this.inputs.key.down - this.inputs.key.up)*Math.cos(this.inputs.mouse.angle));
+		this.x += move.x;
+		this.y += move.y;
 		
 
 		//aggiornamento rotazione
 		this.angle = this.inputs.mouse.angle;
 
 		// aggiornamento ricarica
-		this.reload -= (this.reload!=0);
+		this.reload -= (this.reload>0)*dt;
 
 		if(this.health <= 0) this.hitbox = null;
 
@@ -98,7 +108,7 @@ export class Player extends Entity{
 	}
 
 	shoot(){
-		if(this.reload==0 && this.health>0){
+		if(this.reload<=0 && this.health>0){
 			// spara un colpo
 			this.reload = this.timeReload;
 			let bulletX = this.x + 140 * Math.cos(this.angle);
@@ -118,17 +128,18 @@ export class Enemy extends Entity{
 		this.angle = Math.random()*Math.PI*2;
 		this.hitbox = new HitBox(this,83,120);
 
-		this.speed = 1;
+		this.speed = 100; // px/s
 		this.health = 100;
 		this.damage = 10;
-		this.knockback = 0.1; // valore di spinta
-		this.alert = 500; // raggio di allerta
+		this.knockback = 0.01; // valore di spinta
+		
 		this.target = target; // bersaglio da attaccare
 	}
 
-	update(){
+	update(dt){
 		if (this.health <= 0) return this;
 		
+		let distance = this.speed * dt; // distanza percorsa
 
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
@@ -137,14 +148,14 @@ export class Enemy extends Entity{
 					this.health -= entity.damage;
 				}
 				if(entity instanceof Player || entity instanceof Enemy || entity instanceof Bullet){
-					this.x -= (entity.x - this.x)*entity.speed*entity.knockback;
-					this.y -= (entity.y - this.y)*entity.speed*entity.knockback;
+					this.x -= (entity.x - this.x)*entity.speed*dt*entity.knockback;
+					this.y -= (entity.y - this.y)*entity.speed*dt*entity.knockback;
 				}
 				if(entity instanceof Wall|| entity instanceof Enemy){
 					// TODO: da sistemare perchè vibra
 					// console.log(entity.x, this, this.speed);a
-					this.x -= (entity.x - this.x >= 0)? this.speed : -this.speed;
-					this.y -= (entity.y - this.y >= 0)? this.speed : -this.speed;
+					this.x -= (entity.x - this.x >= 0)? distance : -distance;
+					this.y -= (entity.y - this.y >= 0)? distance : -distance;
 				}
 			}
 			this.hitbox.collision = [];
@@ -153,9 +164,9 @@ export class Enemy extends Entity{
 		// aggiornamento posizione
 		let distX = this.target.x - this.x;
 		let distY = this.target.y - this.y;
-		if(Math.pow(distX,2)+Math.pow(distY,2)<=Math.pow(this.alert,2)){ // se si trova nel raggio di azione
-			this.x += Math.sign(distX)*this.speed;
-			this.y += Math.sign(distY)*this.speed;
+		if(Math.pow(distX,2)+Math.pow(distY,2)<=Math.pow(this.target.alert,2)){ // se si trova nel raggio di azione
+			this.x += Math.sign(distX)*distance;
+			this.y += Math.sign(distY)*distance;
 
 			//aggiornamento rotazione
 			this.angle = Math.atan2(distY,distX);
@@ -186,7 +197,7 @@ export class Enemy extends Entity{
 
 export class Bullet extends Entity{
 	// classe proiettile
-	constructor(x,y,angle=0,radius=300,speed=10){
+	constructor(x,y,angle=0,radius=300,speed=1000){
 		super(x,y);
 		this.startX = x;
 		this.startY = y;
@@ -201,13 +212,15 @@ export class Bullet extends Entity{
 		this.toBeDeleted = false; // se è da eliminare
 
 	}
-	update(){
+	update(dt){
 		if(this.toBeDeleted) return;
 
 		if(this.hitbox.collision.length>0) this.toBeDeleted = true;
 
-		this.x += this.speed * Math.cos(this.angle);
-		this.y += this.speed * Math.sin(this.angle);
+		let distance = this.speed * dt; // distanza percorsa 
+
+		this.x += distance * Math.cos(this.angle);
+		this.y += distance * Math.sin(this.angle);
 
 		if(Math.pow(this.x-this.startX,2)+Math.pow(this.y-this.startY,2)>Math.pow(this.radius,2)) this.toBeDeleted = true;
 		return this;
@@ -228,7 +241,7 @@ export class Wall extends Entity{
 		this.size = size;
 		this.hitbox = new HitBox(this,size,size);
 	}
-	update(){
+	update(dt){
 		// aggiornamento contraccolpo
 		// if(this.hitbox.collision.length>0){
 		// 	this.hitbox.collision = [];

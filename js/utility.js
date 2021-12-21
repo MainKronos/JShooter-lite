@@ -471,7 +471,11 @@ export function hitboxOverlap(hitbox1, hitbox2){
 	return false;
 }
 
-const pointInPolygon = function (polygon, point) {
+function rectangleIntersection (r1, r2) {
+    return !(r1.x + r1.width < r2.x || r1.y + r1.height < r2.y || r1.x > r2.x + r2.width || r1.y > r2.y + r2.height);
+};
+
+function pointInPolygon(polygon, point) {
     // Un punto è in un poligono se una linea dal punto all'infinito attraversa il poligono un numero dispari di volte
     let odd = false;
     // Per ogni spigolo (In questo caso per ogni punto i del poligono e quello precedente j)

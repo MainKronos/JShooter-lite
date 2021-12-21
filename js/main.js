@@ -11,18 +11,30 @@ class GameBoard{
 		this.ctx = this.canvas.getContext('2d');
 
 		this.map = new MapProcessor(this.canvas);
-		
+
+		this.time = Date.now(); // serve per l'aggiornamento basato sul tempo
+		// this.fps = 60;
 
 		this.addListener();
 
-		this.update();
+		this.engine();
 	}
 
-	update(){
+	engine(){
+		window.requestAnimationFrame(()=>this.engine());
+
+		let dt = Date.now()-this.time;
+		this.time = Date.now();
+
+		this.update(dt/1000);
+		this.render();
+	}
+
+	update(dt){
 		// aggiorna tutti gli elementi
 
-		this.map.update();
-		window.requestAnimationFrame(()=>this.render());
+		this.map.update(dt);
+		
 	}
 	render(){
 		// renderizza tutti gli elementi
@@ -41,10 +53,6 @@ class GameBoard{
 		// gestione elementi mappa
 		this.map.render(this.ctx, radius);
 		this.ctx.restore();
-
-		
-		
-		this.update();
 	}
 
 	addListener(){
