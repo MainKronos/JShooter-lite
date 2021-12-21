@@ -10,7 +10,8 @@ class GameBoard{
 		this.resizeBoard();
 		this.ctx = this.canvas.getContext('2d');
 
-		this.map = new MapProcessor();
+		this.map = new MapProcessor(this.canvas);
+		
 
 		this.addListener();
 
@@ -27,14 +28,28 @@ class GameBoard{
 		// renderizza tutti gli elementi
 		draw(this.ctx).clear(this.canvas.width, this.canvas.height);
 
-		this.map.render(this.ctx);
+		// gestione camera
+		this.ctx.save();
+		this.ctx.translate(this.canvas.width/2,this.canvas.height/2);
+		let scale = Math.min(this.canvas.width/1000, this.canvas.height/1000);
+		scale = Math.max(scale, 0.5); // fattore scala massimo
+		this.ctx.scale(scale,scale);
+		this.ctx.translate(-this.map.player.x, -this.map.player.y); // mette il giocatore al centro della mappa
+
+		let radius = Math.max(this.canvas.width/2,this.canvas.height/2) / scale;
+		
+		// gestione elementi mappa
+		this.map.render(this.ctx, radius);
+		this.ctx.restore();
+
+		
 		
 		this.update();
 	}
 
 	addListener(){
 		// aggiunge gli EventListener
-		window.addEventListener('resize', ()=>this.resizeBoard);
+		window.addEventListener('resize', ()=>this.resizeBoard());
 		this.canvas.addEventListener('click', ()=>{
 			let bullet = this.map.player.shoot();
 			if(bullet) this.map.bullets.push(bullet);

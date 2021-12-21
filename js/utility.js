@@ -263,18 +263,18 @@ export function draw(ctx){
 
 		ctx.save();
 		ctx.translate(x, y);
-		ctx.rotate(angle);
+		ctx.rotate(angle-Math.PI/2);
 
 		// left hand
 		ctx.beginPath();
 		ctx.rect(-50, -10, 20, 90);
-		ctx.fillStyle = '#3B8686';
+		ctx.fillStyle = '#339933';
 		ctx.fill();
 
 		// right hand
 		ctx.beginPath();
 		ctx.rect(30, -10, 20, 85);
-		ctx.fillStyle = '#3B8686';
+		ctx.fillStyle = '#99ff33';
 		ctx.fill();
 
 		// torso
@@ -293,7 +293,7 @@ export function draw(ctx){
 		ctx.rotate(-180 * Math.PI / 180);
 		ctx.beginPath();
 		ctx.arc(0, 0, 37, 0, 180 * Math.PI / 180);
-		ctx.fillStyle = '#4d2600';
+		ctx.fillStyle = 'green';
 		ctx.fill();
 		ctx.rotate(180 * Math.PI / 180);
 
@@ -366,6 +366,20 @@ export function draw(ctx){
 		ctx.stroke();
 		ctx.restore();
 	}
+	function wall(x,y,size){
+		ctx.save();
+
+		ctx.translate(x, y);
+
+		// muro
+		ctx.beginPath();
+		ctx.rect(-size/2,-size/2,size,size);
+
+		ctx.fillStyle = 'grey';
+		ctx.fill();
+		ctx.stroke();
+		ctx.restore();
+	}
 	function healthBar(x, y, health) {
 
 
@@ -398,7 +412,7 @@ export function draw(ctx){
 
 		ctx.restore();
 	}
-	function hitBox(x,y,width,height,angle,type){
+	function hitBox(x,y,width,height,angle=0){
 		ctx.save();
 		ctx.translate(x, y);
 		ctx.rotate(angle);
@@ -437,27 +451,46 @@ export function draw(ctx){
 		undead: undead,
 		deadUndead: deadUndead,
 		bullet: bullet,
+		wall: wall,
 		healthBar: healthBar,
 		hitBox: hitBox,
 		clear: clear
 	};
 }
 
-export function pointInPolygonFlat (point, vs) {
-    let x = point[0], y = point[1];
-    let inside = false;
-    let start = 0;
-    let end = vs.length;
-    let len = (end-start)/2;
-    for (let i = 0, j = len - 1; i < len; j = i++) {
-        let xi = vs[start+i*2+0], yi = vs[start+i*2+1];
-        let xj = vs[start+j*2+0], yj = vs[start+j*2+1];
-        let intersect = ((yi > y) !== (yj > y))
-            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
+
+
+export function hitboxOverlap(hitbox1, hitbox2){
+	let overlap = false;
+	for(let point of hitbox1.points){
+		if(pointInPolygon(hitbox2.points, point)) return true;
+	}
+	for(let point of hitbox2.points){
+		if(pointInPolygon(hitbox1.points, point)) return true;
+	}
+	return false;
+}
+
+const pointInPolygon = function (polygon, point) {
+    // Un punto è in un poligono se una linea dal punto all'infinito attraversa il poligono un numero dispari di volte
+    let odd = false;
+    // Per ogni spigolo (In questo caso per ogni punto i del poligono e quello precedente j)
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; i++) {
+        //Se una linea passante dai punti i e j attraversa questo bordo
+        if (((polygon[i].y > point.y) !== (polygon[j].y > point.y)) // Un punto deve essere sopra e uno sotto la nostra coordinata y
+            // ...e il bordo non attraversa la tua coordinata Y prima della tua coordinata x (ma tra la coordinata x e l'infinito)
+            && (point.x < ((polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x))) {
+            // Invert odd
+            odd = !odd;
+        }
+        j = i;
+
     }
-    return inside;
+    // Se il numero di incroci era dispari, il punto è nel poligono
+    return odd;
 };
+
+
 
 
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, width, height, radius) {

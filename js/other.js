@@ -1,4 +1,4 @@
-import {draw, pointInPolygonFlat} from "./utility.js";
+import {draw} from "./utility.js";
 
 export class InputManager{
 	constructor(){
@@ -23,8 +23,9 @@ export class InputManager{
 
 		// mouse event
 		document.addEventListener('mousemove', function (event) {
-			inputs.mouse.x = event.clientX;
-			inputs.mouse.y = event.clientY;
+			if(event.target === document.querySelector('canvas#GameBoard')){
+				inputs.mouse.angle = Math.atan2(event.y-event.target.height/2, event.x-event.target.width/2);
+			}
 		});
 
 		// key event
@@ -56,123 +57,59 @@ export class HitBox{
 		this.entity = entity;
 		this.width = width;
 		this.height = height;
+		this.radius = Math.pow(this.width,2), Math.pow(this.height,2); // distanza massima quadratica
+		this.points = [];
 		this.enable = true; // hitbox attiva
 		// this.type = type; // arc or box
 		this.collision = [];
 		
 	}
-
-	render(ctx){
-		draw(ctx).hitBox(this.entity.x, this.entity.y, this.width, this.height, this.entity.angle, this.type);
-	}
-}
-
-export class EntityManager{
-	constructor(){
-		this.player = [];
-		this.enemies = [];
-		this.walls = [];
-		this.bullets = [];
-	}
-
-	get entities(){
-		return [].concat(this.walls, this.enemies, this.player, this.bullets);
-	}
-
-	deleteEntity(entity){
-		// cancella un entita
-		if(entity===this.player){
-			this.player = null;
-			return;
-		}
-		if(this.enemies.includes(entity)){
-			this.enemies.splice(this.enemies.indexOf(entity),1);
-			return;
-		}
-		if(this.walls.includes(entity)){
-			this.walls.splice(this.walls.indexOf(entity),1);
-			return;
-		}
-		if(this.bullets.includes(entity)){
-			this.bullets.splice(this.bullets.indexOf(entity),1);
-			return;
-		}
-	}
-
-	update(){
-		this.hitboxCollision();
-		for(let entity of this.entities){
-			entity.update();
-			if(entity.toBeDeleted) this.deleteEntity(entity);
-		}
+	update(){ // aggiorna i punti dell'hitbox (aggiornare solo se strettamente necessario)
+		this.points = this.getPoints();
 	}
 
 	render(ctx){
-		
-		for(let entity of this.entities){
-			entity.render(ctx);
-		}
+		draw(ctx).hitBox(this.entity.x, this.entity.y, this.width, this.height, this.entity.angle);
 	}
-
-	hitboxCollision(){
-		// caso tipo box
-		let entities = this.entities;
-		
-		// console.log(entities);
-
-		for(let i=0; i<entities.length-1; i++){
-			let entity1 = this.entities[i];
-
-			if(!entity1.hitbox.enable) continue;
-
-			let rect1 = [];
-			rect1.push(entity1.x + (entity1.hitbox.width/2)*Math.cos(entity1.angle) - (entity1.hitbox.height/2)*Math.sin(entity1.angle));
-			rect1.push(entity1.y + (entity1.hitbox.width/2)*Math.sin(entity1.angle) + (entity1.hitbox.height/2)*Math.cos(entity1.angle));
-
-			rect1.push(entity1.x + (entity1.hitbox.width/2)*Math.cos(entity1.angle) - (-entity1.hitbox.height/2)*Math.sin(entity1.angle));
-			rect1.push(entity1.y + (entity1.hitbox.width/2)*Math.sin(entity1.angle) + (-entity1.hitbox.height/2)*Math.cos(entity1.angle));
-
-			rect1.push(entity1.x + (-entity1.hitbox.width/2)*Math.cos(entity1.angle) - (-entity1.hitbox.height/2)*Math.sin(entity1.angle));
-			rect1.push(entity1.y + (-entity1.hitbox.width/2)*Math.sin(entity1.angle) + (-entity1.hitbox.height/2)*Math.cos(entity1.angle));
-
-			rect1.push(entity1.x + (-entity1.hitbox.width/2)*Math.cos(entity1.angle) - (entity1.hitbox.height/2)*Math.sin(entity1.angle));
-			rect1.push(entity1.y + (-entity1.hitbox.width/2)*Math.sin(entity1.angle) + (entity1.hitbox.height/2)*Math.cos(entity1.angle));
-
-			checkCollision:
-			for(let j=i+1; j<entities.length; j++){
-				let entity2 = this.entities[j];
-
-				if(!entity2.hitbox.enable) continue;
-
-				let rects = [];
-
-				let rect2 = [];
-				rect2.push(entity2.x + (entity2.hitbox.width/2)*Math.cos(entity2.angle) - (entity2.hitbox.height/2)*Math.sin(entity2.angle));
-				rect2.push(entity2.y + (entity2.hitbox.width/2)*Math.sin(entity2.angle) + (entity2.hitbox.height/2)*Math.cos(entity2.angle));
-
-				rect2.push(entity2.x + (entity2.hitbox.width/2)*Math.cos(entity2.angle) - (-entity2.hitbox.height/2)*Math.sin(entity2.angle));
-				rect2.push(entity2.y + (entity2.hitbox.width/2)*Math.sin(entity2.angle) + (-entity2.hitbox.height/2)*Math.cos(entity2.angle));
-
-				rect2.push(entity2.x + (-entity2.hitbox.width/2)*Math.cos(entity2.angle) - (-entity2.hitbox.height/2)*Math.sin(entity2.angle));
-				rect2.push(entity2.y + (-entity2.hitbox.width/2)*Math.sin(entity2.angle) + (-entity2.hitbox.height/2)*Math.cos(entity2.angle));
-
-				rect2.push(entity2.x + (-entity2.hitbox.width/2)*Math.cos(entity2.angle) - (entity2.hitbox.height/2)*Math.sin(entity2.angle));
-				rect2.push(entity2.y + (-entity2.hitbox.width/2)*Math.sin(entity2.angle) + (entity2.hitbox.height/2)*Math.cos(entity2.angle));
-
-				rects.push(rect2);
-				rects.push(rect1);
-
-				for(let l=0; l<rects.length; l++){
-					for(let k=0;k<rects[l].length;k+=2){
-						if(pointInPolygonFlat([rects[l][k], rects[l][k+1]], rects[(l+1)%2])){
-							// console.log(entity1.constructor.name, entity2.constructor.name);
-							entity1.hitbox.collision.push(entity2);
-							entity2.hitbox.collision.push(entity1);
-							break checkCollision;
-						}
-					}
-				}
+	
+	getPoints(){ 
+		// ritorna tutti i punti dell'hitbox
+		return [
+			{
+				x: this.entity.x + (this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
+				y: this.entity.y + (this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (this.entity.hitbox.height/2)*Math.cos(this.entity.angle),
+			},
+			{
+				x: this.entity.x + (this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (-this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
+				y: this.entity.y + (this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (-this.entity.hitbox.height/2)*Math.cos(this.entity.angle)
+			},
+			{
+				x: this.entity.x + (-this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (-this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
+				y: this.entity.y + (-this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (-this.entity.hitbox.height/2)*Math.cos(this.entity.angle)
+			},
+			{
+				x: this.entity.x + (-this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
+				y: this.entity.y + (-this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (this.entity.hitbox.height/2)*Math.cos(this.entity.angle)
+			}
+		];
+	}
+	projectInAxis(x,y){
+		let min = +Infinity;
+		let max = -Infinity;
+		let points = this.points;
+		for (let i = 0; i < points.length; i++) {
+			let px = points[i].x;
+			let py = points[i].y;
+			let projection = (px * x + py * y) / (Math.sqrt(x * x + y * y));
+			if (projection > max) {
+				max = projection;
+			}
+			if (projection < min) {
+				min = projection;
 			}
 		}
+		return { min, max };
 	}
+
 }
+

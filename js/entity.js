@@ -9,7 +9,7 @@ class Entity{
 		this.y = y;
 		this.angle = 0;	
 		this.speed = 0;
-		this.knockback = 0;
+		// this.knockback = 0;
 		this.toBeDeleted = false;
 	}
 	update(){console.log('Funzione update() non inizializzata.')}
@@ -31,7 +31,7 @@ export class Player extends Entity{
 
 		this.timeReload = 20; // tempo di ricarica
 		this.reload = 0;  // tempo passato dallo sparo
-		this.knockback = 0.05; // valore di spinta
+		this.knockback = 0.01; // valore di spinta
 
 	}
 
@@ -40,6 +40,9 @@ export class Player extends Entity{
 		if (this.health<=0) return;
 
 		// this.health -= (this.health!=0);
+
+		let currentSpeed = this.speed;
+		currentSpeed /= (this.inputs.key.up != this.inputs.key.down) && (this.inputs.key.right != this.inputs.key.left) ? Math.SQRT2 : 1;
 
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
@@ -51,20 +54,25 @@ export class Player extends Entity{
 					this.x -= (entity.x - this.x)*entity.speed*entity.knockback;
 					this.y -= (entity.y - this.y)*entity.speed*entity.knockback;
 				}
+				if(entity instanceof Wall){
+					// TODO: da sistemare perchè vibra
+					this.x -= (entity.x - this.x >= 0)? currentSpeed : -currentSpeed;
+					this.y -= (entity.y - this.y >= 0)? currentSpeed : -currentSpeed;
+				}
 			}
 			this.hitbox.collision = [];
 		}
 
 		// aggiornamento posizione
-		let currentSpeed = this.speed;
-		currentSpeed /= (this.inputs.key.up != this.inputs.key.down) && (this.inputs.key.right != this.inputs.key.left) ? Math.SQRT2 : 1;
-		if (this.inputs.key.up) this.y -= currentSpeed;
-		if (this.inputs.key.down) this.y += currentSpeed;
-		if (this.inputs.key.left) this.x -= currentSpeed;
-		if (this.inputs.key.right) this.x += currentSpeed;
+		
+		// this.x += currentSpeed*((this.inputs.key.right - this.inputs.key.left)*Math.cos(this.inputs.mouse.angle)-(this.inputs.key.down - this.inputs.key.up)*Math.sin(this.inputs.mouse.angle));
+		// this.y += currentSpeed*((this.inputs.key.right - this.inputs.key.left)*Math.sin(this.inputs.mouse.angle)+(this.inputs.key.down - this.inputs.key.up)*Math.cos(this.inputs.mouse.angle));
+		this.x += currentSpeed*(this.inputs.key.right - this.inputs.key.left);
+		this.y += currentSpeed*(this.inputs.key.down - this.inputs.key.up);
+		
 
 		//aggiornamento rotazione
-		this.angle = Math.atan2(this.inputs.mouse.y-this.y, this.inputs.mouse.x-this.x);
+		this.angle = this.inputs.mouse.angle;
 
 		// aggiornamento ricarica
 		this.reload -= (this.reload!=0);
@@ -105,19 +113,22 @@ export class Player extends Entity{
 }
 
 export class Enemy extends Entity{
-	constructor(x,y){
+	constructor(x,y,target=null){
 		super(x,y);
 		this.angle = Math.random()*Math.PI*2;
-		this.hitbox = new HitBox(this,120,83);
+		this.hitbox = new HitBox(this,83,120);
 
-		this.speed = 5;
+		this.speed = 1;
 		this.health = 100;
 		this.damage = 10;
-		this.knockback = 0.01; // valore di spinta
+		this.knockback = 0.1; // valore di spinta
+		this.alert = 500; // raggio di allerta
+		this.target = target; // bersaglio da attaccare
 	}
 
 	update(){
 		if (this.health <= 0) return this;
+		
 
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
@@ -129,9 +140,30 @@ export class Enemy extends Entity{
 					this.x -= (entity.x - this.x)*entity.speed*entity.knockback;
 					this.y -= (entity.y - this.y)*entity.speed*entity.knockback;
 				}
+				if(entity instanceof Wall|| entity instanceof Enemy){
+					// TODO: da sistemare perchè vibra
+					// console.log(entity.x, this, this.speed);a
+					this.x -= (entity.x - this.x >= 0)? this.speed : -this.speed;
+					this.y -= (entity.y - this.y >= 0)? this.speed : -this.speed;
+				}
 			}
 			this.hitbox.collision = [];
 		}
+
+		// aggiornamento posizione
+		let distX = this.target.x - this.x;
+		let distY = this.target.y - this.y;
+		if(Math.pow(distX,2)+Math.pow(distY,2)<=Math.pow(this.alert,2)){ // se si trova nel raggio di azione
+			this.x += Math.sign(distX)*this.speed;
+			this.y += Math.sign(distY)*this.speed;
+
+			//aggiornamento rotazione
+			this.angle = Math.atan2(distY,distX);
+		}
+
+		
+
+
 		if(this.health <= 0) this.hitbox.enable = false;
 
 		return this;
@@ -142,7 +174,7 @@ export class Enemy extends Entity{
 			draw(ctx).undead(this.x,this.y,this.angle);
 			draw(ctx).healthBar(this.x, this.y, this.health);
 		} else {
-			draw(ctx).deadHuman(this.x,this.y,this.angle);
+			draw(ctx).undead(this.x,this.y,this.angle);
 		}
 
 		
@@ -165,7 +197,7 @@ export class Bullet extends Entity{
 		this.speed = speed;
 		this.radius = radius;
 		this.damage = 10;
-		this.knockback = 0.01;
+		this.knockback = 0.05;
 		this.toBeDeleted = false; // se è da eliminare
 
 	}
@@ -187,4 +219,23 @@ export class Bullet extends Entity{
 		return this;
 	}
 
+}
+
+
+export class Wall extends Entity{
+	constructor(x,y,size){
+		super(x,y);
+		this.size = size;
+		this.hitbox = new HitBox(this,size,size);
+	}
+	update(){
+		// aggiornamento contraccolpo
+		// if(this.hitbox.collision.length>0){
+		// 	this.hitbox.collision = [];
+		// }
+	}
+	render(ctx){
+		draw(ctx).wall(this.x,this.y,this.size);
+		// this.hitbox.render(ctx);
+	}
 }
