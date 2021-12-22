@@ -50,6 +50,8 @@ export class Player extends Entity{
 			y: distance*(this.inputs.key.down - this.inputs.key.up)
 		};
 
+		let rotate = this.inputs.mouse.angle; // angolo rotazione
+
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
 			for(let entity of this.hitbox.collision){
@@ -64,10 +66,17 @@ export class Player extends Entity{
 					// TODO: da sistemare perchè vibra
 					// if(Math.sign(entity.x - this.x) == Math.sign(move.x) || move.x==0) move.x = -Math.sign(entity.x - this.x);
 					// if(Math.sign(entity.y - this.y) == Math.sign(move.y) || move.y==0) move.y = -Math.sign(entity.y - this.y);
-					if(Math.sign(entity.x - this.x) == Math.sign(move.x)) move.x = 0;
-					if(Math.sign(entity.y - this.y) == Math.sign(move.y)) move.y = 0;
+					let ax = entity.x - this.x;
+					let ay = entity.y - this.y;
+					if(Math.abs(ax) > Math.abs(ay)){
+						if(Math.sign(ax) == Math.sign(move.x)) move.x = 0;
+					}else if(Math.abs(ax) < Math.abs(ay)){
+						if(Math.sign(ay) == Math.sign(move.y)) move.y = 0;
+					}
+
+					// rotate = this.angle;
 					// this.x -= (entity.x - this.x >= 0)? distance : -distance;
-					// this.y -= (entity.y - this.y >= 0)? distance : -distance;
+					// this.y -= (entity.y - this.y >= 0)? distance : -distance;ww
 				}
 			}
 			this.hitbox.collision = [];
@@ -82,7 +91,7 @@ export class Player extends Entity{
 		
 
 		//aggiornamento rotazione
-		this.angle = this.inputs.mouse.angle;
+		this.angle = rotate;
 
 		// aggiornamento ricarica
 		this.reload -= (this.reload>0)*dt;
@@ -103,7 +112,7 @@ export class Player extends Entity{
 		}
 
 		
-		this.hitbox.render(ctx);
+		// this.hitbox.render(ctx);
 		return this;
 	}
 
@@ -228,7 +237,7 @@ export class Bullet extends Entity{
 	render(ctx){
 		if(this.toBeDeleted) return;
 		draw(ctx).bullet(this.x,this.y,this.angle);
-		this.hitbox.render(ctx);
+		// this.hitbox.render(ctx);
 		return this;
 	}
 

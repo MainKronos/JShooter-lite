@@ -40,7 +40,7 @@ class GameBoard{
 		// renderizza tutti gli elementi
 		draw(this.ctx).clear(this.canvas.width, this.canvas.height);
 
-		// draw(this.ctx).background(0,0,this.canvas.width,this.canvas.height);
+		// draw(this.ctx).background(this.map.player.x,this.map.player.y,this.canvas.width,this.canvas.height);
 		
 
 		// gestione camera
