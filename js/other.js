@@ -4,7 +4,8 @@ export class InputManager{
 	constructor(){
 		this.mouse = {
 			x: 0,
-			y: 0
+			y: 0,
+			angle: 0
 		};
 		this.key = {
 			up: false,
@@ -57,7 +58,7 @@ export class HitBox{
 		this.entity = entity;
 		this.width = width;
 		this.height = height;
-		this.radius = Math.pow(this.width,2), Math.pow(this.height,2); // distanza massima quadratica
+		this.radius = Math.sqrt(Math.pow(this.width/2,2) + Math.pow(this.height/2,2)); // distanza massima quadratica
 		this.points = [];
 		this.enable = true; // hitbox attiva
 		// this.type = type; // arc or box

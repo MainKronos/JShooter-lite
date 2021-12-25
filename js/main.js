@@ -1,6 +1,7 @@
 // import { Player, Enemy, Bullet } from "./entity.js";
 import { MapProcessor } from "./map.js";
-import {draw} from "./utility.js";
+import { draw } from "./utility.js";
+import { fps } from "./fps.js";
 
 class GameBoard{
 
@@ -12,8 +13,8 @@ class GameBoard{
 
 		this.map = new MapProcessor(this.canvas);
 
-		this.time = Date.now(); // serve per l'aggiornamento basato sul tempo
-		// this.fps = 60;
+		this.time = 0; // serve per l'aggiornamento basato sul tempo
+		this.fps = new fps();
 
 		this.addListener();
 
@@ -22,25 +23,32 @@ class GameBoard{
 
 	engine(){
 		window.requestAnimationFrame(()=>this.engine());
+		
 
 		let dt = Date.now()-this.time;
-		this.time = Date.now();
 
-		this.update(dt/1000);
-		this.render();
+		if(Math.round(1000/dt)<=+Infinity){ // limitatore fps
+			this.time = Date.now();
+
+			this.update(dt/1000);
+			this.render();
+		}
+		
 	}
 
 	update(dt){
 		// aggiorna tutti gli elementi
-
+		this.fps.update(dt);
 		this.map.update(dt);
+
+		
 		
 	}
 	render(){
 		// renderizza tutti gli elementi
 		draw(this.ctx).clear(this.canvas.width, this.canvas.height);
 
-		// draw(this.ctx).background(this.map.player.x,this.map.player.y,this.canvas.width,this.canvas.height);
+		
 		
 
 		// gestione camera
@@ -57,6 +65,10 @@ class GameBoard{
 		// gestione elementi mappa
 		this.map.render(this.ctx);
 		this.ctx.restore();
+
+		this.fps.render(this.ctx);
+
+		
 	}
 
 	addListener(){

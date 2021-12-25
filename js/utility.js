@@ -452,7 +452,7 @@ export function draw(ctx){
 	function background(x,y,width,height){		
 		ctx.save();
 		ctx.beginPath();
-		ctx.rect(0,0,width,height);
+		ctx.rect(x,y,width,height);
 		ctx.fillStyle = ctx.createPattern(bg, 'repeat');
 		ctx.fill();
 		ctx.stroke();

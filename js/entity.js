@@ -23,6 +23,7 @@ export class Player extends Entity{
 		this.angle = 0;
 
 		this.hitbox = new HitBox(this,83,120);
+		this.hitbox.enable = false;
 
 		this.speed = 500; // px/s
 		this.health = 100;
@@ -30,7 +31,7 @@ export class Player extends Entity{
 		this.inputs = inputs;
 		this.alert = 500; // raggio di allerta dei nemici
 
-		this.timeReload = 1; // tempo di ricarica in secondi
+		this.timeReload = 0.05; // tempo di ricarica in secondi
 		this.reload = 0;  // tempo passato dallo sparo
 		this.knockback = 0.01; // valore di spinta
 
@@ -45,12 +46,22 @@ export class Player extends Entity{
 		let distance = this.speed * dt; // distanza percorsa
 		distance /= (this.inputs.key.up != this.inputs.key.down) && (this.inputs.key.right != this.inputs.key.left) ? Math.SQRT2 : 1;
 
-		let move = { // vettore spostamento
-			x: distance*(this.inputs.key.right - this.inputs.key.left),
-			y: distance*(this.inputs.key.down - this.inputs.key.up)
-		};
-
 		let rotate = this.inputs.mouse.angle; // angolo rotazione
+
+
+		let move = { // movimento temporaneo
+			x : distance*(this.inputs.key.right - this.inputs.key.left),
+			y: distance*(this.inputs.key.down - this.inputs.key.up)
+		}
+
+		// let move = { // vettore spostamento
+		// 	x: tmp.x*Math.cos(rotate+Math.PI/2) - tmp.y*Math.sin(rotate+Math.PI/2),
+		// 	y: tmp.x*Math.sin(rotate+Math.PI/2) + tmp.y*Math.cos(rotate+Math.PI/2)
+		// };
+		// console.log(move);
+
+		
+
 
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
@@ -64,19 +75,20 @@ export class Player extends Entity{
 				}
 				if(entity instanceof Wall){
 					// TODO: da sistemare perchè vibra
-					// if(Math.sign(entity.x - this.x) == Math.sign(move.x) || move.x==0) move.x = -Math.sign(entity.x - this.x);
-					// if(Math.sign(entity.y - this.y) == Math.sign(move.y) || move.y==0) move.y = -Math.sign(entity.y - this.y);
 					let ax = entity.x - this.x;
 					let ay = entity.y - this.y;
-					if(Math.abs(ax) > Math.abs(ay)){
-						if(Math.sign(ax) == Math.sign(move.x)) move.x = 0;
-					}else if(Math.abs(ax) < Math.abs(ay)){
-						if(Math.sign(ay) == Math.sign(move.y)) move.y = 0;
-					}
+
+					// move.x = Math.max(-Math.sign(ax)*(entity.hitbox.radius + this.hitbox.radius - Math.abs(ax))*0.001, move.x);
+					// move.y = Math.max(-Math.sign(ay)*(entity.hitbox.radius + this.hitbox.radius - Math.abs(ay))*0.001, move.y);
+					// if(Math.abs(ax) > Math.abs(ay)){
+
+					// }else if(Math.abs(ax) < Math.abs(ay)){
+
+					// }
+					move.x -= (entity.x - this.x >= 0)? distance : -distance;
+					move.y -= (entity.y - this.y >= 0)? distance : -distance;
 
 					// rotate = this.angle;
-					// this.x -= (entity.x - this.x >= 0)? distance : -distance;
-					// this.y -= (entity.y - this.y >= 0)? distance : -distance;ww
 				}
 			}
 			this.hitbox.collision = [];
