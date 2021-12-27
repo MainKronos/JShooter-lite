@@ -412,7 +412,7 @@ export function draw(ctx){
 		ctx.stroke();
 		ctx.restore();
 	}
-	function wall(x,y,size){
+	function wall(x,y,size,color='grey'){
 		ctx.save();
 
 		ctx.translate(x, y);
@@ -421,9 +421,19 @@ export function draw(ctx){
 		ctx.beginPath();
 		ctx.rect(-size/2,-size/2,size,size);
 
-		ctx.fillStyle = 'grey';
+		ctx.fillStyle = color;
 		ctx.fill();
 		ctx.stroke();
+
+		ctx.beginPath();
+		ctx.moveTo(-size/2,-size/2);
+		ctx.lineTo(size/2,size/2);
+		ctx.moveTo(-size/2,size/2);
+		ctx.lineTo(size/2,-size/2);
+		ctx.strokeStyle = '#4d4d4d';
+		ctx.lineWidth = 1;
+		ctx.stroke();
+
 		ctx.restore();
 	}
 	function healthBar(x, y, health) {

@@ -117,8 +117,8 @@ export class MapProcessor{
 
 				if(hitboxOverlap(entity1.hitbox, entity2.hitbox)){
 					// console.log(entity1.constructor.name, entity2.constructor.name);
-					if(!(entity1 instanceof Wall)) entity1.hitbox.collision.push(entity2);
-					if(!(entity2 instanceof Wall)) entity2.hitbox.collision.push(entity1);
+					entity1.hitbox.collision.push(entity2);
+					entity2.hitbox.collision.push(entity1);
 					break;
 				}
 			}

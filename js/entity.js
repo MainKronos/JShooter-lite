@@ -55,7 +55,7 @@ export class Player extends Entity{
 		this.resSpeed.x *= Math.abs(speed.x) > Math.abs(this.resSpeed.x)? 0 : Math.pow(1/attrito,dt);
 		this.resSpeed.y *= Math.abs(speed.y) > Math.abs(this.resSpeed.y)? 0 : Math.pow(1/attrito,dt);
 
-		
+		console.log(this.hitbox.collision.filter(el=>el instanceof Wall).length);
 
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
@@ -74,10 +74,11 @@ export class Player extends Entity{
 
 				this.resSpeed.x = Math.abs(dx) >= Math.abs(dy) ? -Math.sign(dx)*this.maxSpeed:this.resSpeed.x;
 				this.resSpeed.y = Math.abs(dy) >= Math.abs(dx) ? -Math.sign(dy)*this.maxSpeed:this.resSpeed.y;
-				break;
+				// break;
 			}
 			this.hitbox.collision = [];
 		}
+
 
 		// aggiornamento posizione
 
@@ -188,7 +189,7 @@ export class Enemy extends Entity{
 
 				this.resSpeed.x = Math.abs(dx) >= Math.abs(dy) ? -Math.sign(dx)*this.maxSpeed:this.resSpeed.x;
 				this.resSpeed.y = Math.abs(dy) >= Math.abs(dx) ? -Math.sign(dy)*this.maxSpeed:this.resSpeed.y;
-				break;
+				// break;
 			}
 			this.hitbox.collision = [];
 		}
@@ -241,7 +242,7 @@ export class Bullet extends Entity{
 		this.maxSpeed = speed;
 		this.radius = radius;
 		this.damage = 10;
-		this.knockback = 1000;
+		this.knockback = 600;
 		this.toBeDeleted = false; // se è da eliminare
 
 	}
@@ -276,12 +277,12 @@ export class Wall extends Entity{
 	}
 	update(dt){
 		// aggiornamento contraccolpo
-		// if(this.hitbox.collision.length>0){
-		// 	this.hitbox.collision = [];
-		// }
+		if(this.hitbox.collision.length>0){
+			this.hitbox.collision = [];
+		}
 	}
 	render(ctx){
-		draw(ctx).wall(this.x,this.y,this.size);
+		draw(ctx).wall(this.x,this.y,this.size,this.color);
 		// this.hitbox.render(ctx);
 	}
 }
