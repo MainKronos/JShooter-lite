@@ -1,4 +1,4 @@
-export class fps{
+export class FPSCounter{
 	// contatore fps
 	constructor(){
 		this.counter = 0;

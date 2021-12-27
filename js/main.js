@@ -1,7 +1,6 @@
 // import { Player, Enemy, Bullet } from "./entity.js";
 import { MapProcessor } from "./map.js";
-import { draw } from "./utility.js";
-import { fps } from "./fps.js";
+import { FPSCounter } from "./fps.js";
 
 class GameBoard{
 
@@ -14,7 +13,7 @@ class GameBoard{
 		this.map = new MapProcessor(this.canvas);
 
 		this.time = 0; // serve per l'aggiornamento basato sul tempo
-		this.fps = new fps();
+		this.fps = new FPSCounter();
 
 		this.addListener();
 
@@ -46,25 +45,10 @@ class GameBoard{
 	}
 	render(){
 		// renderizza tutti gli elementi
-		draw(this.ctx).clear(this.canvas.width, this.canvas.height);
-
-		
-		
-
-		// gestione camera
-		this.ctx.save();
-		
-		this.ctx.translate(this.canvas.width/2,this.canvas.height/2);
-		let scale = Math.min(this.canvas.width/1000, this.canvas.height/1000);
-		scale = Math.max(scale, 0.5); // fattore scala massimo
-		this.ctx.scale(scale,scale);
-		this.ctx.translate(-this.map.player.x, -this.map.player.y); // mette il giocatore al centro della mappa
-		
-		
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		
 		// gestione elementi mappa
 		this.map.render(this.ctx);
-		this.ctx.restore();
 
 		this.fps.render(this.ctx);
 
@@ -75,8 +59,8 @@ class GameBoard{
 		// aggiunge gli EventListener
 		window.addEventListener('resize', ()=>this.resizeBoard());
 		this.canvas.addEventListener('click', ()=>{
-			let bullet = this.map.player.shoot();
-			if(bullet) this.map.bullets.push(bullet);
+			let bullets = this.map.player.shoot();
+			if(bullets) this.map.bullets.push(...bullets);
 		});
 	}
 

@@ -1,7 +1,7 @@
 import { Player, Enemy, Bullet, Wall } from "./entity.js";
 import { InputManager } from "./other.js";
-import {hitboxOverlap} from "./utility.js";
-import { draw } from "./utility.js";
+import { hitboxOverlap } from "./utility.js";
+import { draw } from "./drawing.js";
 
 export class MapProcessor{
 	constructor(canvas){
@@ -19,12 +19,12 @@ export class MapProcessor{
 		this.TextMap = [
 			'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
 			'W       W                             W',
-			'W   P   W           E           E     W',
+			'W   P   W  E        E           E     W',
 			'W       W                             W',
 			'W       W           E     WWWWWWWWWWWWW',
 			'W     WWW                             W',
 			'W                   E                 W',
-			'W         E E                   E     W',
+			'W                               E     W',
 			'W                                     W',
 			'WWWWWWWWWWWWWWWWWWWWWWWWWWW           W',
 			'W                         W           W',
@@ -86,7 +86,7 @@ export class MapProcessor{
 		// caso tipo box
 		let entities = this.entities.filter(elem => {
 			if(!elem.hitbox.enable) return false;
-			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert,2)) return false;
+			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert*1.5,2)) return false;
 			return true;
 		});
 
@@ -139,12 +139,26 @@ export class MapProcessor{
 		}
 	}
 	render(ctx){
+
+		ctx.save();
+
+		// gestione camera //////////////////////////////////////
+		ctx.translate(this.canvas.width/2,this.canvas.height/2);
+		let scale = Math.min(this.canvas.width/1000, this.canvas.height/1000);
+		scale = Math.max(scale, 0.5); // fattore scala massimo
+		ctx.scale(scale,scale);
+		ctx.translate(-this.player.x, -this.player.y); // mette il giocatore al centro della mappa
+
+		/////////////////////////////////////////////////
+
+		// render background
 		draw(ctx).background(-this.canvas.width,-this.canvas.height,this.size.width+2*this.canvas.width,this.size.height+2*this.canvas.height);
 
+		// render entità
 		for(let entity of this.entities){
-
-			// if(Math.abs(this.player.x - entity.x)<radius && Math.abs(this.player.y - entity.y)<radius) 
-				entity.render(ctx);
+			entity.render(ctx);
 		}
+
+		ctx.restore();
 	}
 }

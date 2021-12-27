@@ -1,5 +1,4 @@
-import {draw} from "./utility.js";
-import { HitBox } from "./other.js";
+import { draw } from "./drawing.js";
 
 
 class Entity{
@@ -8,13 +7,15 @@ class Entity{
 		this.x = x;
 		this.y = y;
 		this.angle = 0;	
-		this.speed = 0;
+		this.maxSpeed = 0;
 		// this.knockback = 0;
 		this.toBeDeleted = false;
 	}
 	update(){console.log('Funzione update() non inizializzata.')}
 	render(ctx){console.log('Funzione render() non inizializzata.')}
 }
+
+var attrito = 1000; // attrito terreno
 
 export class Player extends Entity{
 	// classe giocatore
@@ -23,17 +24,18 @@ export class Player extends Entity{
 		this.angle = 0;
 
 		this.hitbox = new HitBox(this,83,120);
-		this.hitbox.enable = false;
+		// this.hitbox.enable = false;
 
-		this.speed = 500; // px/s
+		this.maxSpeed = 500; // px/s massima
+		this.resSpeed = {x:0,y:0} //velocità residua
 		this.health = 100;
 
 		this.inputs = inputs;
 		this.alert = 500; // raggio di allerta dei nemici
 
-		this.timeReload = 0.05; // tempo di ricarica in secondi
+		this.timeReload = 0.05; // tempo di ricarica dell'arma in secondi
 		this.reload = 0;  // tempo passato dallo sparo
-		this.knockback = 0.01; // valore di spinta
+		this.knockback = 200; // valore di spinta
 
 	}
 
@@ -41,60 +43,55 @@ export class Player extends Entity{
 		// aggiorna il giocatore
 		if (this.health<=0) return;
 
-		// this.health -= (this.health!=0);
-
-		let distance = this.speed * dt; // distanza percorsa
-		distance /= (this.inputs.key.up != this.inputs.key.down) && (this.inputs.key.right != this.inputs.key.left) ? Math.SQRT2 : 1;
 
 		let rotate = this.inputs.mouse.angle; // angolo rotazione
 
-
-		let move = { // movimento temporaneo
-			x : distance*(this.inputs.key.right - this.inputs.key.left),
-			y: distance*(this.inputs.key.down - this.inputs.key.up)
+		let speed = { // velocità normalizzata
+			x: this.maxSpeed*(this.inputs.key.right - this.inputs.key.left)/(this.inputs.key.up != this.inputs.key.down ? Math.SQRT2 : 1),
+			y: this.maxSpeed*(this.inputs.key.down - this.inputs.key.up)/(this.inputs.key.right != this.inputs.key.left ? Math.SQRT2 : 1)
 		}
 
-		// let move = { // vettore spostamento
-		// 	x: tmp.x*Math.cos(rotate+Math.PI/2) - tmp.y*Math.sin(rotate+Math.PI/2),
-		// 	y: tmp.x*Math.sin(rotate+Math.PI/2) + tmp.y*Math.cos(rotate+Math.PI/2)
-		// };
-		// console.log(move);
+		// velocità residua
+		this.resSpeed.x *= Math.abs(speed.x) > Math.abs(this.resSpeed.x)? 0 : Math.pow(1/attrito,dt);
+		this.resSpeed.y *= Math.abs(speed.y) > Math.abs(this.resSpeed.y)? 0 : Math.pow(1/attrito,dt);
 
 		
 
-
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
-			for(let entity of this.hitbox.collision){
-				if(entity instanceof Bullet || entity instanceof Enemy){
-					this.health -= entity.damage;
-				}
-				if(entity instanceof Player || entity instanceof Enemy || entity instanceof Bullet){
-					move.x -= (entity.x - this.x)*entity.speed*entity.knockback;
-					move.y -= (entity.y - this.y)*entity.speed*entity.knockback;
-				}
-				if(entity instanceof Wall){
-					// TODO: da sistemare perchè vibra
-					let ax = entity.x - this.x;
-					let ay = entity.y - this.y;
 
-					// move.x = Math.max(-Math.sign(ax)*(entity.hitbox.radius + this.hitbox.radius - Math.abs(ax))*0.001, move.x);
-					// move.y = Math.max(-Math.sign(ay)*(entity.hitbox.radius + this.hitbox.radius - Math.abs(ay))*0.001, move.y);
-					// if(Math.abs(ax) > Math.abs(ay)){
+			for(let entity of this.hitbox.collision.filter(el=>el instanceof Bullet || el instanceof Enemy)){
+				this.health -= entity.damage;
+			}
+			for(let entity of this.hitbox.collision.filter(el=>el instanceof Player || el instanceof Enemy || el instanceof Bullet)){
+				this.resSpeed.x -= Math.sign(entity.x - this.x)*entity.knockback;
+				this.resSpeed.y -= Math.sign(entity.y - this.y)*entity.knockback;
+			}
+			for(let entity of this.hitbox.collision.filter(el=>el instanceof Wall)){
+				// TODO: da sistemare perchè vibra
+				let dx = entity.x - this.x;
+				let dy = entity.y - this.y;
 
-					// }else if(Math.abs(ax) < Math.abs(ay)){
-
-					// }
-					move.x -= (entity.x - this.x >= 0)? distance : -distance;
-					move.y -= (entity.y - this.y >= 0)? distance : -distance;
-
-					// rotate = this.angle;
-				}
+				this.resSpeed.x = Math.abs(dx) >= Math.abs(dy) ? -Math.sign(dx)*this.maxSpeed:this.resSpeed.x;
+				this.resSpeed.y = Math.abs(dy) >= Math.abs(dx) ? -Math.sign(dy)*this.maxSpeed:this.resSpeed.y;
+				break;
 			}
 			this.hitbox.collision = [];
 		}
 
 		// aggiornamento posizione
+
+		// this.resSpeed.x += Math.abs(this.resSpeed.x) < Math.abs(speed.x) ? speed.x : 0;
+		// this.resSpeed.y += Math.abs(this.resSpeed.y) < Math.abs(speed.y) ? speed.y : 0;
+		
+		speed.x += this.resSpeed.x;
+		speed.y += this.resSpeed.y;
+		
+
+		let move = { // movimento
+			x: speed.x*dt,
+			y: speed.y*dt
+		}
 		
 		// this.x += distance*((this.inputs.key.right - this.inputs.key.left)*Math.cos(this.inputs.mouse.angle)-(this.inputs.key.down - this.inputs.key.up)*Math.sin(this.inputs.mouse.angle));
 		// this.y += distance*((this.inputs.key.right - this.inputs.key.left)*Math.sin(this.inputs.mouse.angle)+(this.inputs.key.down - this.inputs.key.up)*Math.cos(this.inputs.mouse.angle));
@@ -108,7 +105,7 @@ export class Player extends Entity{
 		// aggiornamento ricarica
 		this.reload -= (this.reload>0)*dt;
 
-		if(this.health <= 0) this.hitbox = null;
+		if(this.health <= 0) this.hitbox.enable = false;
 
 		return this;
 	}
@@ -135,7 +132,7 @@ export class Player extends Entity{
 			let bulletX = this.x + 140 * Math.cos(this.angle);
 			let bulletY = this.y + 140 * Math.sin(this.angle);
 
-			return new Bullet(bulletX, bulletY, this.angle);
+			return [new Bullet(bulletX, bulletY, this.angle)];
 		}else{
 			return null;
 		}
@@ -149,10 +146,11 @@ export class Enemy extends Entity{
 		this.angle = Math.random()*Math.PI*2;
 		this.hitbox = new HitBox(this,83,120);
 
-		this.speed = 100; // px/s
+		this.maxSpeed = 100; // px/s
+		this.resSpeed = {x:0,y:0} //velocità residua
 		this.health = 100;
 		this.damage = 10;
-		this.knockback = 0.01; // valore di spinta
+		this.knockback = 300; // valore di spinta
 		
 		this.target = target; // bersaglio da attaccare
 	}
@@ -160,39 +158,53 @@ export class Enemy extends Entity{
 	update(dt){
 		if (this.health <= 0) return this;
 		
-		let distance = this.speed * dt; // distanza percorsa
+		let distance = this.maxSpeed * dt; // distanza percorsa
+		// Todo: da fare uguale al player
+
+		let distX = this.target.x - this.x;
+		let distY = this.target.y - this.y;
+		let inAllerta = Math.pow(distX,2)+Math.pow(distY,2)<=Math.pow(this.target.alert,2); // se si trova nel raggio di azione
+		let speed = {
+			x: inAllerta ? Math.sign(distX)*this.maxSpeed:0,
+			y: inAllerta ? Math.sign(distY)*this.maxSpeed:0
+		}
+		this.angle = inAllerta ? Math.atan2(distY,distX) : this.angle;
+
+		this.resSpeed.x *= Math.abs(speed.x) > Math.abs(this.resSpeed.x)? 0 : Math.pow(1/attrito,dt);
+		this.resSpeed.y *= Math.abs(speed.y) > Math.abs(this.resSpeed.y)? 0 : Math.pow(1/attrito,dt);
 
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
-			for(let entity of this.hitbox.collision){
-				if(entity instanceof Bullet){
-					this.health -= entity.damage;
-				}
-				if(entity instanceof Player || entity instanceof Enemy || entity instanceof Bullet){
-					this.x -= (entity.x - this.x)*entity.speed*dt*entity.knockback;
-					this.y -= (entity.y - this.y)*entity.speed*dt*entity.knockback;
-				}
-				if(entity instanceof Wall|| entity instanceof Enemy){
-					// TODO: da sistemare perchè vibra
-					// console.log(entity.x, this, this.speed);a
-					this.x -= (entity.x - this.x >= 0)? distance : -distance;
-					this.y -= (entity.y - this.y >= 0)? distance : -distance;
-				}
+			for(let entity of this.hitbox.collision.filter(el=>el instanceof Bullet)){
+				this.health -= entity.damage;
+			}
+			for(let entity of this.hitbox.collision.filter(el=>el instanceof Player || el instanceof Bullet || el instanceof Enemy)){
+				this.resSpeed.x -= Math.sign(entity.x - this.x)*entity.knockback;
+				this.resSpeed.y -= Math.sign(entity.y - this.y)*entity.knockback;
+			}
+			for(let entity of this.hitbox.collision.filter(el=>el instanceof Wall)){
+				let dx = entity.x - this.x;
+				let dy = entity.y - this.y;
+
+				this.resSpeed.x = Math.abs(dx) >= Math.abs(dy) ? -Math.sign(dx)*this.maxSpeed:this.resSpeed.x;
+				this.resSpeed.y = Math.abs(dy) >= Math.abs(dx) ? -Math.sign(dy)*this.maxSpeed:this.resSpeed.y;
+				break;
 			}
 			this.hitbox.collision = [];
 		}
 
-		// aggiornamento posizione
-		let distX = this.target.x - this.x;
-		let distY = this.target.y - this.y;
-		if(Math.pow(distX,2)+Math.pow(distY,2)<=Math.pow(this.target.alert,2)){ // se si trova nel raggio di azione
-			this.x += Math.sign(distX)*distance;
-			this.y += Math.sign(distY)*distance;
+		speed.x += this.resSpeed.x;
+		speed.y += this.resSpeed.y;
 
-			//aggiornamento rotazione
-			this.angle = Math.atan2(distY,distX);
+		// aggiornamento posizione
+		
+		let move = { // movimento
+			x: speed.x*dt,
+			y: speed.y*dt
 		}
 
+		this.x += move.x;
+		this.y += move.y;
 		
 
 
@@ -206,7 +218,7 @@ export class Enemy extends Entity{
 			draw(ctx).undead(this.x,this.y,this.angle);
 			draw(ctx).healthBar(this.x, this.y, this.health);
 		} else {
-			draw(ctx).undead(this.x,this.y,this.angle);
+			draw(ctx).deadUndead(this.x,this.y);
 		}
 
 		
@@ -226,10 +238,10 @@ export class Bullet extends Entity{
 		this.hitbox = new HitBox(this,35,17);
 
 		this.angle = angle;
-		this.speed = speed;
+		this.maxSpeed = speed;
 		this.radius = radius;
 		this.damage = 10;
-		this.knockback = 0.05;
+		this.knockback = 1000;
 		this.toBeDeleted = false; // se è da eliminare
 
 	}
@@ -238,7 +250,7 @@ export class Bullet extends Entity{
 
 		if(this.hitbox.collision.length>0) this.toBeDeleted = true;
 
-		let distance = this.speed * dt; // distanza percorsa 
+		let distance = this.maxSpeed * dt; // distanza percorsa 
 
 		this.x += distance * Math.cos(this.angle);
 		this.y += distance * Math.sin(this.angle);
@@ -272,4 +284,68 @@ export class Wall extends Entity{
 		draw(ctx).wall(this.x,this.y,this.size);
 		// this.hitbox.render(ctx);
 	}
+}
+
+
+export class HitBox{
+	// classe cella hitbox
+	constructor(entity,width=0,height=0){
+
+		this.entity = entity;
+		this.width = width;
+		this.height = height;
+		this.radius = Math.sqrt(Math.pow(this.width/2,2) + Math.pow(this.height/2,2)); // distanza massima
+		this.points = [];
+		this.enable = true; // hitbox attiva
+		// this.type = type; // arc or box
+		this.collision = [];
+		
+	}
+	update(){ // aggiorna i punti dell'hitbox (aggiornare solo se strettamente necessario)
+		this.points = this.getPoints();
+	}
+
+	render(ctx){
+		draw(ctx).hitBox(this.entity.x, this.entity.y, this.width, this.height, this.entity.angle);
+	}
+	
+	getPoints(){ 
+		// ritorna tutti i punti dell'hitbox
+		return [
+			{
+				x: this.entity.x + (this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
+				y: this.entity.y + (this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (this.entity.hitbox.height/2)*Math.cos(this.entity.angle),
+			},
+			{
+				x: this.entity.x + (this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (-this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
+				y: this.entity.y + (this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (-this.entity.hitbox.height/2)*Math.cos(this.entity.angle)
+			},
+			{
+				x: this.entity.x + (-this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (-this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
+				y: this.entity.y + (-this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (-this.entity.hitbox.height/2)*Math.cos(this.entity.angle)
+			},
+			{
+				x: this.entity.x + (-this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
+				y: this.entity.y + (-this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (this.entity.hitbox.height/2)*Math.cos(this.entity.angle)
+			}
+		];
+	}
+	projectInAxis(x,y){
+		let min = +Infinity;
+		let max = -Infinity;
+		let points = this.points;
+		for (let i = 0; i < points.length; i++) {
+			let px = points[i].x;
+			let py = points[i].y;
+			let projection = (px * x + py * y) / (Math.sqrt(x * x + y * y));
+			if (projection > max) {
+				max = projection;
+			}
+			if (projection < min) {
+				min = projection;
+			}
+		}
+		return { min, max };
+	}
+
 }
