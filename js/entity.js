@@ -59,7 +59,6 @@ export class Player extends Entity{
 
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
-
 			for(let entity of this.hitbox.collision.filter(el=>el instanceof Bullet || el instanceof Enemy)){
 				this.health -= entity.damage;
 			}
@@ -72,9 +71,14 @@ export class Player extends Entity{
 				let dx = entity.x - this.x;
 				let dy = entity.y - this.y;
 
-				this.resSpeed.x = Math.abs(dx) >= Math.abs(dy) ? -Math.sign(dx)*this.maxSpeed:this.resSpeed.x;
-				this.resSpeed.y = Math.abs(dy) >= Math.abs(dx) ? -Math.sign(dy)*this.maxSpeed:this.resSpeed.y;
-				// break;
+				if(Math.abs(dx) >= Math.abs(dy)){
+					if(Math.sign(dx) == Math.sign(this.resSpeed.x)) this.resSpeed.x *= -0.1;
+					this.resSpeed.x += -Math.sign(dx)*this.maxSpeed;
+				}
+				if(Math.abs(dy) >= Math.abs(dx)){
+					if(Math.sign(dy) == Math.sign(this.resSpeed.y)) this.resSpeed.y *= -0.1;
+					this.resSpeed.y += -Math.sign(dy)*this.maxSpeed;
+				}
 			}
 			this.hitbox.collision = [];
 		}
@@ -151,7 +155,7 @@ export class Enemy extends Entity{
 		this.resSpeed = {x:0,y:0} //velocità residua
 		this.health = 100;
 		this.damage = 10;
-		this.knockback = 300; // valore di spinta
+		this.knockback = 500; // valore di spinta
 		
 		this.target = target; // bersaglio da attaccare
 	}
@@ -187,9 +191,14 @@ export class Enemy extends Entity{
 				let dx = entity.x - this.x;
 				let dy = entity.y - this.y;
 
-				this.resSpeed.x = Math.abs(dx) >= Math.abs(dy) ? -Math.sign(dx)*this.maxSpeed:this.resSpeed.x;
-				this.resSpeed.y = Math.abs(dy) >= Math.abs(dx) ? -Math.sign(dy)*this.maxSpeed:this.resSpeed.y;
-				// break;
+				if(Math.abs(dx) >= Math.abs(dy)){
+					if(Math.sign(dx) == Math.sign(this.resSpeed.x)) this.resSpeed.x *= -0.1;
+					this.resSpeed.x += -Math.sign(dx)*this.maxSpeed;
+				}
+				if(Math.abs(dy) >= Math.abs(dx)){
+					if(Math.sign(dy) == Math.sign(this.resSpeed.y)) this.resSpeed.y *= -0.1;
+					this.resSpeed.y += -Math.sign(dy)*this.maxSpeed;
+				}
 			}
 			this.hitbox.collision = [];
 		}

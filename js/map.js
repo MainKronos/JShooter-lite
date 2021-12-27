@@ -90,11 +90,6 @@ export class MapProcessor{
 			return true;
 		});
 
-		
-		// console.log(entities);
-		// let counter = 0;
-		// let d = Date.now();
-
 		for(let i=0; i<entities.length-1; i++){
 			let entity1 = entities[i];
 
@@ -119,16 +114,27 @@ export class MapProcessor{
 					// console.log(entity1.constructor.name, entity2.constructor.name);
 					entity1.hitbox.collision.push(entity2);
 					entity2.hitbox.collision.push(entity1);
-					break;
 				}
 			}
 		}
-		// console.log(Date.now()-d, counter);
 	}
+	rearrangeEnemies(){
+		// riordina i cadaveri dei nemici per nn rendere le tombe in primo piano
+
+		let tmp = null;
+		let index = 0;
+		for(let i=0; i<this.enemies.length;i++){
+			if(this.enemies[i].health<=0){
+				tmp = this.enemies[index];
+				this.enemies[index] = this.enemies[i];
+				this.enemies[i] = tmp;
+				index++;
+			}
+		}
+	}
+
 	update(dt){
-			
-		// console.log(Math.round(mdt*10000)/10000, Mdt);
-		
+		if(this.player.health<=0) return;
 		
 
 		this.hitboxCollision();
@@ -137,7 +143,9 @@ export class MapProcessor{
 			entity.update(dt);
 			if(entity.toBeDeleted) this.deleteEntity(entity);
 		}
+		this.rearrangeEnemies();
 	}
+
 	render(ctx){
 
 		ctx.save();
