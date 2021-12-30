@@ -7,6 +7,7 @@ export class FPSCounter{
 
 		this.interval = setInterval(()=>{
 			this.frames = Math.round(this.tmp/this.counter); 
+			if(isNaN(this.frames)) this.frames = 0;
 			this.tmp = 0;
 			this.counter = 0;
 		},200);

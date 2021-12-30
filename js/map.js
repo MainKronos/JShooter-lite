@@ -42,10 +42,12 @@ export class MapProcessor{
 
 		this.size = {width:this.TextMap[0].length*this.blockSize, height:this.TextMap.length*this.blockSize};
 
+		this.endGame = false; // 'bad' || 'good'
+
 		this.generate();
 	}
 	get entities(){
-		return [].concat(this.walls, this.enemies, this.player, this.bullets);
+		return [].concat(this.enemies, this.player, this.bullets, this.walls);
 	}
 	generate(){
 		this.player = new Player(0,0,new InputManager());
@@ -132,6 +134,19 @@ export class MapProcessor{
 			}
 		}
 	}
+	checkEndGame(){
+		if(this.player.health<=0) return 'bad';
+
+
+		let kill = 0;
+		for(let enemy of this.enemies){
+			if(enemy.health>0) return false;
+			else kill++;
+		}
+		if(kill == this.enemies.length) return 'good';
+
+		return false;
+	}
 
 	update(dt){
 		if(this.player.health<=0) return;
@@ -144,6 +159,8 @@ export class MapProcessor{
 			if(entity.toBeDeleted) this.deleteEntity(entity);
 		}
 		this.rearrangeEnemies();
+
+		this.endGame = this.checkEndGame();
 	}
 
 	render(ctx){
@@ -168,12 +185,15 @@ export class MapProcessor{
 			entity.render(ctx);
 		}
 
-
 		
+		ctx.restore();
+		// effetti visivi ///////////////////
+		
+		// draw(ctx).lightEffect(this.canvas.width/2, this.canvas.height/2, 900);
+
+		draw(ctx).oldEffect(0,0,this.canvas.width,this.canvas.height);
 		
 
 		/////////////////////////////////////
-
-		ctx.restore();
 	}
 }

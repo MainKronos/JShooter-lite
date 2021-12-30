@@ -2,7 +2,9 @@ export default ()=>{};
 
 var bg = new Image();
 bg.src = './res/img/pattern.png';
-// bg = ctx.createPattern(bg, 'repeat');
+
+var old = new Image();
+old.src = './res/img/old.png';
 
 export function draw(ctx){
 
@@ -324,7 +326,20 @@ export function draw(ctx){
 		
 		ctx.translate(x, y);
 		// ctx.rotate(angle-Math.PI/2);
-		ctx.transform(1,0,-0.2,1,0,0);
+		// ctx.transform(1,0,-0.2,1,0,0);
+
+		ctx.save();
+		ctx.roundRect(-50,-95,100,155,10);
+		ctx.globalAlpha = 0.4;
+		// ctx.globalCompositeOperation = 'multiply';
+		ctx.shadowBlur = 5;
+		ctx.shadowColor = '#542a00';
+		ctx.fillStyle = '#542a00';
+		ctx.strokeStyle = '#331a00';
+		ctx.lineWidth = 5;
+		ctx.fill();
+		ctx.stroke();
+		ctx.restore();
 
 		// lapide
 		ctx.save();
@@ -338,8 +353,8 @@ export function draw(ctx){
 		ctx.strokeStyle = 'black';
 		ctx.lineWidth = 1.5;
 		ctx.fillStyle = 'grey';
-		ctx.shadowBlur = 2;
-		ctx.shadowColor = 'black';
+		ctx.shadowBlur = 10;
+		ctx.shadowColor = '#542a00';
 		ctx.fill();
 		ctx.stroke();
 		ctx.restore();
@@ -374,19 +389,19 @@ export function draw(ctx){
 		ctx.restore();
 		
 		// terra
-		ctx.save();
-		let offset = Math.PI*0.3
-		ctx.beginPath();
-		ctx.arc(0,130,100,Math.PI+offset,-offset);
-		ctx.closePath();
-		ctx.shadowBlur = 5;
-		ctx.shadowColor = '#542a00';
-		ctx.fillStyle = '#542a00';
-		ctx.strokeStyle = '#331a00';
-		ctx.lineWidth = 2;
-		ctx.fill();
-		ctx.stroke();
-		ctx.restore();
+		// ctx.save();
+		// let offset = Math.PI*0.3
+		// ctx.beginPath();
+		// ctx.arc(0,130,100,Math.PI+offset,-offset);
+		// ctx.closePath();
+		// ctx.shadowBlur = 5;
+		// ctx.shadowColor = '#542a00';
+		// ctx.fillStyle = '#542a00';
+		// ctx.strokeStyle = '#331a00';
+		// ctx.lineWidth = 2;
+		// ctx.fill();
+		// ctx.stroke();
+		// ctx.restore();
 
 
 		ctx.restore();
@@ -496,13 +511,43 @@ export function draw(ctx){
 
 		ctx.restore();
 	}
-	function background(x,y,width,height){		
+	function background(x,y,width,height){
 		ctx.save();
 		ctx.beginPath();
 		ctx.rect(x,y,width,height);
 		ctx.fillStyle = ctx.createPattern(bg, 'repeat');
 		ctx.fill();
 		ctx.stroke();
+		ctx.restore();
+	}
+	function oldEffect(x,y,width,height){
+		ctx.save();
+		ctx.globalAlpha = 0.3;
+		ctx.globalCompositeOperation = 'multiply';
+		// ctx.globalCompositeOperation = 'source-over';
+		ctx.drawImage(old,x,y,width,height);
+		ctx.restore();
+	}
+	function lightEffect(x,y, radius){
+
+		let dist = 0.7; //distanza tra i due raggi
+
+		let gradient = ctx.createRadialGradient(x,y,radius*(1-dist), x,y,radius);
+
+		// Add three color stops
+		gradient.addColorStop(0, 'black');
+		gradient.addColorStop(1, 'rgba(0,0,0,0)');
+
+		ctx.save();
+		// ctx.translate(-radius,-radius);
+		ctx.beginPath();
+		ctx.arc(x,y,radius,0,Math.PI*2);
+		ctx.shadowColor = 'black';
+		ctx.shadowBlur = 500;
+		ctx.fillStyle = gradient;
+		ctx.globalCompositeOperation = 'destination-in';
+		ctx.fill();
+
 		ctx.restore();
 	}
 	function clear(width,height,x=0,y=0){
@@ -520,6 +565,8 @@ export function draw(ctx){
 		healthBar: healthBar,
 		hitBox: hitBox,
 		background: background,
+		oldEffect: oldEffect,
+		lightEffect: lightEffect,
 		clear: clear
 	};
 }
