@@ -15,6 +15,7 @@ class GameBoard{
 		this.map = new MapProcessor(this.canvas);
 
 		this.time = 0; // serve per l'aggiornamento basato sul tempo
+		this.startTime = Date.now(); // momento di inizio gioco
 		this.fps = new FPSCounter();
 
 		this.audio = new GameAudio(this.constructor.name);
@@ -51,7 +52,10 @@ class GameBoard{
 		this.gameMenu(false); // disattiva il menu
 		this.paused = false;
 		if(!this.end){
+			
+				
 			this.audio.background(true); // audio
+
 			this.time = Date.now();
 			this.engine();
 		}
@@ -100,20 +104,28 @@ class GameBoard{
 
 		GameAudio.pauseAll();
 
+		this.canvas.style.letterSpacing = '0.5rem';
+
 		
 		this.ctx.save();
-		this.ctx.font = "bold 100px consolas";
+		this.ctx.font = "bold 14vw Capture";
 		this.ctx.textAlign = "center";
 		this.ctx.textBaseline = 'middle';
-		this.ctx.fillStyle = 'black';
-		this.ctx.shadowColor = 'white';
-		this.ctx.shadowBlur=5;
+		this.ctx.fillStyle = (val=='good')? 'rgba(255, 204, 0, .99)' : 'rgba(255, 204, 0, 0.4)';
+		this.ctx.shadowColor = '#ff7e00';
+		this.ctx.shadowBlur = (val=='good')? 2 : 0;
 		// this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ctx.fillText((val=='good')? 'Win' : 'Game Over', this.canvas.width/2, this.canvas.height/2);
 
+		this.ctx.fillStyle = 'rgba(45,45,45,1)';
+		this.ctx.font = "bold 50px Capture";
+		this.ctx.shadowBlur = 0;
+
+		this.ctx.fillText(`in ${Math.floor((Date.now()-this.startTime)/1000)} secondi`, this.canvas.width/2, this.canvas.height/2+300);
 		
 		this.ctx.restore();
+		this.canvas.style.letterSpacing = '';
 		
 		setTimeout(()=>window.location.replace("./"),3000);
 		

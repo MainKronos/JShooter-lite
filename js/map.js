@@ -19,17 +19,17 @@ export class MapProcessor{
 		this.TextMap = [
 			'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
 			'W       W                             W',
-			'W   P   W  E        E           E     W',
+			'W   P   W  E        O           O     W',
 			'W       W                             W',
-			'W       W           E     WWWWWWWWWWWWW',
+			'W       W           O     WWWWWWWWWWWWW',
 			'W     WWW                             W',
-			'W                   E                 W',
-			'W                               E     W',
+			'W                   O                 W',
+			'W                               O     W',
 			'W                                     W',
 			'WWWWWWWWWWWWWWWWWWWWWWWWWWW           W',
 			'W                         W           W',
-			'W     E     E             W           W',
-			'W                   E     W           W',
+			'W     O     O             W           W',
+			'W                   O     W           W',
 			'WWWWWWWWWWWWW             W           W',
 			'W                         W           W',
 			'W               WWWWWWWWWWW           W',
@@ -40,14 +40,14 @@ export class MapProcessor{
 			'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
 		];
 
-		this.size = {width:this.TextMap[0].length*this.blockSize, height:this.TextMap.length*this.blockSize};
+		this.size = {width:(this.TextMap[0].length-1)*this.blockSize, height:this.TextMap.length*this.blockSize};
 
 		this.endGame = false; // 'bad' || 'good'
 
 		this.generate();
 	}
 	get entities(){
-		return [].concat(this.enemies, this.player, this.bullets, this.walls);
+		return [].concat(this.walls, this.enemies, this.player, this.bullets);
 	}
 	generate(){
 		this.player = new Player(0,0,new InputManager());
@@ -178,7 +178,8 @@ export class MapProcessor{
 		/////////////////////////////////////////////////
 
 		// render background
-		draw(ctx).background(-this.canvas.width,-this.canvas.height,this.size.width+2*this.canvas.width,this.size.height+2*this.canvas.height);
+		draw(ctx).background(0,0,this.size.width,this.size.height);
+		// draw(ctx).background(-this.canvas.width,-this.canvas.height,this.size.width+2*this.canvas.width,this.size.height+2*this.canvas.height);
 
 		// render entità
 		for(let entity of this.entities){

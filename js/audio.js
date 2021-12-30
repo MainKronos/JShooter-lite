@@ -30,8 +30,9 @@ export class GameAudio{
 	background(cond=true){
 		// audio di background
 		if(cond && this.audioBackground.paused){
-			this.audioBackground.play();
 			this.audioBackground.loop=true;
+
+			this.audioBackground.play().catch((err)=>{});
 		}else if(!cond && !this.audioBackground.paused){
 			this.audioBackground.pause();
 			// this.audioBackground.currentTime = 0;

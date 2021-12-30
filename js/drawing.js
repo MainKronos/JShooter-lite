@@ -1,10 +1,16 @@
 export default ()=>{};
 
-var bg = new Image();
-bg.src = './res/img/pattern.png';
 
-var old = new Image();
-old.src = './res/img/old.png';
+
+var bgImage = new Image();
+bgImage.src = `./res/img/grass1.png`;
+
+
+var oldImage = new Image();
+oldImage.src = './res/img/old.png';
+
+var wallImg = new Image();
+wallImg.src = './res/img/wall.png';
 
 export function draw(ctx){
 
@@ -428,11 +434,21 @@ export function draw(ctx){
 		ctx.restore();
 	}
 	function wall(x,y,size,color='grey'){
+
+		let pattern = ctx.createPattern(wallImg, 'repeat');
 		ctx.save();
 
 		ctx.translate(x, y);
 
 		// muro
+
+		ctx.beginPath();
+		ctx.rect(-size/2,size/2,size,size/2);
+		ctx.fillStyle = pattern;
+		ctx.fill();
+		ctx.stroke();
+
+
 		ctx.beginPath();
 		ctx.rect(-size/2,-size/2,size,size);
 
@@ -448,6 +464,8 @@ export function draw(ctx){
 		ctx.strokeStyle = '#4d4d4d';
 		ctx.lineWidth = 1;
 		ctx.stroke();
+
+		
 
 		ctx.restore();
 	}
@@ -512,10 +530,14 @@ export function draw(ctx){
 		ctx.restore();
 	}
 	function background(x,y,width,height){
+		let pattern = ctx.createPattern(bgImage, 'repeat');
+
 		ctx.save();
 		ctx.beginPath();
 		ctx.rect(x,y,width,height);
-		ctx.fillStyle = ctx.createPattern(bg, 'repeat');
+		ctx.fillStyle = pattern;
+		// ctx.shadowColor = 'black';
+		// ctx.shadowBlur = 5;
 		ctx.fill();
 		ctx.stroke();
 		ctx.restore();
@@ -525,7 +547,7 @@ export function draw(ctx){
 		ctx.globalAlpha = 0.3;
 		ctx.globalCompositeOperation = 'multiply';
 		// ctx.globalCompositeOperation = 'source-over';
-		ctx.drawImage(old,x,y,width,height);
+		ctx.drawImage(oldImage,x,y,width,height);
 		ctx.restore();
 	}
 	function lightEffect(x,y, radius){
