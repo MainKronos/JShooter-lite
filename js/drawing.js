@@ -1,7 +1,7 @@
 export default ()=>{};
 
 var bg = new Image();
-bg.src = './res/pattern.png';
+bg.src = './res/img/pattern.png';
 // bg = ctx.createPattern(bg, 'repeat');
 
 export function draw(ctx){

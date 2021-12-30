@@ -1,4 +1,5 @@
 import { draw } from "./drawing.js";
+import { GameAudio } from "./audio.js";
 
 
 class Entity{
@@ -10,6 +11,8 @@ class Entity{
 		this.maxSpeed = 0;
 		// this.knockback = 0;
 		this.toBeDeleted = false;
+
+		this.audio = null; // audio
 	}
 	update(){console.log('Funzione update() non inizializzata.')}
 	render(ctx){console.log('Funzione render() non inizializzata.')}
@@ -37,6 +40,8 @@ export class Player extends Entity{
 		this.reload = 0;  // tempo passato dallo sparo
 		this.knockback = 200; // valore di spinta
 
+
+		this.audio = new GameAudio(this.constructor.name); // audio
 	}
 
 	update(dt){
@@ -52,10 +57,10 @@ export class Player extends Entity{
 		}
 
 		// velocità residua
-		this.resSpeed.x *= Math.abs(speed.x) > Math.abs(this.resSpeed.x)? 0 : Math.pow(1/attrito,dt);
-		this.resSpeed.y *= Math.abs(speed.y) > Math.abs(this.resSpeed.y)? 0 : Math.pow(1/attrito,dt);
+		this.resSpeed.x *= (Math.abs(speed.x) > Math.abs(this.resSpeed.x) || Math.abs(this.resSpeed.x) < 0.1)? 0 : Math.pow(1/attrito,dt);
+		this.resSpeed.y *= (Math.abs(speed.y) > Math.abs(this.resSpeed.y) || Math.abs(this.resSpeed.y) < 0.1)? 0 : Math.pow(1/attrito,dt);
 
-		console.log(this.hitbox.collision.filter(el=>el instanceof Wall).length);
+		// console.log(this.hitbox.collision.filter(el=>el instanceof Wall).length);
 
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
@@ -97,11 +102,15 @@ export class Player extends Entity{
 			x: speed.x*dt,
 			y: speed.y*dt
 		}
+
+		
 		
 		// this.x += distance*((this.inputs.key.right - this.inputs.key.left)*Math.cos(this.inputs.mouse.angle)-(this.inputs.key.down - this.inputs.key.up)*Math.sin(this.inputs.mouse.angle));
 		// this.y += distance*((this.inputs.key.right - this.inputs.key.left)*Math.sin(this.inputs.mouse.angle)+(this.inputs.key.down - this.inputs.key.up)*Math.cos(this.inputs.mouse.angle));
 		this.x += move.x;
 		this.y += move.y;
+
+		this.audio.walk(move.x!=0 || move.y!=0); // audio
 		
 
 		//aggiornamento rotazione
@@ -110,7 +119,10 @@ export class Player extends Entity{
 		// aggiornamento ricarica
 		this.reload -= (this.reload>0)*dt;
 
-		if(this.health <= 0) this.hitbox.enable = false;
+		if(this.health <= 0){
+			this.hitbox.enable = false;
+			this.audio.walk(false);
+		}
 
 		return this;
 	}
@@ -133,6 +145,7 @@ export class Player extends Entity{
 	shoot(){
 		if(this.reload<=0 && this.health>0){
 			// spara un colpo
+			this.audio.shot(); // audio
 			this.reload = this.timeReload;
 			let bulletX = this.x + 140 * Math.cos(this.angle);
 			let bulletY = this.y + 140 * Math.sin(this.angle);
@@ -158,6 +171,8 @@ export class Enemy extends Entity{
 		this.knockback = 500; // valore di spinta
 		
 		this.target = target; // bersaglio da attaccare
+
+		this.audio = new GameAudio(this.constructor.name); // audio
 	}
 
 	update(dt){
@@ -184,6 +199,8 @@ export class Enemy extends Entity{
 				this.health -= entity.damage;
 			}
 			for(let entity of this.hitbox.collision.filter(el=>el instanceof Player || el instanceof Bullet || el instanceof Enemy)){
+				if(entity instanceof Player) this.audio.punch();
+				
 				this.resSpeed.x -= Math.sign(entity.x - this.x)*entity.knockback;
 				this.resSpeed.y -= Math.sign(entity.y - this.y)*entity.knockback;
 			}
@@ -216,9 +233,13 @@ export class Enemy extends Entity{
 		this.x += move.x;
 		this.y += move.y;
 		
+		this.audio.undead(inAllerta);
 
 
-		if(this.health <= 0) this.hitbox.enable = false;
+		if(this.health <= 0){
+			this.audio.undead(false);
+			this.hitbox.enable = false;
+		}
 
 		return this;
 	}

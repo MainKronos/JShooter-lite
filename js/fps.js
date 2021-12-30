@@ -14,7 +14,7 @@ export class FPSCounter{
 	}
 	update(dt){
 		this.counter++;
-		this.tmp += (1/dt);
+		this.tmp += (dt==0)?0:(1/dt);
 	}
 	render(ctx){
 		ctx.save();

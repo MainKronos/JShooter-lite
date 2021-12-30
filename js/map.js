@@ -119,7 +119,7 @@ export class MapProcessor{
 		}
 	}
 	rearrangeEnemies(){
-		// riordina i cadaveri dei nemici per nn rendere le tombe in primo piano
+		// riordina i cadaveri dei nemici per non rendere le tombe in primo piano
 
 		let tmp = null;
 		let index = 0;
@@ -149,6 +149,7 @@ export class MapProcessor{
 	render(ctx){
 
 		ctx.save();
+		
 
 		// gestione camera //////////////////////////////////////
 		ctx.translate(this.canvas.width/2,this.canvas.height/2);
@@ -166,6 +167,12 @@ export class MapProcessor{
 		for(let entity of this.entities){
 			entity.render(ctx);
 		}
+
+
+		
+		
+
+		/////////////////////////////////////
 
 		ctx.restore();
 	}

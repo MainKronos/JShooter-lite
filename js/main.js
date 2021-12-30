@@ -1,6 +1,7 @@
 // import { Player, Enemy, Bullet } from "./entity.js";
 import { MapProcessor } from "./map.js";
 import { FPSCounter } from "./fps.js";
+import { GameAudio } from "./audio.js";
 
 class GameBoard{
 
@@ -9,20 +10,27 @@ class GameBoard{
 		this.canvas = document.querySelector('canvas#GameBoard');
 		this.resizeBoard();
 		this.ctx = this.canvas.getContext('2d');
+		// this.ctx.filter = `sepia(0)`;
 
 		this.map = new MapProcessor(this.canvas);
 
-		this.time = 0; // serve per l'aggiornamento basato sul tempo
+		this.time = Date.now(); // serve per l'aggiornamento basato sul tempo
 		this.fps = new FPSCounter();
 
 		this.addListener();
 
-		this.engine();
+		this.audio = new GameAudio(this.constructor.name);
+		
+
+		this.paused = document.hidden;
+
+		this.anim = null; // AnimationFrame
+
+		if(!this.paused) this.start();
 	}
 
 	engine(){
-		window.requestAnimationFrame(()=>this.engine());
-		
+		this.anim = window.requestAnimationFrame(()=>this.engine());
 
 		let dt = Date.now()-this.time;
 
@@ -32,7 +40,18 @@ class GameBoard{
 			this.update(dt/1000);
 			this.render();
 		}
-		
+	}
+
+	start(){
+		// avvia il gioco
+		this.audio.background(true); // audio
+		this.time = Date.now();
+		this.engine();
+	}
+	stop(){
+		// stoppa il gioco
+		cancelAnimationFrame(this.anim);
+		GameAudio.pauseAll();
 	}
 
 	update(dt){
@@ -46,7 +65,8 @@ class GameBoard{
 	render(){
 		// renderizza tutti gli elementi
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		
+
+
 		// gestione elementi mappa
 		this.map.render(this.ctx);
 
@@ -58,6 +78,21 @@ class GameBoard{
 	addListener(){
 		// aggiunge gli EventListener
 		window.addEventListener('resize', ()=>this.resizeBoard());
+		document.addEventListener("visibilitychange", ()=>{
+			this.paused = document.hidden;
+
+			if(this.paused) this.stop();
+			else this.start();
+
+		});
+		document.addEventListener('keydown', (event)=> {
+			if(event.key == 'Escape'){
+				this.paused = !this.paused;
+
+				if(this.paused) this.stop();
+				else this.start();
+			}
+		});
 		this.canvas.addEventListener('click', ()=>{
 			let bullets = this.map.player.shoot();
 			if(bullets) this.map.bullets.push(...bullets);
