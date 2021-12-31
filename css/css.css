@@ -1,3 +1,9 @@
+@import url(./settings.css);
+@font-face {
+	font-family: 'Capture';
+	src: url(../res/font/Capture.ttf);
+}
+
 html, body {
 	width: 100%;
 	height: 100%;
@@ -7,7 +13,22 @@ html, body {
 	padding: 0;
 }
 
-h1{
+footer{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	/* width: 100%; */
+	font-family: 'Capture';
+	user-select: none;
+	color: rgba(45,45,45,1);
+	font-size: 10px;
+	font-style: italic;
+	font-weight: lighter;
+	text-align: right;
+	padding: 5px 10px;
+}
+
+h1.title{
 	font-family: 'Capture';
 	font-size: 14vw;
 	text-align: center;
@@ -15,8 +36,8 @@ h1{
 	margin: 0;
 	color: rgba(45,45,45,1);
 	letter-spacing: .5rem;
-}	
-span{
+}
+h1.title > span{
 	overflow: hidden;
 	color: #ffcc00;
 	width: 100%;
@@ -41,11 +62,6 @@ span{
 	}
 }
 
-@font-face {
-	font-family: 'Capture';
-	src: url(../res/font/Capture.ttf);
-}
-
 canvas{
 	filter: sepia(0.4) blur(0.8px);
 }
@@ -66,7 +82,7 @@ section{
 	/* z-index: -1; */
 }
 
-section#GameMenu{
+section#GameMenu, section#GameSettings{
 	display: none;
 	background-color: rgba(0, 0, 0, 0.5);
 }
@@ -99,3 +115,8 @@ button:hover{
 					0 0 2px #ff7e00, 
 					0 2px 3px #000;
 }
+
+
+
+
+

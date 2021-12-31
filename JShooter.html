@@ -14,8 +14,45 @@
 			<button id='settings'>Settings</button>
 			<Button id='exit'>Exit</Button>
 		</section>
+		<section id='GameSettings'>
+			<div>
+				<h2>Settings</h2>
+					<label>
+						ShowFPS
+						<input id='showFPS' type="checkbox">
+					</label>
+					<label>
+						Volume Globale
+						<input type="range" min="0" max="100" id="globalVolume">
+					</label>
+					<label>
+						Volume Musica Background
+						<input type="range" min="0" max="100" id="backgroundVolume">
+					</label>
+					<label>
+						Volume Zombie
+						<input type="range" min="0" max="100" id="undeadVolume">
+					</label>
+					<label>
+						Volume Sparo
+						<input type="range" min="0" max="100" id="shotVolume">
+					</label>
+					<label>
+						Volume Pugno Zombie
+						<input type="range" min="0" max="100" id="punchVolume">
+					</label>
+					<label>
+						Volume Camminata
+						<input type="range" min="0" max="100" id="walkVolume">
+					</label>
+					
+					
+			</div>
+			
+			<Button id='back'>Back</Button>
+		</section>
 
-		<footer style="z-index: -1; opacity: 0; font-family: 'Capture';">Made by Lorenzo Chesi</footer>
+		<footer>Made by Lorenzo Chesi</footer>
 		<script type="module" src="./js/main.js"></script>
 	</body>
 </html>

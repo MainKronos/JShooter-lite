@@ -2,6 +2,7 @@
 import { MapProcessor } from "./map.js";
 import { FPSCounter } from "./fps.js";
 import { GameAudio } from "./audio.js";
+import { settings } from "./settings.js";
 
 class GameBoard{
 
@@ -50,6 +51,7 @@ class GameBoard{
 	start(){
 		// avvia il gioco
 		this.gameMenu(false); // disattiva il menu
+		settings.show(false);
 		this.paused = false;
 		if(!this.end){
 			
@@ -155,6 +157,14 @@ class GameBoard{
 		});
 		document.getElementById('resume').addEventListener('click', ()=>this.start());
 		document.getElementById('exit').addEventListener('click', ()=>window.location.replace("./"));
+		document.getElementById('settings').addEventListener('click', ()=>{
+			this.gameMenu(false);
+			settings.show(true);
+		});
+		document.getElementById('back').addEventListener('click', ()=>{
+			this.gameMenu(true);
+			settings.show(false);
+		})
 	}
 
 	resizeBoard(){

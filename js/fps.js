@@ -1,3 +1,5 @@
+import { settings } from "./settings.js";
+
 export class FPSCounter{
 	// contatore fps
 	constructor(){
@@ -14,18 +16,22 @@ export class FPSCounter{
 		
 	}
 	update(dt){
-		this.counter++;
-		this.tmp += (dt==0)?0:(1/dt);
+		if(settings.showFPS){
+			this.counter++;
+			this.tmp += (dt==0)?0:(1/dt);
+		}
 	}
 	render(ctx){
-		ctx.save();
+		if(settings.showFPS){
+			ctx.save();
 
-		ctx.font = "bold 30px consolas";
-		ctx.textAlign = "center";
-		ctx.fillStyle = 'black';
-		ctx.shadowColor = 'white';
-		ctx.shadowBlur=5;
-		ctx.fillText(this.frames, 50, 50);
-		ctx.restore();
+			ctx.font = "bold 30px consolas";
+			ctx.textAlign = "center";
+			ctx.fillStyle = 'black';
+			ctx.shadowColor = 'white';
+			ctx.shadowBlur=5;
+			ctx.fillText(this.frames, 50, 50);
+			ctx.restore();
+		}
 	}
 }

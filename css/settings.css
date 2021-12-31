@@ -1,0 +1,41 @@
+/* Settings **************************************** */
+
+
+
+section#GameSettings > div{
+	display: flex;
+	flex-direction: column;
+    align-items: center;
+	width: 800px;
+	min-height: 300px;
+	background-color: rgba(45,45,45,1);
+	border-radius: 10px;
+	margin: 90px;
+	padding: 50px;
+	box-shadow: 0 0 10px 1px black;
+}
+
+section#GameSettings span{
+	display: inline-block;
+	font-family: 'Capture';
+	font-size: 2em;
+	margin: 0;
+	color: rgba(255, 204, 0, 0.4);
+	letter-spacing: .5rem;
+	vertical-align: middle;
+}
+
+section#GameSettings h2{
+	font-family: 'Capture';
+	font-size: 5em;
+	margin: 0;
+	color: rgba(255, 204, 0, 0.4);
+	letter-spacing: .5rem;
+	margin: 0 0 60px 0;
+}
+
+section#GameSettings label{
+	font-family: 'consolas';
+	font-size: 1em;
+	color: rgba(255, 204, 0, 0.4);
+}
