@@ -197,7 +197,12 @@ export class MapProcessor{
 
 		// render entità
 		for(let entity of this.entities){
-			entity.render(ctx);
+			if(
+				this.player.x*scale-this.canvas.width/2-this.blockSize<=entity.x*scale && 
+				entity.x*scale <=this.player.x*scale+this.canvas.width/2+this.blockSize &&
+				this.player.y*scale-this.canvas.height/2-this.blockSize<=entity.y*scale && 
+				entity.y*scale <=this.player.y*scale+this.canvas.height/2+this.blockSize
+			) entity.render(ctx);
 		}
 
 		
