@@ -34,9 +34,9 @@ export class Player extends Entity{
 		this.health = 100;
 
 		this.inputs = inputs;
-		this.alert = 500; // raggio di allerta dei nemici
+		this.alert = 900; // raggio di allerta dei nemici
 
-		this.timeReload = 0.05; // tempo di ricarica dell'arma in secondi
+		this.timeReload = 0.5; // tempo di ricarica dell'arma in secondi
 		this.reload = 0;  // tempo passato dallo sparo
 		this.knockback = 200; // valore di spinta
 
@@ -164,10 +164,10 @@ export class Enemy extends Entity{
 		this.angle = Math.random()*Math.PI*2;
 		this.hitbox = new HitBox(this,83,120);
 
-		this.maxSpeed = 100; // px/s
+		this.maxSpeed = Math.floor(Math.random() * (400 - 250 + 1) ) + 250; // px/s
 		this.resSpeed = {x:0,y:0} //velocità residua
 		this.health = 100;
-		this.damage = 10;
+		this.damage = Math.floor(Math.random() * (15 - 10 + 1) ) + 10;
 		this.knockback = 500; // valore di spinta
 		
 		this.target = target; // bersaglio da attaccare
@@ -272,7 +272,7 @@ export class Bullet extends Entity{
 		this.maxSpeed = speed;
 		this.radius = radius;
 		this.damage = 10;
-		this.knockback = 600;
+		this.knockback = 800;
 		this.toBeDeleted = false; // se è da eliminare
 
 	}

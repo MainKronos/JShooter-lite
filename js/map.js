@@ -4,50 +4,58 @@ import { hitboxOverlap } from "./utility.js";
 import { draw } from "./drawing.js";
 
 export class MapProcessor{
-	constructor(canvas){
+	constructor(canvas, TextMap){
 
 		// entity manager
 		this.player = {};
 		this.enemies = [];
 		this.walls = [];
 		this.bullets = [];
+		this.corpses = [];
 
 		this.canvas = canvas;
 
-		this.blockSize = 100;
-
-		this.TextMap = [
-			'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
-			'W       W                             W',
-			'W   P   W  E        O           O     W',
-			'W       W                             W',
-			'W       W           O     WWWWWWWWWWWWW',
-			'W     WWW                             W',
-			'W                   O                 W',
-			'W                               O     W',
-			'W                                     W',
-			'WWWWWWWWWWWWWWWWWWWWWWWWWWW           W',
-			'W                         W           W',
-			'W     O     O             W           W',
-			'W                   O     W           W',
-			'WWWWWWWWWWWWW             W           W',
-			'W                         W           W',
-			'W               WWWWWWWWWWW           W',
-			'W                         W           W',
-			'W                                     W',
-			'W         WWWWW                       W',
-			'W           W                         W',
-			'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
-		];
-
-		this.size = {width:(this.TextMap[0].length-1)*this.blockSize, height:this.TextMap.length*this.blockSize};
-
+		this.blockSize = 150;
 		this.endGame = false; // 'bad' || 'good'
 
+
+		
+		this.TextMap = TextMap;
+		this.size = {width:(this.TextMap[0].length-1)*this.blockSize, height:this.TextMap.length*this.blockSize};
 		this.generate();
+
+		// this.TextMap = [
+		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
+		// 	'W       W                             W',
+		// 	'W   P   W  E        E           E     W',
+		// 	'W       W                             W',
+		// 	'W       W           E     WWWWWWWWWWWWW',
+		// 	'W     WWW                             W',
+		// 	'W                   E                 W',
+		// 	'W                               E     W',
+		// 	'W                                     W',
+		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWW           W',
+		// 	'W                         W           W',
+		// 	'W     E     E             W           W',
+		// 	'W                   E     W           W',
+		// 	'WWWWWWWWWWWWW             W           W',
+		// 	'W                         W           W',
+		// 	'W               WWWWWWWWWWW           W',
+		// 	'W                         W           W',
+		// 	'W                                     W',
+		// 	'W         WWWWW                       W',
+		// 	'W           W                         W',
+		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
+		// ];
+
+		// this.size = {width:(this.TextMap[0].length-1)*this.blockSize, height:this.TextMap.length*this.blockSize};
+
+		
+
+		// this.generate();
 	}
 	get entities(){
-		return [].concat(this.walls, this.enemies, this.player, this.bullets);
+		return [].concat(this.corpses, this.walls, this.enemies, this.player, this.bullets);
 	}
 	generate(){
 		this.player = new Player(0,0,new InputManager());
@@ -123,14 +131,20 @@ export class MapProcessor{
 	rearrangeEnemies(){
 		// riordina i cadaveri dei nemici per non rendere le tombe in primo piano
 
-		let tmp = null;
-		let index = 0;
-		for(let i=0; i<this.enemies.length;i++){
-			if(this.enemies[i].health<=0){
-				tmp = this.enemies[index];
-				this.enemies[index] = this.enemies[i];
-				this.enemies[i] = tmp;
-				index++;
+		// let tmp = null;
+		// let index = 0;
+		// for(let i=0; i<this.enemies.length;i++){
+		// 	if(this.enemies[i].health<=0){
+		// 		tmp = this.enemies[index];
+		// 		this.enemies[index] = this.enemies[i];
+		// 		this.enemies[i] = tmp;
+		// 		index++;
+		// 	}
+		// }
+		
+		for(let elem of this.enemies){
+			if(elem.health<=0){
+				this.corpses.push(this.enemies.splice(this.enemies.indexOf(elem),1)[0]);
 			}
 		}
 	}

@@ -13,26 +13,30 @@ class GameBoard{
 		
 		// this.ctx.filter = `sepia(0)`;
 
-		this.map = new MapProcessor(this.canvas);
+		fetch("./api/map")
+		.then((response)=> response.json())
+		.then((response)=>{
+			this.map = new MapProcessor(this.canvas, response);
 
-		this.time = 0; // serve per l'aggiornamento basato sul tempo
-		this.startTime = Date.now(); // momento di inizio gioco
-		this.fps = new FPSCounter();
+			this.time = 0; // serve per l'aggiornamento basato sul tempo
+			this.startTime = Date.now(); // momento di inizio gioco
+			this.fps = new FPSCounter();
 
-		this.audio = new GameAudio(this.constructor.name);
-		
+			this.audio = new GameAudio(this.constructor.name);
+			
 
-		this.paused = document.hidden;
-		this.end = false; // fine del gioco
+			this.paused = document.hidden;
+			this.end = false; // fine del gioco
 
-		this.anim = null; // AnimationFrame
+			this.anim = null; // AnimationFrame
 
-		this.addListener();
-		this.resizeBoard();
+			this.addListener();
+			this.resizeBoard();
 
-		if(!this.paused) this.start();
-		else this.stop();
-		// else this.render(); // per il render iniziale altrimenti lo schermo è grigio
+			if(!this.paused) this.start();
+			else this.stop();
+			// else this.render(); // per il render iniziale altrimenti lo schermo è grigio
+		});
 	}
 
 	engine(){
@@ -50,16 +54,17 @@ class GameBoard{
 
 	start(){
 		// avvia il gioco
+		document.getElementById('GameLoader').style.display = 'none'; // disattiva il GameLoader
 		this.gameMenu(false); // disattiva il menu
 		settings.show(false);
 		this.paused = false;
-		if(!this.end){
-			
-				
-			this.audio.background(true); // audio
-
-			this.time = Date.now();
-			this.engine();
+		if(!this.end){	
+			this.audio.background(true).then(()=>{
+				this.time = Date.now();
+				this.engine();
+			}).catch((err)=>{
+				this.stop();
+			});	
 		}
 	}
 	stop(){
@@ -150,7 +155,7 @@ class GameBoard{
 			}
 		});
 		this.canvas.addEventListener('click', ()=>{
-			if(!this.paused){
+			if(!this.paused && !this.end){
 				let bullets = this.map.player.shoot();
 				if(bullets) this.map.bullets.push(...bullets);
 			}
