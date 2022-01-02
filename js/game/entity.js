@@ -183,12 +183,13 @@ export class Enemy extends Entity{
 
 		let distX = this.target.x - this.x;
 		let distY = this.target.y - this.y;
+		let tAngle = Math.atan2(distY, distX);
 		let inAllerta = Math.pow(distX,2)+Math.pow(distY,2)<=Math.pow(this.target.alert,2); // se si trova nel raggio di azione
 		let speed = {
-			x: inAllerta ? Math.sign(distX)*this.maxSpeed:0,
-			y: inAllerta ? Math.sign(distY)*this.maxSpeed:0
+			x: inAllerta ? Math.cos(tAngle)*this.maxSpeed:0,
+			y: inAllerta ? Math.sin(tAngle)*this.maxSpeed:0
 		}
-		this.angle = inAllerta ? Math.atan2(distY,distX) : this.angle;
+		this.angle = inAllerta ? tAngle : this.angle;
 
 		this.resSpeed.x *= Math.abs(speed.x) > Math.abs(this.resSpeed.x)? 0 : Math.pow(1/attrito,dt);
 		this.resSpeed.y *= Math.abs(speed.y) > Math.abs(this.resSpeed.y)? 0 : Math.pow(1/attrito,dt);

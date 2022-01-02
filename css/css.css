@@ -1,4 +1,3 @@
-@import url(./settings.css);
 @font-face {
 	font-family: 'Capture';
 	src: url(../res/font/Capture.ttf);
@@ -9,8 +8,20 @@ html, body {
 	height: 100%;
 	overflow: hidden;
 	background: black;
+	color: rgba(45,45,45,1);
 	margin: 0;
 	padding: 0;
+}
+
+header{
+	color: rgba(45,45,45,1);
+	font-family: 'Capture';
+	size: 1.5em;
+	margin: 10px;
+	position: absolute;
+	user-select: none;
+	top: 0;
+	left: 0;
 }
 
 footer{
@@ -28,9 +39,21 @@ footer{
 	padding: 5px 10px;
 }
 
+h2{
+	font-family: 'Capture';
+	font-size: 5em;
+	margin: 0;
+	color: rgba(255, 204, 0, 0.4);
+	letter-spacing: .5rem;
+	margin: 0 0 60px 0;
+	font-weight: 400;
+	user-select: none;
+}
+
 h1.title{
 	font-family: 'Capture';
 	font-size: 14vw;
+	user-select: none;
 	text-align: center;
 	line-height: 1;
 	margin: 0;
@@ -40,6 +63,7 @@ h1.title{
 	filter: blur(0.8px);
 }
 h1.title > span{
+	user-select: none;
 	overflow: hidden;
 	color: #ffcc00;
 	width: 100%;
@@ -73,6 +97,7 @@ section{
 	top: 0;
 	left: 0;
 	right:0;
+	user-select: none;
 	display: flex;
 	width: 100%;
 	height: 100%;
@@ -94,6 +119,7 @@ button{
 	width: 300px;
 	font-size: 2.5em;
 	font-family: 'Capture';
+	user-select: none;
 	text-transform: uppercase;
 	font-weight:lighter;
 	color: rgba(255, 204, 0, 0.4);
@@ -116,6 +142,37 @@ button:hover{
 					0 0 15px #ff4444, 
 					0 0 2px #ff7e00, 
 					0 2px 3px #000;
+}
+
+section#GameSettings > div{
+	display: flex;
+	flex-direction: column;
+    align-items: center;
+	width: 800px;
+	min-height: 300px;
+	background-color: rgba(45,45,45,1);
+	border-radius: 10px;
+	margin: 90px;
+	padding: 50px;
+	box-shadow: 0 0 10px 1px black;
+}
+
+section#GameSettings span{
+	display: inline-block;
+	font-family: 'Capture';
+	font-size: 2em;
+	margin: 0;
+	color: rgba(255, 204, 0, 0.4);
+	letter-spacing: .5rem;
+	vertical-align: middle;
+}
+
+
+
+section#GameSettings label{
+	font-family: 'consolas';
+	font-size: 1em;
+	color: rgba(255, 204, 0, 0.4);
 }
 
 

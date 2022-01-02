@@ -1,14 +1,14 @@
-// import { Player, Enemy, Bullet } from "./entity.js";
 import { MapProcessor } from "./map.js";
 import { FPSCounter } from "./fps.js";
 import { GameAudio } from "./audio.js";
 import { settings } from "./settings.js";
 
-class GameBoard{
+export class GameBoard{
 
 	constructor(){
 		// setup
 		this.canvas = document.querySelector('canvas#GameBoard');
+
 		this.ctx = this.canvas.getContext('2d');
 		
 		// this.ctx.filter = `sepia(0)`;
@@ -16,26 +16,29 @@ class GameBoard{
 		fetch("./api/map")
 		.then((response)=> response.json())
 		.then((response)=>{
-			this.map = new MapProcessor(this.canvas, response);
+			if(!response['error']){
+				this.map = new MapProcessor(this.canvas, response['data']['map']);
 
-			this.time = 0; // serve per l'aggiornamento basato sul tempo
-			this.startTime = Date.now(); // momento di inizio gioco
-			this.fps = new FPSCounter();
+				this.time = 0; // serve per l'aggiornamento basato sul tempo
+				this.startTime = Date.now(); // momento di inizio gioco
+				this.fps = new FPSCounter();
 
-			this.audio = new GameAudio(this.constructor.name);
+				this.audio = new GameAudio(this.constructor.name);
+				
+
+				this.paused = document.hidden;
+				this.end = false; // fine del gioco
+
+				this.anim = null; // AnimationFrame
+
+				this.addListener();
+				this.resizeBoard();
+
+				if(!this.paused) this.start();
+				else this.stop();
+				// else this.render(); // per il render iniziale altrimenti lo schermo è grigio
+			}
 			
-
-			this.paused = document.hidden;
-			this.end = false; // fine del gioco
-
-			this.anim = null; // AnimationFrame
-
-			this.addListener();
-			this.resizeBoard();
-
-			if(!this.paused) this.start();
-			else this.stop();
-			// else this.render(); // per il render iniziale altrimenti lo schermo è grigio
 		});
 	}
 
@@ -55,6 +58,7 @@ class GameBoard{
 	start(){
 		// avvia il gioco
 		document.getElementById('GameLoader').style.display = 'none'; // disattiva il GameLoader
+		this.canvas.style.filter = 'sepia(0.4) blur(0.8px)'; // ripristina i filtri
 		this.gameMenu(false); // disattiva il menu
 		settings.show(false);
 		this.paused = false;
@@ -73,6 +77,7 @@ class GameBoard{
 		cancelAnimationFrame(this.anim);
 		GameAudio.pauseAll();
 		this.gameMenu(true); // attiva il menu
+		this.canvas.style.filter = 'sepia(0.5) blur(5px)'; // rende opaco lo sfondo
 		
 	}
 	gameMenu(show){
@@ -179,9 +184,4 @@ class GameBoard{
 		this.render();
 	}
 	
-}
-
-window.onload = function(){
-	// inizializzatore
-	let game = new GameBoard();
 }

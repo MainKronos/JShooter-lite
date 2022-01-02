@@ -5,15 +5,19 @@ USE JShooter;
 
 
 CREATE TABLE User(
-    ID_user int AUTO_INCREMENT primary key,
-    username varchar(255),
-    password varchar(255)
+    username varchar(255) primary key,
+    pass varchar(255)
 );
 
 CREATE TABLE Map(
     ID_map int AUTO_INCREMENT primary key,
     map json
 );
+
+-- Dati -----------------------------------------------
+
+INSERT INTO User value
+('MainKronos', '$2y$10$.t5FkYvo6uuBZX9Fs1yaB.XgwGcSPB1Y79TvpLEDcCKqNwBed17d6'); -- 123
 
 INSERT INTO Map(map) values 
 ('[
