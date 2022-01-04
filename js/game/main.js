@@ -10,7 +10,7 @@ window.onload = function(){
 			document.getElementById('username').textContent = username;
 			let game = new GameBoard(username);
 		}else{
-			window.location.replace("./login");
+			window.location.replace("./login/");
 		}
 	});
 }

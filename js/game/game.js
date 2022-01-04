@@ -165,12 +165,6 @@ export class GameBoard{
 				else this.start();
 			}
 		});
-		this.canvas.addEventListener('click', ()=>{
-			if(!this.paused && !this.end){
-				let bullets = this.map.player.shoot();
-				if(bullets) this.map.bullets.push(...bullets);
-			}
-		});
 		document.getElementById('resume').addEventListener('click', ()=>this.start());
 		document.getElementById('exit').addEventListener('click', ()=>window.location.replace("./"));
 		document.getElementById('settings').addEventListener('click', ()=>{

@@ -18,7 +18,7 @@ class Entity{
 	render(ctx){console.log('Funzione render() non inizializzata.')}
 }
 
-var attrito = 1000; // attrito terreno
+var attrito = 100000; // attrito terreno
 
 export class Player extends Entity{
 	// classe giocatore
@@ -36,7 +36,7 @@ export class Player extends Entity{
 		this.inputs = inputs;
 		this.alert = 900; // raggio di allerta dei nemici
 
-		this.timeReload = 0.5; // tempo di ricarica dell'arma in secondi
+		this.timeReload = 0.4; // tempo di ricarica dell'arma in secondi
 		this.reload = 0;  // tempo passato dallo sparo
 		this.knockback = 200; // valore di spinta
 
@@ -167,7 +167,7 @@ export class Enemy extends Entity{
 		this.maxSpeed = Math.floor(Math.random() * (450 - 350 + 1) ) + 350; // px/s
 		this.resSpeed = {x:0,y:0} //velocità residua
 		this.health = 100;
-		this.damage = Math.floor(Math.random() * (10 - 5 + 1) ) + 5;
+		this.damage = Math.floor(Math.random() * (13 - 10 + 1) ) + 10;
 		this.knockback = 900; // valore di spinta
 		
 		this.target = target; // bersaglio da attaccare
@@ -262,7 +262,7 @@ export class Enemy extends Entity{
 
 export class Bullet extends Entity{
 	// classe proiettile
-	constructor(x,y,angle=0,radius=300,speed=1000){
+	constructor(x,y,angle=0,radius=400,speed=2000){
 		super(x,y);
 		this.startX = x;
 		this.startY = y;
@@ -272,8 +272,8 @@ export class Bullet extends Entity{
 		this.angle = angle;
 		this.maxSpeed = speed;
 		this.radius = radius;
-		this.damage = Math.floor(Math.random() * (13 - 10 + 1) ) + 10;
-		this.knockback = 800;
+		this.damage = Math.floor(Math.random() * (20 - 10 + 1) ) + 10;
+		this.knockback = 900;
 		this.toBeDeleted = false; // se è da eliminare
 
 	}

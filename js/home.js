@@ -4,10 +4,10 @@
 
 
 function login(){
-	window.location.href='./login';
+	window.location.href='./login/';
 }
 function logout(){
-	fetch('./api/logout')
+	fetch('./api/logout/')
 	.then(()=>{
 		document.getElementById('login').removeEventListener('click', logout);
 		document.getElementById('play').removeEventListener('click', play);
@@ -20,7 +20,7 @@ function play(){
 
 function start(){
 
-	document.getElementById('leaderboard').addEventListener('click', ()=>window.location.href='./leaderboard')
+	document.getElementById('leaderboard').addEventListener('click', ()=>window.location.href='./leaderboard/')
 
 	fetch("./api/account/")
 	.then((res)=> res.json())

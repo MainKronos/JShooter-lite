@@ -572,6 +572,21 @@ export function draw(ctx){
 
 		ctx.restore();
 	}
+	function poiter(x,y){
+
+		ctx.save();
+		// ctx.translate(-radius,-radius);
+		ctx.beginPath();
+		ctx.moveTo(x-12,y);
+		ctx.lineTo(x+12,y);
+		ctx.moveTo(x,y-12);
+		ctx.lineTo(x,y+12);
+		ctx.arc(x,y,10,0,Math.PI*2);
+		ctx.lineWidth = 1;
+		ctx.stroke();
+
+		ctx.restore();
+	}
 	function clear(width,height,x=0,y=0){
 		// ripulisce il canvas
 		ctx.clearRect(x, y, width, height);
@@ -589,6 +604,7 @@ export function draw(ctx){
 		background: background,
 		oldEffect: oldEffect,
 		lightEffect: lightEffect,
+		poiter: poiter,
 		clear: clear
 	};
 }

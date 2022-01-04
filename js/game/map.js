@@ -18,6 +18,8 @@ export class MapProcessor{
 		this.blockSize = 150;
 		this.endGame = false; // 'bad' || 'good'
 
+		this.input = new InputManager();
+
 
 		this.TextMap = TextMap
 		// this.TextMap = [
@@ -58,7 +60,7 @@ export class MapProcessor{
 		return [].concat(this.corpses, this.walls, this.enemies, this.player, this.bullets);
 	}
 	generate(){
-		this.player = new Player(0,0,new InputManager());
+		this.player = new Player(0,0,this.input);
 		for (let y = 0; y < this.TextMap.length; y++) {
 			let row = this.TextMap[y];
 		
@@ -164,8 +166,12 @@ export class MapProcessor{
 
 	update(dt){
 		if(this.player.health<=0) return;
-		
 
+		if(this.input.mouse.click){
+			let bullets = this.player.shoot();
+			if(bullets) this.bullets.push(...bullets);
+		}
+		
 		this.hitboxCollision();
 		for(let entity of this.entities){
 			// if()
@@ -179,8 +185,7 @@ export class MapProcessor{
 
 	render(ctx){
 
-		ctx.save();
-		
+		ctx.save();		
 
 		// gestione camera //////////////////////////////////////
 		ctx.translate(this.canvas.width/2,this.canvas.height/2);
@@ -207,6 +212,7 @@ export class MapProcessor{
 
 		
 		ctx.restore();
+		draw(ctx).poiter(this.input.mouse.x, this.input.mouse.y);
 		// effetti visivi ///////////////////
 		
 		// draw(ctx).lightEffect(this.canvas.width/2, this.canvas.height/2, 900);

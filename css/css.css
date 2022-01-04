@@ -105,7 +105,11 @@ h1{
 }
 
 canvas{
+	position: absolute;
+	top: 0;
+	left: 0;
 	filter: sepia(0.4) blur(0.8px);
+	overflow: hidden;
 }
 
 section{
@@ -122,6 +126,7 @@ section{
     justify-content: center;
 	/* justify-content: space-between; */
 	align-items: center;
+	overflow: hidden;
 	
 	/* z-index: -1; */
 }

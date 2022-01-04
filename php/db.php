@@ -4,7 +4,7 @@ function db(){
 	$host = "localhost";
 	$db_name = "JShooter";
 	$username = "root";
-	$password = "root";
+	$password = "";
 
 	// connessione al database
 	$conn = null;

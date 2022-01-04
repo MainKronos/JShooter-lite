@@ -3,7 +3,8 @@ export class InputManager{
 		this.mouse = {
 			x: 0,
 			y: 0,
-			angle: 0
+			angle: 0,
+			click: false
 		};
 		this.key = {
 			up: false,
@@ -24,7 +25,15 @@ export class InputManager{
 		document.addEventListener('mousemove', function (event) {
 			if(event.target === document.querySelector('canvas#GameBoard')){
 				inputs.mouse.angle = Math.atan2(event.y-event.target.height/2, event.x-event.target.width/2);
+				inputs.mouse.x = event.x;
+				inputs.mouse.y = event.y;
 			}
+		});
+		document.querySelector('canvas#GameBoard').addEventListener('mousedown', ()=>{
+			inputs.mouse.click = true;
+		});
+		document.querySelector('canvas#GameBoard').addEventListener('mouseup', ()=>{
+			inputs.mouse.click = false;
 		});
 
 		// key event
