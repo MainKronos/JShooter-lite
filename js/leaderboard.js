@@ -2,7 +2,7 @@ window.onload = function(){
 
 	const tbl = document.querySelector('table > tbody');
 	// const tbdy = document.createElement('tbody');
-	fetch('../api/leaderboard')
+	fetch('../api/leaderboard/')
 	.then(res=>res.json())
 	.then(res=>{
 		for(let row of res['data']){

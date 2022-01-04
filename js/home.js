@@ -22,7 +22,7 @@ function start(){
 
 	document.getElementById('leaderboard').addEventListener('click', ()=>window.location.href='./leaderboard')
 
-	fetch("./api/account")
+	fetch("./api/account/")
 	.then((res)=> res.json())
 	.then((res)=>{
 		let usernameEl = document.getElementById('username');

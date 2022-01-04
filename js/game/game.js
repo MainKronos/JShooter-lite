@@ -15,7 +15,7 @@ export class GameBoard{
 		
 		// this.ctx.filter = `sepia(0)`;
 
-		fetch("./api/map")
+		fetch("./api/map/")
 		.then((response)=> response.json())
 		.then((response)=>{
 			if(!response['error']){
@@ -200,7 +200,7 @@ export class GameBoard{
 
 		vettore = (pos+1).toString() + vettore.slice(0,pos) + score + vettore.slice(pos+score.length) + lunghezza.toString();
 
-		fetch('./api/account/score',{
+		fetch('./api/account/score/',{
 			method: 'POST',
 			body: JSON.stringify({
 				gameID: this.id,

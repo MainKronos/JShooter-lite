@@ -2,7 +2,7 @@ import { GameBoard } from "./game.js";
 
 window.onload = function(){
 
-	fetch("./api/account")
+	fetch("./api/account/")
 	.then((response)=> response.json())
 	.then((response)=>{
 		if(!response['error']){

@@ -28,12 +28,13 @@ function submit(){
 	let pass = document.querySelector(`form > input[type='password']`);
 
 	if(user.checkValidity() && pass.checkValidity()){
-		fetch(`../api/${type}`, {
+		fetch(`../api/${type}/`, {
 			method: 'POST',
 			body: new FormData(document.querySelector('form'))
 		})
 		.then(res=>res.json())
 		.then(res=>{
+			
 			if(!res['error']){
 				window.location.href='../';
 			}else{
@@ -72,7 +73,7 @@ function showError(err){
 
 
 window.onload = function(){
-	fetch("../api/account")
+	fetch("../api/account/")
 	.then((response)=> response.json(), ()=>{})
 	.then((response)=>{
 		if(!response['error']){

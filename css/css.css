@@ -28,6 +28,7 @@ header{
 	user-select: none;
 	top: 0;
 	left: 0;
+	z-index: 1;
 }
 
 header > span{
@@ -201,7 +202,7 @@ section#GameSettings label{
 
 /* width */
 ::-webkit-scrollbar {
-	width: 10px;
+	width: 7px;
 }
 
 /* Track */
@@ -212,7 +213,7 @@ section#GameSettings label{
 /* Handle */
 ::-webkit-scrollbar-thumb {
 	background: rgba(255, 204, 0, 0.4);
-	border-radius: 10px;
+	border-radius: 2px;
 }
 
 /* Handle on hover */

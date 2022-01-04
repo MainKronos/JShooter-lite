@@ -38,18 +38,22 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE GetScore() 
 BEGIN
-    SELECT d.username, d.score, d.matches
+    SELECT k.username, ROUND(k.score,0) as score, k.matches
 	FROM (
-		SELECT u.username, ROUND(AVG(s.score),0) as score, SUM(IFNULL(s.matches,0)) as matches, u.registration
-		FROM User u
-			LEFT OUTER JOIN (
-				SELECT s.username, s.mapID, MIN(s.score) as score, COUNT(*) as matches
-				FROM score s
-				GROUP BY s.username, s.mapID
-			) as s on u.username = s.username
-		GROUP BY u.username
-	) as d
-	ORDER BY ISNULL(d.score), d.score, d.registration;
+		SELECT d.username, d.registration, IF(ISNULL(d.score), NULL, (10000000/d.score)+LOG10(d.matches+10)*10) as score, d.matches
+		FROM (
+			SELECT u.username, AVG(s.score) as score, SUM(IFNULL(s.matches,0)) as matches, u.registration
+			FROM User u
+				LEFT OUTER JOIN (
+					SELECT s.username, s.mapID, MIN(s.score) as score, COUNT(*) as matches
+					FROM score s
+					GROUP BY s.username, s.mapID
+				) as s on u.username = s.username
+			GROUP BY u.username
+		) as d
+		ORDER BY ISNULL(d.score), d.score, d.registration
+	)as k
+	ORDER BY k.score DESC, k.registration ASC;
 END $$
 DELIMITER ;
 
