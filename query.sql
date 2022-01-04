@@ -46,7 +46,7 @@ BEGIN
 			FROM User u
 				LEFT OUTER JOIN (
 					SELECT s.username, s.mapID, MIN(s.score) as score, COUNT(*) as matches
-					FROM score s
+					FROM Score s
 					GROUP BY s.username, s.mapID
 				) as s on u.username = s.username
 			GROUP BY u.username
