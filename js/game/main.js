@@ -6,9 +6,9 @@ window.onload = function(){
 	.then((response)=> response.json())
 	.then((response)=>{
 		if(!response['error']){
-			// inizializzatore
-			document.getElementById('username').textContent = response['data']['username'];
-			let game = new GameBoard();
+			let username = response['data']['username'];
+			document.getElementById('username').textContent = username;
+			let game = new GameBoard(username);
 		}else{
 			window.location.replace("./login");
 		}

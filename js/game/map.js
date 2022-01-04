@@ -19,10 +19,13 @@ export class MapProcessor{
 		this.endGame = false; // 'bad' || 'good'
 
 
-		
-		this.TextMap = TextMap;
-		this.size = {width:(this.TextMap[0].length-1)*this.blockSize, height:this.TextMap.length*this.blockSize};
-		this.generate();
+		this.TextMap = TextMap
+		// this.TextMap = [
+		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
+		// 	'W                                     W',
+		// 	'W   P      E                          W',
+		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
+		// ]
 
 		// this.TextMap = [
 		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
@@ -48,11 +51,8 @@ export class MapProcessor{
 		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW'
 		// ];
 
-		// this.size = {width:(this.TextMap[0].length-1)*this.blockSize, height:this.TextMap.length*this.blockSize};
-
-		
-
-		// this.generate();
+		this.size = {width:(this.TextMap[0].length-1)*this.blockSize, height:this.TextMap.length*this.blockSize};
+		this.generate();
 	}
 	get entities(){
 		return [].concat(this.corpses, this.walls, this.enemies, this.player, this.bullets);

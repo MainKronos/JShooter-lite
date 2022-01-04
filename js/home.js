@@ -1,20 +1,50 @@
 // file di home page
 
 
-document.getElementById('play').addEventListener('click', function(){
-	window.location.href='./JShooter.html';
-})
-document.getElementById('login').addEventListener('click', function(){
-	window.location.href='./login';
-})
 
-window.onload = function(){
+
+function login(){
+	window.location.href='./login';
+}
+function logout(){
+	fetch('./api/logout')
+	.then(()=>{
+		document.getElementById('login').removeEventListener('click', logout);
+		document.getElementById('play').removeEventListener('click', play);
+		start();
+	});
+}
+function play(){
+	window.location.href='./JShooter.html';
+}
+
+function start(){
+
+	document.getElementById('leaderboard').addEventListener('click', ()=>window.location.href='./leaderboard')
+
 	fetch("./api/account")
-	.then((response)=> response.json())
-	.then((response)=>{
-		if(!response['error']){
+	.then((res)=> res.json())
+	.then((res)=>{
+		let usernameEl = document.getElementById('username');
+		let loginEl = document.getElementById('login');
+		let playEl = document.getElementById('play');
+
+
+		if(!res['error']){
 			// inizializzatore
-			document.getElementById('username').textContent = response['data']['username'];
+			usernameEl.textContent = res['data']['username'];
+			playEl.disabled = false;
+			playEl.addEventListener('click', play);
+			loginEl.addEventListener('click', logout);
+			loginEl.textContent = 'LOGOUT';
+
+		}else{
+			usernameEl.textContent = '';
+			playEl.disabled = true;
+			loginEl.addEventListener('click', login);
+			loginEl.textContent = 'LOGIN';
 		}
 	});
 }
+
+window.onload = start;

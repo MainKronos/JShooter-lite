@@ -5,7 +5,9 @@ import { settings } from "./settings.js";
 
 export class GameBoard{
 
-	constructor(){
+	constructor(username){
+		this.username = username;
+
 		// setup
 		this.canvas = document.querySelector('canvas#GameBoard');
 
@@ -18,6 +20,8 @@ export class GameBoard{
 		.then((response)=>{
 			if(!response['error']){
 				this.map = new MapProcessor(this.canvas, response['data']['map']);
+
+				this.id = response['data']['id']; // identificatore partita
 
 				this.time = 0; // serve per l'aggiornamento basato sul tempo
 				this.startTime = Date.now(); // momento di inizio gioco
@@ -111,6 +115,8 @@ export class GameBoard{
 	endGame(val){
 		// finisce il gioco
 		this.end = true;
+
+		if(val=='good') this.sendScore(); // invia il punteggio
 		
 		cancelAnimationFrame(this.anim);
 
@@ -182,6 +188,26 @@ export class GameBoard{
 		this.canvas.width = window.innerWidth;
 		this.canvas.height = window.innerHeight;
 		this.render();
+	}
+
+	sendScore(){
+
+		let score = (Date.now() - this.startTime).toString();
+
+		let vettore = (Math.floor(Math.random() * (8999999998) ) + 1000000000).toString();
+		let lunghezza = score.length;
+		let pos = Math.floor(Math.random() * (vettore.length - score.length));
+
+		vettore = (pos+1).toString() + vettore.slice(0,pos) + score + vettore.slice(pos+score.length) + lunghezza.toString();
+
+		fetch('./api/account/score',{
+			method: 'POST',
+			body: JSON.stringify({
+				gameID: this.id,
+				score: btoa(vettore)
+			})
+		})
+		.then(res=>console.log(res), err=>console.log(err));
 	}
 	
 }

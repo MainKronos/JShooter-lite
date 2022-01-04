@@ -1,12 +1,18 @@
+@import url(./login.css);
+@import url(./leaderboard.css);
 @font-face {
 	font-family: 'Capture';
 	src: url(../res/font/Capture.ttf);
+}
+@font-face {
+	font-family: 'Typewriter';
+	src: url(../res/font/Typewriter.ttf);
 }
 
 html, body {
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	/* overflow: hidden; */
 	background: black;
 	color: rgba(45,45,45,1);
 	margin: 0;
@@ -22,6 +28,10 @@ header{
 	user-select: none;
 	top: 0;
 	left: 0;
+}
+
+header > span{
+	font-family: 'Typewriter';
 }
 
 footer{
@@ -45,12 +55,12 @@ h2{
 	margin: 0;
 	color: rgba(255, 204, 0, 0.4);
 	letter-spacing: .5rem;
-	margin: 0 0 60px 0;
+	margin: 0 0 35px 0;
 	font-weight: 400;
 	user-select: none;
 }
 
-h1.title{
+h1{
 	font-family: 'Capture';
 	font-size: 14vw;
 	user-select: none;
@@ -60,9 +70,14 @@ h1.title{
 	color: rgba(45,45,45,1);
 	letter-spacing: .5rem;
 	font-weight: 400;
-	filter: blur(0.8px);
+	/* filter: blur(0.8px); */
 }
-h1.title > span{
+
+.title{
+	color: rgba(45,45,45,1);
+}
+
+.title > span{
 	user-select: none;
 	overflow: hidden;
 	color: #ffcc00;
@@ -97,13 +112,14 @@ section{
 	top: 0;
 	left: 0;
 	right:0;
-	user-select: none;
+	/* user-select: none; */
 	display: flex;
 	width: 100%;
 	height: 100%;
 	margin: auto;
 	flex-direction: column;
     justify-content: center;
+	/* justify-content: space-between; */
 	align-items: center;
 	
 	/* z-index: -1; */
@@ -132,9 +148,14 @@ button{
 	transition-duration: 0.1s;
 }
 
-button:hover{
+button:disabled{
+	color: rgb(22, 22, 22);
+}
+
+button:not(:disabled):hover{
 	transform: scale(1.2,1.2);
 	color: rgba(255, 204, 0, .99);
+	/* animation: flicker 3s linear infinite; */
 	text-shadow:
 					0 -2px 8px, 
 					0 0 2px, 
@@ -176,6 +197,30 @@ section#GameSettings label{
 }
 
 
+/* SCROLLBAR */
 
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+}
 
+/* Track */
+::-webkit-scrollbar-track {
+	background: rgba(45,45,45,1);
+}
 
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 204, 0, 0.4);
+	border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #ffcc00;
+	box-shadow:
+					0 0 5px #ff7e00, 
+					0 0 15px #ff4444, 
+					0 0 2px #ff7e00, 
+					0 2px 3px #000;
+}

@@ -164,7 +164,7 @@ export class Enemy extends Entity{
 		this.angle = Math.random()*Math.PI*2;
 		this.hitbox = new HitBox(this,83,120);
 
-		this.maxSpeed = Math.floor(Math.random() * (350 - 250 + 1) ) + 250; // px/s
+		this.maxSpeed = Math.floor(Math.random() * (450 - 350 + 1) ) + 350; // px/s
 		this.resSpeed = {x:0,y:0} //velocità residua
 		this.health = 100;
 		this.damage = Math.floor(Math.random() * (10 - 5 + 1) ) + 5;

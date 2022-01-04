@@ -2,8 +2,7 @@
 
 session_start();
 
-
-
+header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset=utf-8');
 
 // STATUS CODE
@@ -84,10 +83,11 @@ function res_help(){
 function signup(){
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 		if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
-			$user = $_REQUEST['username'];
+			$user = filter_var($_REQUEST['username'], FILTER_SANITIZE_STRING);
 			$pass = password_hash($_REQUEST['password'], PASSWORD_DEFAULT);
+			$registrazione = date("Y-m-d H:i:s");
 			try {
-				db()->query("INSERT INTO User value ('$user', '$pass');");
+				db()->query("INSERT INTO User value ('$user', '$pass', '$registrazione');");
 			} catch (PDOException $e) {
 				if($e->getCode() == '23000'){
 					return json_encode(array(
@@ -95,7 +95,7 @@ function signup(){
 					));
 				}
 				return json_encode(array(
-					'error' => $e->errorInfo()[2]
+					'error' => $e->getMessage()
 				));
 			}
 			$_SESSION["username"] = $user;
@@ -108,30 +108,13 @@ function signup(){
 	return;
 }
 
-function account($args){
-	if($_SERVER["REQUEST_METHOD"] == "GET"){
-		if(isset($_SESSION["username"])){
-			return json_encode(array(
-				'error' => false,
-				'data' => array('username' => $_SESSION["username"])
-			));
-		}else{
-			return json_encode(array(
-				'error' => 'Utente non loggato.'
-			));
-		}
-	}
-	http_response_code(400);
-	return;
-}
-
 function login(){
 
 	// login
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 		if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
-			$user = $_REQUEST['username'];
-			$pass = $_REQUEST['password'];
+			$user = filter_var($_REQUEST['username'], FILTER_SANITIZE_STRING);
+			$pass = filter_var($_REQUEST['password'], FILTER_SANITIZE_STRING);
 			// $pass = password_hash($_REQUEST['password'], PASSWORD_DEFAULT);
 
 			// echo password_hash($_REQUEST['password'], PASSWORD_DEFAULT);
@@ -147,30 +130,133 @@ function login(){
 					));
 				}
 			}
+			return json_encode(array(
+				'error' => 'Credenziali non valide.'
+			));
 		}
-		http_response_code(401); // non autorizzato
-		return;
 	}
 	http_response_code(400);
 	return;
 }
-function map(){
-	if($_SERVER["REQUEST_METHOD"] == "GET"){
-		$result = db()->query('SELECT * FROM Map;');
-		$lenght = $result->rowCount();
-		if($lenght > 0){
-			$res = array();
-			while ($row = $result->fetch()) {
-				array_push($res, $row['map']);
+
+function logout(){
+	if(isset($_SESSION["username"])){
+		session_destroy();
+		return json_encode(array(
+			'error' => false
+		));
+	}
+	http_response_code(403);
+	return;
+}
+
+function account($args){
+	if(count($args)==0){
+		if($_SERVER["REQUEST_METHOD"] == "GET"){
+			if(isset($_SESSION["username"])){
+				return json_encode(array(
+					'error' => false,
+					'data' => array('username' => $_SESSION["username"])
+				));
+			}else{
+				return json_encode(array(
+					'error' => 'Utente non loggato.'
+				));
 			}
-			// sleep(5);
+		}
+	}elseif ($args[0] == 'score') {
+		if($_SERVER["REQUEST_METHOD"] == "POST"){
+			if(isset($_SESSION["username"])){
+
+				$data = json_decode(file_get_contents('php://input'), true);
+				$gameID = $data['gameID'];
+				if(isset($_SESSION[$gameID])){
+
+					$ricezione = round(microtime(true) * 1000);
+
+					$session = $_SESSION[$gameID];
+					$_SESSION[$gameID] = null;
+
+					$score = base64_decode($data['score']);
+					$score = substr($score, $score[0], substr($score, -1));
+
+					// se la durata della partita inviata dal client è inferiore di 1 secondi alla differenza della durata calcolata dal server
+					if(($ricezione - $session['start'] - $score <= 1000) && ($ricezione - $session['start'] - $score > 0)){
+						$username = $_SESSION['username'];
+						$map = $session['map'];
+						db()->exec("CALL UpdateScore('$username', '$map', $score);");
+						return json_encode(array(
+							'error' => false
+						));
+					}
+					error_log('Errore trasmissione dati.');
+					return json_encode(array(
+						'error' => 'Errore trasmissione dati.'
+					));
+				}
+				return json_encode(array(
+					'error' => 'Partita non precedentemente inizializzata.'
+				));
+			}
 			return json_encode(array(
-				'error' => false,
-				'data' => array(
-					'map' => json_decode($res[rand(0,$lenght-1)])
-				)
+				'error' => 'Utente non loggato.'
 			));
 		}
+	}
+	http_response_code(400);
+	return;
+}
+
+function leaderboard(){
+	if($_SERVER["REQUEST_METHOD"] == "GET"){
+		// prende lo score
+		$result = db()->query("CALL GetScore();");
+
+		$res = array();
+
+		while ($row = $result->fetch()) {
+			$user = $row['username'];
+			$score = ($row['score'] == null)? null : $row['score']/1000;
+			$matches = $row['matches'];
+			array_push($res, array('user'=>$user , 'score'=>$score, 'matches'=>$matches));
+		}
+		return json_encode(array(
+			'error' => false,
+			'data' => $res
+		));
+
+	}
+	http_response_code(400);
+	return;
+}
+
+function map(){
+	if($_SERVER["REQUEST_METHOD"] == "GET"){
+		if(isset($_SESSION["username"])){
+			$result = db()->query('SELECT * FROM Map;');
+			$lenght = $result->rowCount();
+			if($lenght > 0){
+				$rnd = rand(0,$lenght-1);
+				$res = $result->fetchAll()[$rnd];
+
+				$gameID = uniqid();
+
+				$_SESSION[$gameID] = array('map'=>$res['mapID'], 'start'=>round(microtime(true) * 1000));
+				
+				// sleep(5);
+				return json_encode(array(
+					'error' => false,
+					'data' => array(
+						'map' => json_decode($res['map']),
+						'id' => $gameID
+					)
+				));
+			}
+			http_response_code(500);
+			return;
+		}
+		http_response_code(403);
+		return;
 	}
 	http_response_code(400);
 	return;
@@ -194,11 +280,17 @@ function API($ulr){
 		case 'login':
 			return login();
 			break;
-		case 'account':
-			return account(array_slice($endpints,0));
+		case 'logout':
+			return logout();
 			break;
 		case 'signup':
 			return signup();
+			break;
+		case 'account':
+			return account(array_slice($endpints,1));
+			break;
+		case 'leaderboard':
+			return leaderboard();
 			break;
 		case 'map':
 			return map();

@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 	<head>
 		<title>Login</title>
 		<link rel="stylesheet" href="../css/css.css">
 	</head>
 	<body>
+		<header>User: <span id='username'></span></header>
 		<section>
-			<h2>LOGIN</h2>
-			<form action="../api/login" method="post">
-				<label for="username">Username</label>
-				<input type="text" name="username">
-				<label for="password">Password</label>
-				<input type="password" name="password">
-				<input type="submit">
+			<h2 class='title'>L<span>O</span>GIN</h2>
+			<p class='error'></p>
+			<form>
+				<input type="text" name="username" placeholder="Username" autocomplete="off" spellcheck="false" autofocus required>
+				<input type="password" name="password" placeholder="Password" autocomplete="off" spellcheck="false" required>
 			</form>
+			<button id='submit'>LOGIN</button>
+			<p class="logsign">Non hai un account? <a href="#">SignUp</a></p>
 		</section>
+		<script src="../js/login.js"></script>
 	</body>
 </html>

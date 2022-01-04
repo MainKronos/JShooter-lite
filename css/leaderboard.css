@@ -1,0 +1,31 @@
+table{
+	border-collapse: collapse;
+	width: 50%;
+	max-width: 500px;
+	text-align: center;
+}
+
+th{
+	padding: 15px;
+	border-bottom: 1px solid rgba(45,45,45,1);
+	color: rgba(255, 204, 0, 0.4);
+	font-family: 'Capture';
+	font-size: 2.5em;
+	letter-spacing: 1px;
+	font-weight: 400;
+}
+
+td{
+	padding: 15px;
+	border-bottom: 1px solid rgba(45,45,45,1);
+	font-family: 'Typewriter';
+	font-size: 1.2rem;
+	text-shadow: 0 0 3px rgba(45,45,45,1);
+}
+
+div.leaderboard{
+	padding-top: 100px;
+	display: flex;
+	flex-direction: column;
+    align-items: center;
+}
