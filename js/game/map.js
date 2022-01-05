@@ -25,7 +25,8 @@ export class MapProcessor{
 		// this.TextMap = [
 		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
 		// 	'W                                     W',
-		// 	'W   P      E                          W',
+		// 	'W   P                            E    W',
+		// 	'W                                     W',
 		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
 		// ]
 
@@ -197,7 +198,7 @@ export class MapProcessor{
 		/////////////////////////////////////////////////
 
 		// render background
-		draw(ctx).background(0,0,this.size.width,this.size.height);
+		draw(ctx).background(-this.blockSize/2,-this.blockSize/2,this.size.width,this.size.height);
 		// draw(ctx).background(-this.canvas.width,-this.canvas.height,this.size.width+2*this.canvas.width,this.size.height+2*this.canvas.height);
 
 		// render entità

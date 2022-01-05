@@ -441,12 +441,15 @@ export function draw(ctx){
 		ctx.translate(x, y);
 
 		// muro
-
+		ctx.save();
+		// ctx.translate(0,size/2)
+		ctx.transform(1,0,0,0.6,0,0)
 		ctx.beginPath();
-		ctx.rect(-size/2,size/2,size,size/2);
+		ctx.rect(-size/2,size/2,size,size);
 		ctx.fillStyle = pattern;
 		ctx.fill();
 		ctx.stroke();
+		ctx.restore();
 
 
 		ctx.beginPath();
