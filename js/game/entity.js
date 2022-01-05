@@ -164,7 +164,7 @@ export class Enemy extends Entity{
 		this.angle = Math.random()*Math.PI*2;
 		this.hitbox = new HitBox(this,83,120);
 
-		this.maxSpeed = Math.floor(Math.random() * (450 - 350 + 1) ) + 350; // px/s
+		this.maxSpeed = Math.floor(Math.random() * (510 - 490 + 1) ) + 490; // px/s
 		this.resSpeed = {x:0,y:0} //velocità residua
 		this.health = 100;
 		this.damage = Math.floor(Math.random() * (13 - 10 + 1) ) + 10;
@@ -186,8 +186,8 @@ export class Enemy extends Entity{
 		let tAngle = Math.atan2(distY, distX);
 		let inAllerta = Math.pow(distX,2)+Math.pow(distY,2)<=Math.pow(this.target.alert,2); // se si trova nel raggio di azione
 		let speed = {
-			x: inAllerta ? Math.cos(tAngle)*this.maxSpeed:0,
-			y: inAllerta ? Math.sin(tAngle)*this.maxSpeed:0
+			x: inAllerta ? Math.cos(tAngle)*this.maxSpeed * ((this.health <= 15) ? -1 : 1) : 0,
+			y: inAllerta ? Math.sin(tAngle)*this.maxSpeed * ((this.health <= 15) ? -1 : 1) : 0
 		}
 		this.angle = inAllerta ? tAngle : this.angle;
 
@@ -273,7 +273,7 @@ export class Bullet extends Entity{
 		this.maxSpeed = speed;
 		this.radius = radius;
 		this.damage = Math.floor(Math.random() * (20 - 10 + 1) ) + 10;
-		this.knockback = 900;
+		this.knockback = 2000;
 		this.toBeDeleted = false; // se è da eliminare
 
 	}

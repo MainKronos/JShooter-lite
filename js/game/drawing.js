@@ -578,14 +578,17 @@ export function draw(ctx){
 	function poiter(x,y){
 
 		ctx.save();
+		ctx.lineWidth = 1;
 		// ctx.translate(-radius,-radius);
 		ctx.beginPath();
 		ctx.moveTo(x-12,y);
 		ctx.lineTo(x+12,y);
 		ctx.moveTo(x,y-12);
 		ctx.lineTo(x,y+12);
+		ctx.stroke();
+		ctx.beginPath();
 		ctx.arc(x,y,10,0,Math.PI*2);
-		ctx.lineWidth = 1;
+		
 		ctx.stroke();
 
 		ctx.restore();
