@@ -1,5 +1,5 @@
 import { Player, Enemy, Bullet, Wall } from "./entity.js";
-import { InputManager } from "./other.js";
+import { input } from "./input.js";
 import { hitboxOverlap } from "./utility.js";
 import { draw } from "./drawing.js";
 
@@ -17,8 +17,6 @@ export class MapProcessor{
 
 		this.blockSize = 150;
 		this.endGame = false; // 'bad' || 'good'
-
-		this.input = new InputManager();
 
 
 		this.TextMap = TextMap
@@ -61,7 +59,7 @@ export class MapProcessor{
 		return [].concat(this.corpses, this.walls, this.enemies, this.player, this.bullets);
 	}
 	generate(){
-		this.player = new Player(0,0,this.input);
+		this.player = new Player(0,0,input);
 		for (let y = 0; y < this.TextMap.length; y++) {
 			let row = this.TextMap[y];
 		
@@ -168,7 +166,7 @@ export class MapProcessor{
 	update(dt){
 		if(this.player.health<=0) return;
 
-		if(this.input.mouse.click){
+		if(input.mouse.click){
 			let bullets = this.player.shoot();
 			if(bullets) this.bullets.push(...bullets);
 		}
@@ -213,7 +211,7 @@ export class MapProcessor{
 
 		
 		ctx.restore();
-		draw(ctx).poiter(this.input.mouse.x, this.input.mouse.y);
+		draw(ctx).poiter(input.mouse.x, input.mouse.y);
 		// effetti visivi ///////////////////
 		
 		// draw(ctx).lightEffect(this.canvas.width/2, this.canvas.height/2, 900);

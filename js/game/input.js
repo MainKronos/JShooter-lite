@@ -1,4 +1,4 @@
-export class InputManager{
+class InputManager{
 	constructor(){
 		this.mouse = {
 			x: 0,
@@ -54,6 +54,18 @@ export class InputManager{
 				case "d": inputs.key.right = false; break;
 			}
 		});
+
+
+		document.addEventListener("visibilitychange", ()=>{
+			if(document.hidden){
+				inputs.mouse.click = false;
+				inputs.key.up = false;
+				inputs.key.down = false;
+				inputs.key.right = false;
+				inputs.key.left = false;
+			}
+		});
 	}
 }
 
+export var input = new InputManager();
