@@ -32,51 +32,69 @@ export function draw(ctx){
 		ctx.translate(x, y);
 		ctx.rotate(angle-Math.PI/2);
 
+		// // left foot
+		// ctx.beginPath();
+		// ctx.rect(20, -20 + (footPosition * 35), 25, 40);
+		// ctx.fillStyle = '#D95B43';
+		// ctx.fill();
+
+		// // right foot
+		// ctx.beginPath();
+		// ctx.rect(-40, -20 + (footPosition * -35), 25, 40);
+		// ctx.fillStyle = '#D95B43';
+		// ctx.fill();
+
 		// barccio e mano sinistra
+		ctx.save();
 		ctx.rotate(30 * Math.PI / 180);
 		/// mano ###
+		ctx.save();
 		ctx.beginPath();
 		ctx.translate(50, 78);
 		ctx.arc(0, 0, 14, 0, 2 * Math.PI);
 		ctx.fillStyle = color.skin;
 		ctx.fill();
 		ctx.stroke();
-		ctx.translate(-50, -78);
+		ctx.restore();
 		/// braccio ###
 		ctx.beginPath();
 		ctx.rect(40, -10, 20, 80);
 		ctx.fillStyle = color.primary_light;
-		ctx.strokeStyle = 'black';
 		ctx.fill();
 		ctx.stroke();
-		ctx.rotate(-30 * Math.PI / 180);
+		ctx.restore();
 
 		// braccio e mano destra
+		ctx.save();
 		ctx.rotate(-50 * Math.PI / 180);
 		/// mano ###
-		ctx.translate(-45, 33);
+		ctx.save();
 		ctx.beginPath();
+		ctx.translate(-45, 33);
 		ctx.arc(0, 0, 14, 0, 2 * Math.PI);
 		ctx.fillStyle = color.skin;
 		ctx.fill();
 		ctx.stroke();
-		ctx.translate(45, -33);
+		ctx.restore();
 		/// braccio ###
 		ctx.beginPath();
 		ctx.rect(-55, -20, 20, 45);
 		ctx.fillStyle = color.primary_light;
 		ctx.fill();
 		ctx.stroke();
-		ctx.rotate(50 * Math.PI / 180);
+		ctx.restore();
 
 		// torso
+		ctx.save();
 		ctx.beginPath();
 		ctx.roundRect(-60, - 30, 120, 60, 4);
 		ctx.fillStyle = color.secondary_light;
 		ctx.fill();
 		ctx.stroke();
+		ctx.restore();
 
 		// fucile
+		// ctx.save();
 		ctx.beginPath();
 		ctx.moveTo(-13,0);
 		ctx.lineTo(-13,90);
@@ -96,15 +114,19 @@ export function draw(ctx){
 		ctx.fillStyle = 'gray';
 		ctx.fill();
 		ctx.stroke();
+		// ctx.restore();
 
 		// testa
+		ctx.save();
 		ctx.beginPath();
 		ctx.arc(0, 0, 40, 0, 2 * Math.PI);
 		ctx.fillStyle = color.skin;
 		ctx.fill();
 		ctx.stroke();
+		ctx.restore();
 
 		// capelli
+		ctx.save();
 		ctx.rotate(-180 * Math.PI / 180);
 		ctx.beginPath();
 		ctx.arc(0, 0, 40, 0, 180 * Math.PI / 180);
@@ -113,9 +135,10 @@ export function draw(ctx){
 			i+=(40*2)/8;
 			ctx.lineTo(-40+i, -20);
 		}
+		ctx.closePath();
 		ctx.fillStyle = color.hair;
 		ctx.fill();
-		ctx.rotate(180 * Math.PI / 180);
+		ctx.restore();
 
 		ctx.restore();
 	}
@@ -259,36 +282,45 @@ export function draw(ctx){
 		ctx.rotate(angle-Math.PI/2);
 
 		// left hand
+		ctx.save();
 		ctx.beginPath();
 		ctx.rect(-50, -10, 20, 90);
 		ctx.fillStyle = '#339933';
 		ctx.fill();
+		ctx.restore();
 
 		// right hand
+		ctx.save();
 		ctx.beginPath();
 		ctx.rect(30, -10, 20, 85);
 		ctx.fillStyle = '#99ff33';
 		ctx.fill();
+		ctx.restore();
 
 		// torso
+		ctx.save();
 		ctx.beginPath();
 		ctx.rect(-60, - 30, 120, 60);
 		ctx.fillStyle = '#0B486B';
 		ctx.fill();
+		ctx.restore();
 
 		// head
+		ctx.save();
 		ctx.beginPath();
 		ctx.arc(0, 0, 40, 0, 2 * Math.PI);
 		ctx.fillStyle = '#CFF09E';
 		ctx.fill();
+		ctx.restore();
 
 		// hair
+		ctx.save();
 		ctx.rotate(-180 * Math.PI / 180);
 		ctx.beginPath();
 		ctx.arc(0, 0, 37, 0, 180 * Math.PI / 180);
 		ctx.fillStyle = 'green';
 		ctx.fill();
-		ctx.rotate(180 * Math.PI / 180);
+		ctx.restore();
 
 		ctx.restore();
 	}
@@ -299,35 +331,42 @@ export function draw(ctx){
 		ctx.save();
 		
 		ctx.translate(x, y);
+		// ctx.rotate(angle-Math.PI/2);
+		// ctx.transform(1,0,-0.2,1,0,0);
 
+		ctx.save();
 		ctx.roundRect(-50,-95,100,155,10);
-		// ctx.shadowBlur = 5;
-		// ctx.shadowColor = '#542a00';
-		ctx.globalAlpha = 0.6;
+		ctx.globalAlpha = 0.4;
+		// ctx.globalCompositeOperation = 'multiply';
+		ctx.shadowBlur = 5;
+		ctx.shadowColor = '#542a00';
 		ctx.fillStyle = '#542a00';
 		ctx.strokeStyle = '#331a00';
 		ctx.lineWidth = 5;
 		ctx.fill();
 		ctx.stroke();
-		ctx.globalAlpha = 1;
+		ctx.restore();
 
 		// lapide
+		ctx.save();
 		ctx.beginPath();
 		ctx.moveTo(40, -45);
 		ctx.arcTo(40, 45, -40, 45, 5);
 		ctx.arcTo(-40, 45, -40, -45, 5);
 		ctx.lineTo(-40, -45);
 		ctx.arc(0,-45,40,Math.PI,Math.PI*2);
+		ctx.closePath();
 		ctx.strokeStyle = 'black';
 		ctx.lineWidth = 1.5;
 		ctx.fillStyle = 'grey';
-		// ctx.shadowBlur = 10;
-		// ctx.shadowColor = '#542a00';
+		ctx.shadowBlur = 10;
+		ctx.shadowColor = '#542a00';
 		ctx.fill();
 		ctx.stroke();
+		ctx.restore();
 
 		// R.I.P.
-		// ctx.save();
+		ctx.save();
 		ctx.fillStyle = 'black';
 		ctx.textAlign = 'center';
 		ctx.font = '25px serif';
@@ -335,9 +374,10 @@ export function draw(ctx){
 		ctx.strokeStyle = '#4d4d4d';
 		ctx.lineWidth = 1;
 		ctx.strokeText('R.I.P.', 0, -20);
-		// ctx.restore();
+		ctx.restore();
 
 		// scritte (liniette)
+		ctx.save();
 		ctx.beginPath();
 		ctx.moveTo(-30,-5);
 		ctx.lineTo(30,-5);
@@ -352,6 +392,7 @@ export function draw(ctx){
 		ctx.strokeStyle = '#4d4d4d';
 		ctx.lineWidth = 3;
 		ctx.stroke();
+		ctx.restore();
 		
 		// terra
 		// ctx.save();
@@ -386,9 +427,8 @@ export function draw(ctx){
 		ctx.lineTo(8,10);
 		ctx.lineTo(8,-17);
 
-		// ctx.closePath();
+		ctx.closePath();
 		ctx.fillStyle = 'grey';
-		ctx.strokeStyle = 'black';
 		ctx.fill();
 		ctx.stroke();
 		ctx.restore();
@@ -396,13 +436,14 @@ export function draw(ctx){
 	function wall(x,y,size,color='grey'){
 
 		let pattern = ctx.createPattern(wallImg, 'repeat');
-		// ctx.save();
+		ctx.save();
 
 		ctx.translate(x, y);
 
 		// muro
 		ctx.save();
-		ctx.scale(1, 0.6);
+		// ctx.translate(0,size/2)
+		ctx.transform(1,0,0,0.6,0,0)
 		ctx.beginPath();
 		ctx.rect(-size/2,size/2,size,size);
 		ctx.fillStyle = pattern;
@@ -429,7 +470,7 @@ export function draw(ctx){
 
 		
 
-		ctx.translate(-x, -y);
+		ctx.restore();
 	}
 	function healthBar(x, y, health) {
 
@@ -443,6 +484,7 @@ export function draw(ctx){
 		grd.addColorStop(0.5, hColor);
 		grd.addColorStop(1, 'black');
 
+		ctx.save();
 		ctx.translate(x,y);
 
 		ctx.beginPath();
@@ -459,8 +501,8 @@ export function draw(ctx){
 		ctx.lineWidth = 2;
 		ctx.stroke();
 
-		ctx.shadowBlur = 0;
-		ctx.translate(-x,-y);
+
+		ctx.restore();
 	}
 	function hitBox(x,y,width,height,angle=0){
 		ctx.save();
@@ -493,21 +535,23 @@ export function draw(ctx){
 	function background(x,y,width,height){
 		let pattern = ctx.createPattern(bgImage, 'repeat');
 
+		ctx.save();
 		ctx.beginPath();
 		ctx.rect(x,y,width,height);
 		ctx.fillStyle = pattern;
 		// ctx.shadowColor = 'black';
 		// ctx.shadowBlur = 5;
 		ctx.fill();
+		ctx.stroke();
+		ctx.restore();
 	}
 	function oldEffect(x,y,width,height){
+		ctx.save();
 		ctx.globalAlpha = 0.3;
 		ctx.globalCompositeOperation = 'multiply';
+		// ctx.globalCompositeOperation = 'source-over';
 		ctx.drawImage(oldImage,x,y,width,height);
-
-		// restore
-		ctx.globalAlpha = 1;
-		ctx.globalCompositeOperation = 'source-over';
+		ctx.restore();
 	}
 	function lightEffect(x,y, radius){
 
@@ -533,6 +577,7 @@ export function draw(ctx){
 	}
 	function poiter(x,y){
 
+		ctx.save();
 		ctx.lineWidth = 1;
 		// ctx.translate(-radius,-radius);
 		ctx.beginPath();
@@ -546,6 +591,7 @@ export function draw(ctx){
 		
 		ctx.stroke();
 
+		ctx.restore();
 	}
 	function clear(width,height,x=0,y=0){
 		// ripulisce il canvas

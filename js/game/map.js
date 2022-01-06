@@ -18,14 +18,15 @@ export class MapProcessor{
 		this.blockSize = 150;
 		this.endGame = false; // 'bad' || 'good'
 
+		this.scale =  Math.max(Math.min(this.canvas.width/1000, this.canvas.height/1000),0.5);
+
 
 		this.TextMap = TextMap
 		// this.TextMap = [
-		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
-		// 	'W                                     W',
-		// 	'W   P                            E    W',
-		// 	'W                                     W',
-		// 	'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW',
+		// 	'WWWWWWWWWWWWWWWWWWWWWWW',
+		// 	'W           W         W',
+		// 	'W   P    E  W     E   W',
+		// 	'WWWWWWWWWWWWWWWWWWWWWWW',
 		// ]
 
 		// this.TextMap = [
@@ -107,6 +108,12 @@ export class MapProcessor{
 		let entities = this.entities.filter(elem => {
 			if(!elem.hitbox.enable) return false;
 			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert*1.5,2)) return false;
+			if(
+				!((this.player.x-this.blockSize)*this.scale-this.canvas.width/2<=elem.x*this.scale) || 
+				!(elem.x*this.scale <=(this.player.x+this.blockSize)*this.scale+this.canvas.width/2) ||
+				!((this.player.y-this.blockSize)*this.scale-this.canvas.height/2<=elem.y*this.scale) || 
+				!(elem.y*this.scale <=(this.player.y+this.blockSize)*this.scale+this.canvas.height/2)
+			) return false;
 			return true;
 		});
 
@@ -139,19 +146,6 @@ export class MapProcessor{
 		}
 	}
 	rearrangeEnemies(){
-		// riordina i cadaveri dei nemici per non rendere le tombe in primo piano
-
-		// let tmp = null;
-		// let index = 0;
-		// for(let i=0; i<this.enemies.length;i++){
-		// 	if(this.enemies[i].health<=0){
-		// 		tmp = this.enemies[index];
-		// 		this.enemies[index] = this.enemies[i];
-		// 		this.enemies[i] = tmp;
-		// 		index++;
-		// 	}
-		// }
-		
 		for(let elem of this.enemies){
 			if(elem.health<=0){
 				this.corpses.push(this.enemies.splice(this.enemies.indexOf(elem),1)[0]);
@@ -181,11 +175,22 @@ export class MapProcessor{
 		}
 		
 		this.hitboxCollision();
-		for(let entity of this.entities){
-			// if()
+
+		let fEntities = this.entities.filter(elem => {
+			if(!elem.hitbox.enable) return false;
+			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert*1.5,2)) return false;
+			if(
+				!((this.player.x-this.blockSize)*this.scale-this.canvas.width/2<=elem.x*this.scale) || 
+				!(elem.x*this.scale <=(this.player.x+this.blockSize)*this.scale+this.canvas.width/2) ||
+				!((this.player.y-this.blockSize)*this.scale-this.canvas.height/2<=elem.y*this.scale) || 
+				!(elem.y*this.scale <=(this.player.y+this.blockSize)*this.scale+this.canvas.height/2)
+			) return false;
+			return true;
+		})
+		for(let entity of fEntities){
 			entity.update(dt);
-			if(entity.toBeDeleted) this.deleteEntity(entity);
 		}
+		for(let bullet of this.bullets) if(bullet.toBeDeleted) this.deleteEntity(bullet);
 		this.rearrangeEnemies();
 
 		this.endGame = this.checkEndGame();
@@ -193,34 +198,33 @@ export class MapProcessor{
 
 	render(ctx){
 
+		this.scale = Math.max(Math.min(this.canvas.width/1000, this.canvas.height/1000),0.5);
+
 		ctx.save();		
 
 		// gestione camera //////////////////////////////////////
-		ctx.translate(this.canvas.width/2,this.canvas.height/2);
-		let scale = Math.min(this.canvas.width/1000, this.canvas.height/1000);
-		scale = Math.max(scale, 0.5); // fattore scala massimo
-		ctx.scale(scale,scale);
-		ctx.translate(-this.player.x, -this.player.y); // mette il giocatore al centro della mappa
+		ctx.translate(Math.round(this.canvas.width/2),Math.round(this.canvas.height/2));
+		ctx.scale(this.scale,this.scale);
+		ctx.translate(Math.round(-this.player.x), Math.round(-this.player.y)); // mette il giocatore al centro della mappa
 
 		/////////////////////////////////////////////////
 
 		// render background
-		draw(ctx).background(-this.blockSize/2,-this.blockSize/2,this.size.width,this.size.height);
-		// draw(ctx).background(-this.canvas.width,-this.canvas.height,this.size.width+2*this.canvas.width,this.size.height+2*this.canvas.height);
+		draw(ctx).background(Math.round(-this.blockSize/2),Math.round(-this.blockSize/2),this.size.width,this.size.height);
 
 		// render entità
 		for(let entity of this.entities){
 			if(
-				this.player.x*scale-this.canvas.width/2-this.blockSize<=entity.x*scale && 
-				entity.x*scale <=this.player.x*scale+this.canvas.width/2+this.blockSize &&
-				this.player.y*scale-this.canvas.height/2-this.blockSize<=entity.y*scale && 
-				entity.y*scale <=this.player.y*scale+this.canvas.height/2+this.blockSize
+				(this.player.x-this.blockSize)*this.scale-this.canvas.width/2<=entity.x*this.scale && 
+				entity.x*this.scale <=(this.player.x+this.blockSize)*this.scale+this.canvas.width/2 &&
+				(this.player.y-this.blockSize)*this.scale-this.canvas.height/2<=entity.y*this.scale && 
+				entity.y*this.scale <=(this.player.y+this.blockSize)*this.scale+this.canvas.height/2
 			) entity.render(ctx);
 		}
 
 		
 		ctx.restore();
-		draw(ctx).poiter(input.mouse.x, input.mouse.y);
+		draw(ctx).poiter(Math.round(input.mouse.x), Math.round(input.mouse.y));
 		// effetti visivi ///////////////////
 		
 		// draw(ctx).lightEffect(this.canvas.width/2, this.canvas.height/2, 900);

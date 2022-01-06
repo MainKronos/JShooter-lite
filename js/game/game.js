@@ -11,7 +11,7 @@ export class GameBoard{
 		// setup
 		this.canvas = document.querySelector('canvas#GameBoard');
 
-		this.ctx = this.canvas.getContext('2d');
+		this.ctx = this.canvas.getContext('2d', { alpha: false });
 		
 		// this.ctx.filter = `sepia(0)`;
 
@@ -101,12 +101,10 @@ export class GameBoard{
 	render(){
 		// renderizza tutti gli elementi
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
+		
 		
 		// gestione elementi mappa
 		this.map.render(this.ctx);
-		
-		this.fps.render(this.ctx);
 		
 		if(this.map.endGame) this.endGame(this.map.endGame);
 		

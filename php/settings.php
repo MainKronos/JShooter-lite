@@ -12,9 +12,14 @@ function settings(){
 			}
 			
 		}elseif($_SERVER["REQUEST_METHOD"] == "GET"){
+			if($_SESSION["settings"]){
+				return json_encode(array(
+					'error' => false,
+					'data' => $_SESSION["settings"]
+				));
+			}
 			return json_encode(array(
-				'error' => false,
-				'data' => $_SESSION["settings"]
+				'error' => 'Nessune impostazioni salvate.',
 			));
 		}
 		http_response_code(400);

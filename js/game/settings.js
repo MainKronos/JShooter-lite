@@ -7,40 +7,39 @@ class GameSettings{
 		fetch('./api/account/settings/')
 		.then((res)=> res.json())
 		.then((res)=>{
-			if(!res['error']){
-				let saveSettings = (res['data'])? res['data'] : {
-					showFPS: false,
-					globalVolume: 1,
-					backgroundVolume: 1,
-					undeadVolume: 1,
-					shotVolume: 1,
-					punchVolume: 1,
-					walkVolume: 1
-				}
-
-				this.showFPS = saveSettings['showFPS'];
-				document.getElementById('showFPS').checked = saveSettings['showFPS'];
-
-				this.globalVolume = saveSettings['globalVolume'];
-				document.getElementById('globalVolume').value = saveSettings['globalVolume']*100;
-
-				this.backgroundVolume = saveSettings['backgroundVolume'];
-				document.getElementById('backgroundVolume').value = saveSettings['backgroundVolume']*100;
-
-				this.undeadVolume = saveSettings['undeadVolume'];
-				document.getElementById('undeadVolume').value = saveSettings['undeadVolume']*100;
-
-				this.shotVolume = saveSettings['shotVolume'];
-				document.getElementById('shotVolume').value = saveSettings['shotVolume']*100;
-
-				this.punchVolume = saveSettings['punchVolume'];
-				document.getElementById('punchVolume').value = saveSettings['punchVolume']*100;
-
-				this.walkVolume = saveSettings['walkVolume'];
-				document.getElementById('walkVolume').value = saveSettings['walkVolume']*100;
-
-				this.addListener();
+			let saveSettings = (!res['error'])? res['data'] : {
+				showFPS: false,
+				globalVolume: 1,
+				backgroundVolume: 1,
+				undeadVolume: 1,
+				shotVolume: 1,
+				punchVolume: 1,
+				walkVolume: 1
 			}
+
+			this.showFPS = saveSettings['showFPS'];
+			document.getElementById('showFPS').checked = saveSettings['showFPS'];
+			document.querySelector('span#FPS').style.display = (this.showFPS) ? 'block' : 'none';
+
+			this.globalVolume = saveSettings['globalVolume'];
+			document.getElementById('globalVolume').value = saveSettings['globalVolume']*100;
+
+			this.backgroundVolume = saveSettings['backgroundVolume'];
+			document.getElementById('backgroundVolume').value = saveSettings['backgroundVolume']*100;
+
+			this.undeadVolume = saveSettings['undeadVolume'];
+			document.getElementById('undeadVolume').value = saveSettings['undeadVolume']*100;
+
+			this.shotVolume = saveSettings['shotVolume'];
+			document.getElementById('shotVolume').value = saveSettings['shotVolume']*100;
+
+			this.punchVolume = saveSettings['punchVolume'];
+			document.getElementById('punchVolume').value = saveSettings['punchVolume']*100;
+
+			this.walkVolume = saveSettings['walkVolume'];
+			document.getElementById('walkVolume').value = saveSettings['walkVolume']*100;
+
+			this.addListener();
 		});
 		
 	}
@@ -72,6 +71,7 @@ class GameSettings{
 	addListener(){
 		document.getElementById('showFPS').addEventListener('change', ()=>{
 			this.showFPS = document.getElementById('showFPS').checked;
+			document.querySelector('span#FPS').style.display = (this.showFPS) ? 'block' : 'none';
 			this.syncData()
 		});
 		document.getElementById('globalVolume').addEventListener('change', ()=>{

@@ -11,7 +11,7 @@ function map(){
 
 				$gameID = uniqid();
 
-				$_SESSION[$gameID] = array('start'=>round(microtime(true) * 1000));
+				$_SESSION[$gameID] = array('map'=> $res['mapID'],'start'=>round(microtime(true) * 1000));
 				
 				// sleep(5);
 				return json_encode(array(

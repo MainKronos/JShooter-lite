@@ -18,7 +18,7 @@ class Entity{
 	render(ctx){console.log('Funzione render() non inizializzata.')}
 }
 
-var attrito = 100000; // attrito terreno
+const attrito = 100000; // attrito terreno
 
 export class Player extends Entity{
 	// classe giocatore
@@ -131,10 +131,10 @@ export class Player extends Entity{
 		// rederizza il giocatore
 
 		if (this.health>0) {
-			draw(ctx).human(this.x,this.y,this.angle);
-			draw(ctx).healthBar(this.x, this.y, this.health);
+			draw(ctx).human(Math.round(this.x),Math.round(this.y),this.angle);
+			draw(ctx).healthBar(Math.round(this.x), Math.round(this.y), this.health);
 		} else {
-			draw(ctx).deadHuman(this.x,this.y,this.angle);
+			draw(ctx).deadHuman(Math.round(this.x),Math.round(this.y),this.angle);
 		}
 
 		
@@ -186,8 +186,8 @@ export class Enemy extends Entity{
 		let tAngle = Math.atan2(distY, distX);
 		let inAllerta = Math.pow(distX,2)+Math.pow(distY,2)<=Math.pow(this.target.alert,2); // se si trova nel raggio di azione
 		let speed = {
-			x: inAllerta ? Math.cos(tAngle)*this.maxSpeed * ((this.health <= 15) ? -1 : 1) : 0,
-			y: inAllerta ? Math.sin(tAngle)*this.maxSpeed * ((this.health <= 15) ? -1 : 1) : 0
+			x: inAllerta ? Math.cos(tAngle)*this.maxSpeed * ((this.health <= 15 && this.target.health >= 15) ? -0.5 : 1) : 0,
+			y: inAllerta ? Math.sin(tAngle)*this.maxSpeed * ((this.health <= 15 && this.target.health >= 15) ? -0.5 : 1) : 0
 		}
 		this.angle = inAllerta ? tAngle : this.angle;
 
@@ -247,10 +247,10 @@ export class Enemy extends Entity{
 	render(ctx){
 
 		if (this.health>0) {
-			draw(ctx).undead(this.x,this.y,this.angle);
-			draw(ctx).healthBar(this.x, this.y, this.health);
+			draw(ctx).undead(Math.round(this.x),Math.round(this.y),this.angle);
+			draw(ctx).healthBar(Math.round(this.x), Math.round(this.y), this.health);
 		} else {
-			draw(ctx).deadUndead(this.x,this.y);
+			draw(ctx).deadUndead(Math.round(this.x),Math.round(this.y));
 		}
 
 		
@@ -292,7 +292,7 @@ export class Bullet extends Entity{
 	}
 	render(ctx){
 		if(this.toBeDeleted) return;
-		draw(ctx).bullet(this.x,this.y,this.angle);
+		draw(ctx).bullet(Math.round(this.x),Math.round(this.y),this.angle);
 		// this.hitbox.render(ctx);
 		return this;
 	}
@@ -313,7 +313,7 @@ export class Wall extends Entity{
 		}
 	}
 	render(ctx){
-		draw(ctx).wall(this.x,this.y,this.size,this.color);
+		draw(ctx).wall(Math.round(this.x),Math.round(this.y),this.size);
 		// this.hitbox.render(ctx);
 	}
 }
