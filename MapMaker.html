@@ -46,7 +46,8 @@
 			var cmd = 1;
 			var press = true;
 
-			const len = 30;
+			const len = 16;
+			const door = 2;
 			
 			let table = document.querySelector("table");
 
@@ -54,7 +55,12 @@
 				let row = table.insertRow();
 				for (let j=0; j<len; j++) {
 					let cell = row.insertCell();
-					cell.style.backgroundColor = (i==0 || i==len-1 || j==0 || j==len-1 ) ? 'black' : 'white';
+					cell.style.backgroundColor = 
+					(
+						((i==0 || i==len-1) && (j>=Math.floor((len+door)/2) || j<(len-door)/2)) ||
+						((j==0 || j==len-1) && (i>=Math.floor((len+door)/2) || i<(len-door)/2))
+					) ? 'black' : 'white';
+
 					cell.addEventListener('click', ()=>{
 						if(press){
 							if(cmd==1) cell.style.backgroundColor = 'white';

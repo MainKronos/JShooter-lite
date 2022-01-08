@@ -273,7 +273,7 @@ export class Bullet extends Entity{
 		this.maxSpeed = speed;
 		this.radius = radius;
 		this.damage = Math.floor(Math.random() * (20 - 10 + 1) ) + 10;
-		this.knockback = 2000;
+		this.knockback = 1500;
 		this.toBeDeleted = false; // se è da eliminare
 
 	}

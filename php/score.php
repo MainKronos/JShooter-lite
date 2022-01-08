@@ -19,8 +19,8 @@ function score(){
 				// se la durata della partita inviata dal client è inferiore di 1 secondi alla differenza della durata calcolata dal server
 				if(($ricezione - $session['start'] - $score <= 1000) && ($ricezione - $session['start'] - $score > 0)){
 					$username = $_SESSION['username'];
-					$map = $session['map'];
-					db()->exec("CALL UpdateScore('$username', '$map', $score);");
+					$dscore = date("Y-m-d H:i:s");
+					db()->exec("CALL UpdateScore('$username', $score, $dscore);");
 					return json_encode(array(
 						'error' => false
 					));
