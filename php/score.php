@@ -20,7 +20,7 @@ function score(){
 				if(($ricezione - $session['start'] - $score <= 1000) && ($ricezione - $session['start'] - $score > 0)){
 					$username = $_SESSION['username'];
 					$dscore = date("Y-m-d H:i:s");
-					db()->exec("CALL UpdateScore('$username', $score, $dscore);");
+					db()->exec("CALL UpdateScore('$username', $score, '$dscore');");
 					return json_encode(array(
 						'error' => false
 					));

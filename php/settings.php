@@ -12,7 +12,7 @@ function settings(){
 			}
 			
 		}elseif($_SERVER["REQUEST_METHOD"] == "GET"){
-			if($_SESSION["settings"]){
+			if(isset($_SESSION["settings"])){
 				return json_encode(array(
 					'error' => false,
 					'data' => $_SESSION["settings"]

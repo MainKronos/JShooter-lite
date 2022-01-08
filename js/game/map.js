@@ -70,6 +70,7 @@ export class MapProcessor{
 	}
 	generate(){
 		this.player = new Player(0,0,input);
+		let spownpoints = [];
 		for (let y = 0; y < this.TextMap.length; y++) {
 			let row = this.TextMap[y];
 		
@@ -79,10 +80,13 @@ export class MapProcessor{
 				switch (char) {
 					case 'W': this.walls.push(new Wall(x*this.blockSize, y*this.blockSize, this.blockSize)); break;
 					case 'E': this.enemies.push(new Enemy(x*this.blockSize, y*this.blockSize,this.player)); break;
-					case 'P': this.player.x = x*this.blockSize; this.player.y = y*this.blockSize; break;
+					case 'P': spownpoints.push({x:x*this.blockSize, y:y*this.blockSize}); break;
 				}
 			}
 		}
+		let sp = spownpoints[Math.floor(Math.random()*spownpoints.length)];
+		this.player.x = sp.x;
+		this.player.y = sp.y;
 	}
 	deleteEntity(entity){
 		// cancella un entita
