@@ -1,11 +1,11 @@
-table{
+div.leaderboard table{
 	border-collapse: collapse;
 	width: 50%;
 	max-width: 500px;
 	text-align: center;
 }
 
-th{
+div.leaderboard th{
 	padding: 15px;
 	border-bottom: 1px solid rgba(45,45,45,1);
 	color: rgba(255, 204, 0, 0.4);
@@ -15,7 +15,7 @@ th{
 	font-weight: 400;
 }
 
-td{
+div.leaderboard td{
 	padding: 15px;
 	border-bottom: 1px solid rgba(45,45,45,1);
 	font-family: 'Typewriter';
