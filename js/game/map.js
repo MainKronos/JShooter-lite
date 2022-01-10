@@ -112,12 +112,12 @@ export class MapProcessor{
 		let entities = this.entities.filter(elem => {
 			if(!elem.hitbox.enable) return false;
 			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert*1.5,2)) return false;
-			if(
-				!((this.player.x-this.blockSize)*this.scale-this.canvas.width/2<=elem.x*this.scale) || 
-				!(elem.x*this.scale <=(this.player.x+this.blockSize)*this.scale+this.canvas.width/2) ||
-				!((this.player.y-this.blockSize)*this.scale-this.canvas.height/2<=elem.y*this.scale) || 
-				!(elem.y*this.scale <=(this.player.y+this.blockSize)*this.scale+this.canvas.height/2)
-			) return false;
+			if(!(
+				(this.player.x-this.blockSize)*this.scale-this.canvas.width/2<=elem.x*this.scale && 
+				elem.x*this.scale <=(this.player.x+this.blockSize)*this.scale+this.canvas.width/2 &&
+				(this.player.y-this.blockSize)*this.scale-this.canvas.height/2<=elem.y*this.scale && 
+				elem.y*this.scale <=(this.player.y+this.blockSize)*this.scale+this.canvas.height/2
+			)) return false;
 			return true;
 		});
 
@@ -132,13 +132,7 @@ export class MapProcessor{
 
 				let r1 = Math.sqrt(Math.pow(entity1.x-entity2.x,2) + Math.pow(entity1.y-entity2.y,2));
 				let r2 = entity1.hitbox.radius+entity2.hitbox.radius;
-				if(r1>r2) continue; // se la distanza tra le 2 entità è maggiore della somma dei loro raggi
-
-				// console.log("test");
-
-				entity1.hitbox.update();
-				entity2.hitbox.update();
-				
+				if(r1>r2) continue; // se la distanza tra le 2 entità è maggiore della somma dei loro raggi				
 
 
 				if(hitboxOverlap(entity1.hitbox, entity2.hitbox)){
@@ -183,14 +177,16 @@ export class MapProcessor{
 		let fEntities = this.entities.filter(elem => {
 			if(!elem.hitbox.enable) return false;
 			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert*1.5,2)) return false;
-			if(
-				!((this.player.x-this.blockSize)*this.scale-this.canvas.width/2<=elem.x*this.scale) || 
-				!(elem.x*this.scale <=(this.player.x+this.blockSize)*this.scale+this.canvas.width/2) ||
-				!((this.player.y-this.blockSize)*this.scale-this.canvas.height/2<=elem.y*this.scale) || 
-				!(elem.y*this.scale <=(this.player.y+this.blockSize)*this.scale+this.canvas.height/2)
-			) return false;
+			if(!(
+				(this.player.x-this.blockSize)*this.scale-this.canvas.width/2<=elem.x*this.scale && 
+				elem.x*this.scale <=(this.player.x+this.blockSize)*this.scale+this.canvas.width/2 &&
+				(this.player.y-this.blockSize)*this.scale-this.canvas.height/2<=elem.y*this.scale && 
+				elem.y*this.scale <=(this.player.y+this.blockSize)*this.scale+this.canvas.height/2
+			)) return false;
 			return true;
-		})
+		});
+
+
 		for(let entity of fEntities){
 			entity.update(dt);
 		}
@@ -209,7 +205,7 @@ export class MapProcessor{
 		// gestione camera //////////////////////////////////////
 		ctx.translate(Math.round(this.canvas.width/2),Math.round(this.canvas.height/2));
 		ctx.scale(this.scale,this.scale);
-		ctx.translate(Math.round(-this.player.x), Math.round(-this.player.y)); // mette il giocatore al centro della mappa
+		ctx.translate(-this.player.x, -this.player.y); // mette il giocatore al centro della mappa
 
 		/////////////////////////////////////////////////
 

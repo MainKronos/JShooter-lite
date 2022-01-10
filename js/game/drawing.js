@@ -462,27 +462,17 @@ export function draw(ctx){
 		ctx.shadowBlur = 0;
 		ctx.translate(-x,-y);
 	}
-	function hitBox(x,y,width,height,angle=0){
+	function hitBox(x, y, type='rect', args={}){
 		ctx.save();
 		ctx.translate(x, y);
-		ctx.rotate(angle);
 
 		ctx.beginPath();
-		// if(type=='arcH'){
-		// 	ctx.arc(0,-height/2+width/2,width/2,0,Math.PI*2);
-		// 	ctx.arc(0,height/2-width/2,width/2,0,Math.PI*2);
-		// 	ctx.moveTo(0,-height/2);
-		// 	ctx.lineTo(0,height/2);
-		// 	ctx.rect(-width/2,-height/2+width/2,width,height-width);
-		// }else if(type=='arcW'){
-		// 	ctx.arc(-width/2+height/2,0,height/2,0,Math.PI*2);
-		// 	ctx.arc(width/2-height/2,0,height/2,0,Math.PI*2);
-		// 	ctx.moveTo(-width/2,0);
-		// 	ctx.lineTo(width/2,0);
-		// 	ctx.rect(-width/2+height/2,-height/2,width-height,height);
-		// }else{
-		// }
-		ctx.rect(-width/2,-height/2,width,height);
+		if(type=='rect'){
+			ctx.rect(-args['width']/2,-args['height']/2,args['width'],args['height']);
+		}else{
+			ctx.arc(0,0,args['radius'], 0, Math.PI*2);
+		}
+
 		ctx.closePath();
 		ctx.strokeStyle = 'black';
 		// ctx.fill();

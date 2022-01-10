@@ -9,6 +9,7 @@ class GameSettings{
 		.then((res)=>{
 			let saveSettings = (!res['error'])? res['data'] : {
 				showFPS: false,
+				showHitBox: false,
 				globalVolume: 1,
 				backgroundVolume: 1,
 				undeadVolume: 1,
@@ -20,6 +21,9 @@ class GameSettings{
 			this.showFPS = saveSettings['showFPS'];
 			document.getElementById('showFPS').checked = saveSettings['showFPS'];
 			document.querySelector('span#FPS').style.display = (this.showFPS) ? 'block' : 'none';
+
+			this.showHitBox = saveSettings['showHitBox'];
+			document.getElementById('showHitBox').checked = saveSettings['showHitBox'];
 
 			this.globalVolume = saveSettings['globalVolume'];
 			document.getElementById('globalVolume').value = saveSettings['globalVolume']*100;
@@ -46,6 +50,7 @@ class GameSettings{
 	syncData(){
 		let saveSettings = {
 			showFPS: this.showFPS,
+			showHitBox: this.showHitBox,
 			globalVolume: this.globalVolume,
 			backgroundVolume: this.backgroundVolume,
 			undeadVolume: this.undeadVolume,
@@ -72,31 +77,35 @@ class GameSettings{
 		document.getElementById('showFPS').addEventListener('change', ()=>{
 			this.showFPS = document.getElementById('showFPS').checked;
 			document.querySelector('span#FPS').style.display = (this.showFPS) ? 'block' : 'none';
-			this.syncData()
+			this.syncData();
+		});
+		document.getElementById('showHitBox').addEventListener('change', ()=>{
+			this.showHitBox = document.getElementById('showHitBox').checked;
+			this.syncData();
 		});
 		document.getElementById('globalVolume').addEventListener('change', ()=>{
 			this.globalVolume = document.getElementById('globalVolume').value/100;
-			this.syncData()
+			this.syncData();
 		})
 		document.getElementById('backgroundVolume').addEventListener('change', ()=>{
 			this.backgroundVolume = document.getElementById('backgroundVolume').value/100;
-			this.syncData()
+			this.syncData();
 		})
 		document.getElementById('undeadVolume').addEventListener('change', ()=>{
 			this.undeadVolume = document.getElementById('undeadVolume').value/100;
-			this.syncData()
+			this.syncData();
 		})
 		document.getElementById('shotVolume').addEventListener('change', ()=>{
 			this.shotVolume = document.getElementById('shotVolume').value/100;
-			this.syncData()
+			this.syncData();
 		})
 		document.getElementById('punchVolume').addEventListener('change', ()=>{
 			this.punchVolume = document.getElementById('punchVolume').value/100;
-			this.syncData()
+			this.syncData();
 		})
 		document.getElementById('walkVolume').addEventListener('change', ()=>{
 			this.walkVolume = document.getElementById('walkVolume').value/100;
-			this.syncData()
+			this.syncData();
 		})
 	}
 }

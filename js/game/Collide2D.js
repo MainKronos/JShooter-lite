@@ -4,6 +4,12 @@
 
 
 export class Collide2D{
+
+	dist(x1,y1,x2,y2){
+
+		return Math.sqrt(Math.pow(x2 - x1,2)+Math.pow(y2 - y1,2))
+	}
+
 	collideRectRect(x, y, w, h, x2, y2, w2, h2) {
 		//2d
 		//add in a thing to detect rectMode CENTER
