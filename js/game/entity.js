@@ -18,7 +18,7 @@ class Entity{
 	render(ctx){console.log('Funzione render() non inizializzata.')}
 }
 
-const attrito = 10000; // attrito terreno
+const attrito = 1000; // attrito terreno
 
 export class Player extends Entity{
 	// classe giocatore
@@ -65,12 +65,20 @@ export class Player extends Entity{
 
 		// console.log(this.hitbox.collision.filter(el=>el instanceof Wall).length);
 
+
 		// aggiornamento contraccolpo
 		if(this.hitbox.collision.length>0){
-			for(let entity of this.hitbox.collision.filter(el=>el instanceof Bullet || el instanceof Enemy)){
+			for(let entity of this.hitbox.collision.filter(el=>el instanceof Bullet)){
 				this.health -= entity.damage;
+
+				let angle = Math.atan2(entity.startY - this.y, entity.startX - this.x);
+
+				this.resSpeed.x -= Math.cos(angle)*entity.knockback;
+				this.resSpeed.y -= Math.sin(angle)*entity.knockback;
 			}
-			for(let entity of this.hitbox.collision.filter(el=>el instanceof Player || el instanceof Enemy || el instanceof Bullet)){
+			for(let entity of this.hitbox.collision.filter(el=>el instanceof Player || el instanceof Enemy)){
+				if(entity instanceof Enemy) this.health -= entity.damage;
+
 				this.resSpeed.x -= Math.sign(entity.x - this.x)*entity.knockback;
 				this.resSpeed.y -= Math.sign(entity.y - this.y)*entity.knockback;
 			}
@@ -78,19 +86,26 @@ export class Player extends Entity{
 				let dx = entity.x - this.x;
 				let dy = entity.y - this.y;
 
+				let ex = (dx>0) ? entity.x - entity.size/2 : entity.x + entity.size/2;
+				let ey = (dy>0) ? entity.y - entity.size/2 : entity.y + entity.size/2;
+
+				let angle = Math.atan2(ey-this.y, ex-this.x);
+
 				if(Math.abs(dx) >= Math.abs(dy)){
-					if(Math.sign(speed.x) == Math.sign(dx)){
-						let ex = (dx>0) ? entity.x - entity.size/2 : entity.x + entity.size/2;
-						speed.x = 0;
-						this.x = ex - Math.sign(dx)*this.hitbox.radius;
-					}
-				}
-				if(Math.abs(dy) >= Math.abs(dx)){
-					if(Math.sign(speed.y) == Math.sign(dy)){
-						let ey = (dy>0) ? entity.y - entity.size/2 : entity.y + entity.size/2;
-						speed.y = 0;
-						this.y = ey - Math.sign(dy)*this.hitbox.radius;
-					}
+					if(dy * Math.sin(angle) > 0){
+						this.x = ex - Math.cos(angle)*(this.hitbox.radius-0.5);
+						speed.y -= Math.sign(dy)*Math.abs(speed.x*Math.cos(angle));
+					} 
+					else this.x = ex - Math.sign(dx)*this.hitbox.radius;
+					if(Math.sign(speed.x) == Math.sign(dx)) speed.x = 0;
+
+				}else if(Math.abs(dy) >= Math.abs(dx)){
+					if(dx * Math.cos(angle) > 0){
+						this.y = ey - Math.sin(angle)*(this.hitbox.radius-0.5);
+						speed.x -= Math.sign(dx)*Math.abs(speed.y*Math.sin(angle));
+					} 
+					else this.y = ey - Math.sign(dy)*this.hitbox.radius;
+					if(Math.sign(speed.y) == Math.sign(dy)) speed.y = 0;
 				}
 			}
 			this.hitbox.collision = [];
@@ -154,8 +169,8 @@ export class Player extends Entity{
 			// spara un colpo
 			this.audio.shot(); // audio
 			this.reload = this.timeReload;
-			let bulletX = this.x + 140 * Math.cos(this.angle);
-			let bulletY = this.y + 140 * Math.sin(this.angle);
+			let bulletX = this.x + 100 * Math.cos(this.angle);
+			let bulletY = this.y + 100 * Math.sin(this.angle);
 
 			return [new Bullet(bulletX, bulletY, this.angle)];
 		}else{
@@ -186,7 +201,6 @@ export class Enemy extends Entity{
 		if (this.health <= 0) return this;
 		
 		let distance = this.maxSpeed * dt; // distanza percorsa
-		// Todo: da fare uguale al player
 
 		let distX = this.target.x - this.x;
 		let distY = this.target.y - this.y;
@@ -208,8 +222,13 @@ export class Enemy extends Entity{
 		if(this.hitbox.collision.length>0){
 			for(let entity of this.hitbox.collision.filter(el=>el instanceof Bullet)){
 				this.health -= entity.damage;
+
+				let angle = Math.atan2(entity.startY - this.y, entity.startX - this.x);
+
+				this.resSpeed.x -= Math.cos(angle)*entity.knockback;
+				this.resSpeed.y -= Math.sin(angle)*entity.knockback;
 			}
-			for(let entity of this.hitbox.collision.filter(el=>el instanceof Player || el instanceof Bullet || el instanceof Enemy)){
+			for(let entity of this.hitbox.collision.filter(el=>el instanceof Player || el instanceof Enemy)){
 				if(entity instanceof Player) this.audio.punch();
 				
 				this.resSpeed.x -= Math.sign(entity.x - this.x)*entity.knockback;
@@ -219,19 +238,26 @@ export class Enemy extends Entity{
 				let dx = entity.x - this.x;
 				let dy = entity.y - this.y;
 
+				let ex = (dx>0) ? entity.x - entity.size/2 : entity.x + entity.size/2;
+				let ey = (dy>0) ? entity.y - entity.size/2 : entity.y + entity.size/2;
+
+				let angle = Math.atan2(ey-this.y, ex-this.x);
+
 				if(Math.abs(dx) >= Math.abs(dy)){
-					if(Math.sign(speed.x) == Math.sign(dx)){
-						let ex = (dx>0) ? entity.x - entity.size/2 : entity.x + entity.size/2;
-						speed.x = 0;
-						this.x = ex - Math.sign(dx)*this.hitbox.radius;
-					}
-				}
-				if(Math.abs(dy) >= Math.abs(dx)){
-					if(Math.sign(speed.y) == Math.sign(dy)){
-						let ey = (dy>0) ? entity.y - entity.size/2 : entity.y + entity.size/2;
-						speed.y = 0;
-						this.y = ey - Math.sign(dy)*this.hitbox.radius;
-					}
+					if(dy * Math.sin(angle) > 0){
+						this.x = ex - Math.cos(angle)*(this.hitbox.radius);
+						speed.y -= Math.sign(dy)*Math.abs(speed.x*Math.cos(angle));
+					} 
+					else this.x = ex - Math.sign(dx)*this.hitbox.radius;
+					if(Math.sign(speed.x) == Math.sign(dx)) speed.x = 0;
+
+				}else if(Math.abs(dy) >= Math.abs(dx)){
+					if(dx * Math.cos(angle) > 0){
+						this.y = ey - Math.sin(angle)*(this.hitbox.radius);
+						speed.x -= Math.sign(dx)*Math.abs(speed.y*Math.sin(angle));
+					} 
+					else this.y = ey - Math.sign(dy)*this.hitbox.radius;
+					if(Math.sign(speed.y) == Math.sign(dy)) speed.y = 0;
 				}
 			}
 			this.hitbox.collision = [];
@@ -288,7 +314,7 @@ export class Bullet extends Entity{
 		this.maxSpeed = speed;
 		this.radius = radius;
 		this.damage = Math.floor(Math.random() * (20 - 10 + 1) ) + 10;
-		this.knockback = 1500;
+		this.knockback = 2000;
 		this.toBeDeleted = false; // se è da eliminare
 
 	}

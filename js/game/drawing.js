@@ -463,7 +463,6 @@ export function draw(ctx){
 		ctx.translate(-x,-y);
 	}
 	function hitBox(x, y, type='rect', args={}){
-		ctx.save();
 		ctx.translate(x, y);
 
 		ctx.beginPath();
@@ -473,12 +472,11 @@ export function draw(ctx){
 			ctx.arc(0,0,args['radius'], 0, Math.PI*2);
 		}
 
-		ctx.closePath();
 		ctx.strokeStyle = 'black';
 		// ctx.fill();
 		ctx.stroke();
 
-		ctx.restore();
+		ctx.translate(-x, -y);
 	}
 	function background(x,y,width,height){
 		let pattern = ctx.createPattern(bgImage, 'repeat');

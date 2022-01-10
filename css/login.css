@@ -32,32 +32,12 @@ input[type='text']:invalid, input[type='password']:invalid{
   	animation-duration: .5s;
 }
 
-p{
-	min-height: 1.25em;
-  	line-height: 1.25;
-	font-family: 'Typewriter';
-	color: rgba(45,45,45,1);
-}
-
 p.error{
 	color: #ff4444;
 	text-shadow: 0 0 8px;
 }
 
-p.logsign > a{
-	text-decoration: none;
-	color: rgba(255, 204, 0, 0.4);
-}
-p.logsign > a:hover{
-	color: rgba(255, 204, 0, .99);
-	text-shadow:
-				0 -2px 8px, 
-				0 0 2px, 
-				0 0 5px #ff7e00, 
-				0 0 15px #ff4444, 
-				0 0 2px #ff7e00, 
-				0 2px 3px #000;
-}
+
 
 
 form{

@@ -70,15 +70,3 @@ function showError(err){
 		pass.setCustomValidity('');
 	},1000);
 }
-
-
-window.onload = function(){
-	fetch("../api/account/")
-	.then((response)=> response.json(), ()=>{})
-	.then((response)=>{
-		if(!response['error']){
-			// inizializzatore
-			document.getElementById('username').textContent = response['data']['username'];
-		}
-	});
-}

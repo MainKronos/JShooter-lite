@@ -110,14 +110,8 @@ export class MapProcessor{
 	hitboxCollision(){
 		// caso tipo box
 		let entities = this.entities.filter(elem => {
-			if(!elem.hitbox.enable) return false;
-			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert*1.5,2)) return false;
-			if(!(
-				(this.player.x-this.blockSize)*this.scale-this.canvas.width/2<=elem.x*this.scale && 
-				elem.x*this.scale <=(this.player.x+this.blockSize)*this.scale+this.canvas.width/2 &&
-				(this.player.y-this.blockSize)*this.scale-this.canvas.height/2<=elem.y*this.scale && 
-				elem.y*this.scale <=(this.player.y+this.blockSize)*this.scale+this.canvas.height/2
-			)) return false;
+			if(!elem.hitbox.enable) return false; // se l'hitbox NON è abilitata
+			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert*1.5,2)) return false; // se le entità si trovano FUORI dal raggio di allerta del giocatore
 			return true;
 		});
 
@@ -125,15 +119,9 @@ export class MapProcessor{
 			let entity1 = entities[i];
 
 			for(let j=i+1; j<entities.length; j++){
-				// counter++;
 				let entity2 = entities[j];
 				
-				if(entity1 instanceof Wall && entity2 instanceof Wall) continue; // è irrilevante se 2 muri collidono
-
-				let r1 = Math.sqrt(Math.pow(entity1.x-entity2.x,2) + Math.pow(entity1.y-entity2.y,2));
-				let r2 = entity1.hitbox.radius+entity2.hitbox.radius;
-				if(r1>r2) continue; // se la distanza tra le 2 entità è maggiore della somma dei loro raggi				
-
+				if(entity1 instanceof Wall && entity2 instanceof Wall) continue; // è irrilevante se 2 muri collidono			
 
 				if(hitboxOverlap(entity1.hitbox, entity2.hitbox)){
 					// console.log(entity1.constructor.name, entity2.constructor.name);
@@ -177,12 +165,6 @@ export class MapProcessor{
 		let fEntities = this.entities.filter(elem => {
 			if(!elem.hitbox.enable) return false;
 			if(Math.pow(elem.x - this.player.x,2) + Math.pow(elem.y - this.player.y,2) > Math.pow(this.player.alert*1.5,2)) return false;
-			if(!(
-				(this.player.x-this.blockSize)*this.scale-this.canvas.width/2<=elem.x*this.scale && 
-				elem.x*this.scale <=(this.player.x+this.blockSize)*this.scale+this.canvas.width/2 &&
-				(this.player.y-this.blockSize)*this.scale-this.canvas.height/2<=elem.y*this.scale && 
-				elem.y*this.scale <=(this.player.y+this.blockSize)*this.scale+this.canvas.height/2
-			)) return false;
 			return true;
 		});
 

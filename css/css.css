@@ -13,13 +13,12 @@ html, body {
 	width: 100%;
 	height: 100%;
 	background: black;
-	color: rgba(45,45,45,1);
+	color: rgb(70, 70, 70);
 	margin: 0;
 	padding: 0;
 }
 
 header{
-	color: rgba(45,45,45,1);
 	font-family: 'Capture';
 	size: 1.5em;
 	margin: 10px;
@@ -71,6 +70,27 @@ h1{
 	letter-spacing: .5rem;
 	font-weight: 400;
 	/* filter: blur(0.8px); */
+}
+
+p{
+	min-height: 1.25em;
+  	line-height: 1.25;
+	font-family: 'Typewriter';
+}
+
+p > a{
+	text-decoration: none;
+	color: rgba(255, 204, 0, 0.4);
+}
+p > a:hover{
+	color: rgba(255, 204, 0, .99);
+	text-shadow:
+				0 -2px 8px, 
+				0 0 2px, 
+				0 0 5px #ff7e00, 
+				0 0 15px #ff4444, 
+				0 0 2px #ff7e00, 
+				0 2px 3px #000;
 }
 
 .title{
