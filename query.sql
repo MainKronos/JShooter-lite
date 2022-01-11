@@ -5,14 +5,14 @@ USE JShooter;
 
 
 CREATE TABLE User(
-    username VARCHAR(255) PRIMARY KEY,
-    pass VARCHAR(255) NOT NULL,
+	username VARCHAR(255) PRIMARY KEY,
+	pass VARCHAR(255) NOT NULL,
 	registration DATETIME NOT NULL
 );
 
 CREATE TABLE Map(
-    mapID INT AUTO_INCREMENT PRIMARY KEY,
-    map JSON NOT NULL
+	mapID INT AUTO_INCREMENT PRIMARY KEY,
+	map JSON NOT NULL
 );
 
 CREATE TABLE Score(
@@ -29,8 +29,8 @@ DELIMITER $$
 CREATE PROCEDURE UpdateScore(
 IN _username VARCHAR(255), IN _score INTEGER, IN _dscore DATETIME
 ) BEGIN
-    INSERT INTO Score(username, score, dscore) VALUE
-    (_username, _score, _dscore);
+	INSERT INTO Score(username, score, dscore) VALUE
+	(_username, _score, _dscore);
 END $$
 DELIMITER ;
 
@@ -126,186 +126,16 @@ INSERT INTO User VALUES
 ('jsleany1d','4959fa00ce535c4bb301b73c62abe5cec5e14e9a2803541f42bedc998ef3c3f1','2021-05-22 21:20:40');
 
 INSERT INTO Map(map) VALUES
-('[
-	"WWWWWWW  WWWWWWW",
-	"WP W        W  W",
-	"W  W        W  W",
-	"W  W  WWWW  W  W",
-	"W  W  WE W  W  W",
-	"W  W  W  W  W  W",
-	"W  W  W  W  W  W",
-	"   W  W     W   ",
-	"   W  W     W   ",
-	"W  W  W  W  W  W",
-	"W  W  W  W  W  W",
-	"W  W  W EW  W  W",
-	"W  W  WWWW  W  W",
-	"W        W     W",
-	"W        W     W",
-	"WWWWWWW  WWWWWWW"
-]'),
-('[
-	"WWWWWWW  WWWWWWW",
-	"W     W  W    EW",
-	"W     W  W     W",
-	"W  W  W  WWWW  W",
-	"W  W  W  W  W  W",
-	"W  W  W  W  W  W",
-	"W  WWWW  W  W  W",
-	"       P        ",
-	"                ",
-	"WWWW  W  W  WWWW",
-	"WE W  W  W  W  W",
-	"W  W  W  W  W  W",
-	"W  W  W  WWWW  W",
-	"W     W     W  W",
-	"W     W     W  W",
-	"WWWWWWW  WWWWWWW"
-]'),
-('[
-	"WWWWWWW  WWWWWWW",
-	"W             EW",
-	"W              W",
-	"W  W           W",
-	"W  W           W",
-	"W  W           W",
-	"W  W  WWWWWWWWWW",
-	"   WP           ",
-	"   W            ",
-	"W  W  WWWWWWWWWW",
-	"W  W           W",
-	"W  W           W",
-	"W  W           W",
-	"W  W           W",
-	"W  W          EW",
-	"WWWWWWW  WWWWWWW"
-]'),
-('[
-	"WWWWWWW  WWWWWWW",
-	"W             EW",
-	"W              W",
-	"W  WWWWWWWWWW  W",
-	"W     W     W  W",
-	"W     W     W  W",
-	"WWWW  W  W  W  W",
-	"   W  W  W  W   ",
-	"   W  WP W  W   ",
-	"W  W  WWWW  W  W",
-	"W  W        W  W",
-	"W  WE       W  W",
-	"W  WWWWWWWWWW  W",
-	"W              W",
-	"W              W",
-	"WWWWWWW  WWWWWWW"
-]'),
-('[
-	"WWWWWWW  WWWWWWW",
-	"W              W",
-	"WE             W",
-	"WWWWWWWWWWWWW  W",
-	"W           W  W",
-	"W           W  W",
-	"W     WWWW  W  W",
-	"      WP    W   ",
-	"      W     W   ",
-	"W     W     W  W",
-	"W     W     W  W",
-	"W     W     W  W",
-	"W     W     W  W",
-	"W  E  W        W",
-	"W     W        W",
-	"WWWWWWW  WWWWWWW"
-]'),
-('[
-	"WWWWWWW  WWWWWWW",
-	"W     W  W     W",
-	"W     W  W    PW",
-	"W  W  W  W  WWWW",
-	"W  W  W        W",
-	"W  W  W        W",
-	"W  W  WWWWWWW  W",
-	"   W            ",
-	"   WE           ",
-	"W  W  WWWWWWW  W",
-	"W  W  W        W",
-	"W  W  W      E W",
-	"W  W  W  WWWW  W",
-	"W     W  W     W",
-	"W     W  W     W",
-	"WWWWWWW  WWWWWWW"
-]'),
-('[
-	"WWWWWWW  WWWWWWW",
-	"W              W",
-	"W              W",
-	"W  W     W     W",
-	"W  W     W     W",
-	"W  W  E  W     W",
-	"W  W     W  WWWW",
-	"   W     W      ",
-	"   W     W      ",
-	"WWWWWWW  W     W",
-	"W        W     W",
-	"W        W  E  W",
-	"WWWWWWW  W     W",
-	"WP       W     W",
-	"W        W     W",
-	"WWWWWWW  WWWWWWW"
-]'),
-('[
-	"WWWWWWW  WWWWWWW",
-	"W E   W        W",
-	"W     W        W",
-	"WWW   W       WW",
-	"W     W    E WWW",
-	"W     W     WWWW",
-	"W   WWW     WWWW",
-	"      W         ",
-	"         W      ",
-	"W        W     W",
-	"W     WWWW     W",
-	"W     WWWWWWW  W",
-	"W    WW     W  W",
-	"W   WWW        W",
-	"W PWWWW  W     W",
-	"WWWWWWW  WWWWWWW"
-]'),
-('[
-	"WWWWWWW  WWWWWWW",
-	"W              W",
-	"W              W",
-	"W           W  W",
-	"W   WWWWW   W  W",
-	"W    EW     WE W",
-	"W     W     WWWW",
-	"   WWWWWWWWWW   ",
-	"   W            ",
-	"W  W          WW",
-	"W  W   WW    WWW",
-	"W     WW    WW W",
-	"W     W    WW  W",
-	"W     W   WW   W",
-	"W    PW  WW    W",
-	"WWWWWWW  WWWWWWW"
-]')
-('[
-	"WWWWWWW  WWWWWWW",
-	"W              W",
-	"W              W",
-	"W  WWWWWWWWWW  W",
-	"W  W           W",
-	"W  W           W",
-	"W  W  WWWWWWW  W",
-	"   W  WP    W   ",
-	"   W  W     W   ",
-	"W  W  WWWW  W  W",
-	"W  W     W  W  W",
-	"W  WE    W  W  W",
-	"W  WWWW  W  W  W",
-	"W     W  W     W",
-	"W    EW  W     W",
-	"WWWWWWW  WWWWWWW"
-]');
+('["WWWWWWW  WWWWWWW","WP W        W  W","W  W        W  W","W  W  WWWW  W  W","W  W  WE W  W  W","W  W  W  W  W  W","W  W  W  W  W  W","   W  W     W   ","   W  W     W   ","W  W  W  W  W  W","W  W  W  W  W  W","W  W  W EW  W  W","W  W  WWWW  W  W","W        W     W","W        W     W","WWWWWWW  WWWWWWW"]'),
+('["WWWWWWW  WWWWWWW","W     W  W    EW","W     W  W     W","W  W  W  WWWW  W","W  W  W  W  W  W","W  W  W  W  W  W","W  WWWW  W  W  W","       P        ","                ","WWWW  W  W  WWWW","WE W  W  W  W  W","W  W  W  W  W  W","W  W  W  WWWW  W","W     W     W  W","W     W     W  W","WWWWWWW  WWWWWWW"]'),
+('["WWWWWWW  WWWWWWW","W             EW","W              W","W  W           W","W  W           W","W  W           W","W  W  WWWWWWWWWW","   WP           ","   W            ","W  W  WWWWWWWWWW","W  W           W","W  W           W","W  W           W","W  W           W","W  W          EW","WWWWWWW  WWWWWWW"]'),
+('["WWWWWWW  WWWWWWW","W             EW","W              W","W  WWWWWWWWWW  W","W     W     W  W","W     W     W  W","WWWW  W  W  W  W","   W  W  W  W   ","   W  WP W  W   ","W  W  WWWW  W  W","W  W        W  W","W  WE       W  W","W  WWWWWWWWWW  W","W              W","W              W","WWWWWWW  WWWWWWW"]'),
+('["WWWWWWW  WWWWWWW","W              W","WE             W","WWWWWWWWWWWWW  W","W           W  W","W           W  W","W     WWWW  W  W","      WP    W   ","      W     W   ","W     W     W  W","W     W     W  W","W     W     W  W","W     W     W  W","W  E  W        W","W     W        W","WWWWWWW  WWWWWWW"]'),
+('["WWWWWWW  WWWWWWW","W     W  W     W","W     W  W    PW","W  W  W  W  WWWW","W  W  W        W","W  W  W        W","W  W  WWWWWWW  W","   W            ","   WE           ","W  W  WWWWWWW  W","W  W  W        W","W  W  W      E W","W  W  W  WWWW  W","W     W  W     W","W     W  W     W","WWWWWWW  WWWWWWW"]'),
+('["WWWWWWW  WWWWWWW","W              W","W              W","W  W     W     W","W  W     W     W","W  W  E  W     W","W  W     W  WWWW","   W     W      ","   W     W      ","WWWWWWW  W     W","W        W     W","W        W  E  W","WWWWWWW  W     W","WP       W     W","W        W     W","WWWWWWW  WWWWWWW"]'),
+('["WWWWWWW  WWWWWWW","W E   W        W","W     W        W","WWW   W       WW","W     W    E WWW","W     W     WWWW","W   WWW     WWWW","      W         ","         W      ","W        W     W","W     WWWW     W","W     WWWWWWW  W","W    WW     W  W","W   WWW        W","W PWWWW  W     W","WWWWWWW  WWWWWWW"]'),
+('["WWWWWWW  WWWWWWW","W              W","W              W","W           W  W","W   WWWWW   W  W","W    EW     WE W","W     W     WWWW","   WWWWWWWWWW   ","   W            ","W  W          WW","W  W   WW    WWW","W     WW    WW W","W     W    WW  W","W     W   WW   W","W    PW  WW    W","WWWWWWW  WWWWWWW"]'),
+('["WWWWWWW  WWWWWWW","W              W","W              W","W  WWWWWWWWWW  W","W  W           W","W  W           W","W  W  WWWWWWW  W","   W  WP    W   ","   W  W     W   ","W  W  WWWW  W  W","W  W     W  W  W","W  WE    W  W  W","W  WWWW  W  W  W","W     W  W     W","W    EW  W     W","WWWWWWW  WWWWWWW"]');
 
 INSERT INTO Score(username, score, dscore) VALUES
 ('ihulanced', 173071, '2021-12-18 20:33:42'),

@@ -1,16 +1,15 @@
 
 var nPage = 0; // pagina corrente
-var endData = false; // se sono stati scaricati tutti i dati
+var get_data = false; // se sono stati scaricati tutti i dati
 
 function getData(page=0){
 	const tbl = document.querySelector('table > tbody');
 	fetch(`../api/leaderboard/?page=${page}`)
 	.then(res=>res.json())
 	.then(res=>{
-		if(res['data'].length==0){
-			endData = true;
-			return
-		}
+		if(res['data'].length==0) return;
+
+		get_data = true;
 
 		for(let row of res['data']){
 			let tr = document.createElement('tr');
@@ -36,7 +35,8 @@ window.onload = function(){
 
 window.addEventListener('scroll', function(){
 	if(window.scrollY + window.innerHeight >= document.body.offsetHeight-100){
-		if(!endData){
+		if(get_data){
+			get_data = false;
 			nPage++;
 			getData(nPage);
 		}
