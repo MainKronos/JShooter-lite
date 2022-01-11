@@ -53,7 +53,7 @@ BEGIN
 		SELECT 
 			u.username, 
 			u.registration, 
-			IF(ISNULL(s.score), 0, (10000000/s.score)+LOG10(s.matches+10)*10) as score, 
+			IF(ISNULL(s.score), 0, (3*POW(10,14))/POW(s.score/1000, 6)+LOG10(s.matches+10)*10) as score, 
 			IFNULL(s.matches,0) as matches
 		FROM 
 			User u LEFT OUTER JOIN (

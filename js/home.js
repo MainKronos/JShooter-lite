@@ -25,7 +25,7 @@ function start(){
 	fetch("./api/account/")
 	.then((res)=> res.json())
 	.then((res)=>{
-		let usernameEl = document.getElementById('username');
+		let usernameEl = document.querySelector('span#username > span');
 		let loginEl = document.getElementById('login');
 		let playEl = document.getElementById('play');
 

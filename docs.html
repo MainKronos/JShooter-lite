@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+		<title>Documentazione</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="./css/css.css">
+	</head>
+	<body>
+		<div class='container'>
+			<header>
+				<h2 class='title'>D<span>O</span>CUMENTAZIONE</h2>
+				Back to <a href="/">HOME</a>
+			</header>
+			<p class='docs'>
+				<em>JShooter</em> è uno sparattutto in terza persona il cui obbiettivo è di uccidere tutti gli zombie nella mappa.
+				<br>
+				Per poter giocare è necessario pima fare il <a href="./login/">login</a>, o il <a href="./login/">signup</a> se ancora non è stato creato un account, che servirà poi per registrare il <em>punteggio</em> della partita. Il proprio <em>Username</em> è sempre visibile in alto a sinistra della schermata nella <a href="./">Home</a> o durante il gioco.
+				<br>
+				I <em>Comandi</em> sono uguali agli standard che hanno tutti i giochi, cioè 'W' per andare avanti, 'S' per andare indietro, 'A' per andare a sinistra e 'D' per andare a destra, e premendo il tasto 'Esc' è possibile azionare il menù di gioco dove è possibile modificare il volume e altre piccole personalizzazioni. Per sparare basta puntare il mouse nella direzione di dove si vuole che il proiettile vada e tenere premuso il pulsante sinistro.
+				<br>
+				Le <em>Mappe</em> sono generate in modo casuale e sono possibili 10<sup>4</sup> combinazioni differenti, la grandezza è sempre uguale e corrisponde ad un quadrato di 31x31 blocchi (blocco ≃ 150px). Lo spawnpoint (posizione del giocatore all'inizio del gioco) è circa casuale. Il numero degli zombie presenti nella mappa è sempre fisso ed è 8.
+				<br>
+				Il <em>Punteggio</em> è calcolato in base al numero di vittorie e al tempo minimo impiegato per finire una partita, la funzione usata è: (3⋅10<sup>14</sup>)/(score/1000)<sup>6</sup>+Log<sub>10</sub>(wins+10)⋅10.
+			</p>
+		</div>
+	<script src="./js/docs.js"></script>
+	</body>
+</html>

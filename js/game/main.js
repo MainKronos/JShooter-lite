@@ -7,7 +7,7 @@ window.onload = function(){
 	.then((response)=>{
 		if(!response['error']){
 			let username = response['data']['username'];
-			document.getElementById('username').textContent = username;
+			document.querySelector('span#username > span').textContent = username;
 			let game = new GameBoard(username);
 		}else{
 			window.location.replace("./login/");
