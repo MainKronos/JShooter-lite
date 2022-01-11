@@ -1,10 +1,17 @@
-window.onload = function(){
 
+var nPage = 0; // pagina corrente
+var endData = false; // se sono stati scaricati tutti i dati
+
+function getData(page=0){
 	const tbl = document.querySelector('table > tbody');
-	// const tbdy = document.createElement('tbody');
-	fetch('../api/leaderboard/')
+	fetch(`../api/leaderboard/?page=${page}`)
 	.then(res=>res.json())
 	.then(res=>{
+		if(res['data'].length==0){
+			endData = true;
+			return
+		}
+
 		for(let row of res['data']){
 			let tr = document.createElement('tr');
 
@@ -19,3 +26,19 @@ window.onload = function(){
 		}
 	});
 }
+
+window.onload = function(){
+
+	// creazione tabella
+	getData(nPage);
+	
+}
+
+window.addEventListener('scroll', function(){
+	if(window.scrollY + window.innerHeight >= document.body.offsetHeight-100){
+		if(!endData){
+			nPage++;
+			getData(nPage);
+		}
+	}
+});

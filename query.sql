@@ -34,9 +34,17 @@ IN _username VARCHAR(255), IN _score INTEGER, IN _dscore DATETIME
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS GetScore;
 DELIMITER $$
-CREATE PROCEDURE GetScore() 
+CREATE PROCEDURE GetScore(
+	IN _page INTEGER, IN _size INTEGER
+) 
 BEGIN
+
+	DECLARE offset INTEGER DEFAULT 0;
+
+	SET offset = _page*_size;
+
 	SELECT 
 		k.username, 
 		ROUND(k.score,0) as score, 
@@ -56,7 +64,8 @@ BEGIN
 	)as k
 	ORDER BY 
 		k.score DESC, 
-		k.registration ASC;
+		k.registration ASC
+	LIMIT offset, _size;
 END $$
 DELIMITER ;
 

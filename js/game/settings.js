@@ -86,27 +86,27 @@ class GameSettings{
 		document.getElementById('globalVolume').addEventListener('change', ()=>{
 			this.globalVolume = document.getElementById('globalVolume').value/100;
 			this.syncData();
-		})
+		});
 		document.getElementById('backgroundVolume').addEventListener('change', ()=>{
 			this.backgroundVolume = document.getElementById('backgroundVolume').value/100;
 			this.syncData();
-		})
+		});
 		document.getElementById('undeadVolume').addEventListener('change', ()=>{
 			this.undeadVolume = document.getElementById('undeadVolume').value/100;
 			this.syncData();
-		})
+		});
 		document.getElementById('shotVolume').addEventListener('change', ()=>{
 			this.shotVolume = document.getElementById('shotVolume').value/100;
 			this.syncData();
-		})
+		});
 		document.getElementById('punchVolume').addEventListener('change', ()=>{
 			this.punchVolume = document.getElementById('punchVolume').value/100;
 			this.syncData();
-		})
+		});
 		document.getElementById('walkVolume').addEventListener('change', ()=>{
 			this.walkVolume = document.getElementById('walkVolume').value/100;
 			this.syncData();
-		})
+		});
 	}
 }
 

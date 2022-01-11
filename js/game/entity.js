@@ -93,7 +93,6 @@ export class Player extends Entity{
 
 				if(Math.abs(dx) >= Math.abs(dy)){
 					if(dy * Math.sin(angle) > 0){
-						this.x = ex - Math.cos(angle)*(this.hitbox.radius-0.5);
 						speed.y -= Math.sign(dy)*Math.abs(speed.x*Math.cos(angle));
 					} 
 					else this.x = ex - Math.sign(dx)*this.hitbox.radius;
@@ -101,7 +100,6 @@ export class Player extends Entity{
 
 				}else if(Math.abs(dy) >= Math.abs(dx)){
 					if(dx * Math.cos(angle) > 0){
-						this.y = ey - Math.sin(angle)*(this.hitbox.radius-0.5);
 						speed.x -= Math.sign(dx)*Math.abs(speed.y*Math.sin(angle));
 					} 
 					else this.y = ey - Math.sign(dy)*this.hitbox.radius;
@@ -245,7 +243,6 @@ export class Enemy extends Entity{
 
 				if(Math.abs(dx) >= Math.abs(dy)){
 					if(dy * Math.sin(angle) > 0){
-						this.x = ex - Math.cos(angle)*(this.hitbox.radius);
 						speed.y -= Math.sign(dy)*Math.abs(speed.x*Math.cos(angle));
 					} 
 					else this.x = ex - Math.sign(dx)*this.hitbox.radius;
@@ -253,7 +250,6 @@ export class Enemy extends Entity{
 
 				}else if(Math.abs(dy) >= Math.abs(dx)){
 					if(dx * Math.cos(angle) > 0){
-						this.y = ey - Math.sin(angle)*(this.hitbox.radius);
 						speed.x -= Math.sign(dx)*Math.abs(speed.y*Math.sin(angle));
 					} 
 					else this.y = ey - Math.sign(dy)*this.hitbox.radius;

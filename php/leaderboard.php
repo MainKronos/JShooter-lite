@@ -3,7 +3,11 @@ require $_SERVER['DOCUMENT_ROOT'].'/php/db.php';
 function leaderboard(){
 	if($_SERVER["REQUEST_METHOD"] == "GET"){
 		// prende lo score
-		$result = db()->query("CALL GetScore();");
+
+		$page_size = 50;
+		$page = $_GET["page"]; // inizia da 0
+
+		$result = db()->query("CALL GetScore($page, $page_size);");
 
 		$res = array();
 

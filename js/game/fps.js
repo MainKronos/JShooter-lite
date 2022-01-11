@@ -20,6 +20,7 @@ export class FPSCounter{
 			this.counter++;
 			this.tmp += (dt==0)?0:(1/dt);
 			document.querySelector('span#FPS').textContent = this.frames;
+			document.querySelector('span#FPS').style.textShadow = (this.tmp/this.counter<50)? '0 0 5px red': '0 0 5px white';
 		}
 	}
 }

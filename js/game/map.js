@@ -21,46 +21,7 @@ export class MapProcessor{
 		this.scale =  Math.max(Math.min(this.canvas.width/1000, this.canvas.height/1000),0.5);
 
 
-		this.TextMap = TextMap
-		// this.TextMap = [
-		// 	'WWWWWWWWWWWWWWWWWWWWWWW',
-		// 	'W           W         W',
-		// 	'W   P    E  W     E   W',
-		// 	'WWWWWWWWWWWWWWWWWWWWWWW',
-		// ]
-
-		// this.TextMap = [
-		// 	"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-		// 	"W       W                E   W",
-		// 	"W   E   W                E   W",
-		// 	"W  W  E W  WWWWWWWWWWWWWWWW  W",
-		// 	"W  W    WEEW          E   W  W",
-		// 	"W  W    W  W          E   W  W",
-		// 	"W  W    W  W  WWWWWWWWWW  W  W",
-		// 	"W  W    W  WEEW        W  W  W",
-		// 	"W  W E  W  W  W        W  W  W",
-		// 	"W  W    W  W  W  WWWW  W  W  W",
-		// 	"W  W    W  W  WEE   W  W  W  W",
-		// 	"W  W E  W  W  W     WEEW  W  W",
-		// 	"W  W    W  W  WWWWWWW  W  W  W",
-		// 	"W  W  E W  W   E       W  W  W",
-		// 	"W  W    W  W   E       WEEW  W",
-		// 	"W  W    W  WWWWWWWWWWWWW  W  W",
-		// 	"W  W    W   E             W  W",
-		// 	"W  W E  W   E             W  W",
-		// 	"W  W    WWWWWWWWWWWWWWWWWWW  W",
-		// 	"W  W    W  W              W  W",
-		// 	"W  W    W  W              W  W",
-		// 	"W  WW  WW  W E   E  E  W  W  W",
-		// 	"W  W    W  W  E     E  W  W  W",
-		// 	"W  W    W  W      E    W  W  W",
-		// 	"W  W    W  W    E      W  W  W",
-		// 	"W  W P  W  W       E   W  W  W",
-		// 	"W  WWWWWW  W  E        W  W  W",
-		// 	"W               E E  E W     W",
-		// 	"W                      W     W",
-		// 	"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
-		// ]
+		this.TextMap = TextMap;
 
 		this.size = {width:(this.TextMap[0].length-1)*this.blockSize, height:this.TextMap.length*this.blockSize};
 		this.generate();
@@ -124,7 +85,6 @@ export class MapProcessor{
 				if(entity1 instanceof Wall && entity2 instanceof Wall) continue; // è irrilevante se 2 muri collidono			
 
 				if(hitboxOverlap(entity1.hitbox, entity2.hitbox)){
-					// console.log(entity1.constructor.name, entity2.constructor.name);
 					entity1.hitbox.collision.push(entity2);
 					entity2.hitbox.collision.push(entity1);
 				}

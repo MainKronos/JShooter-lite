@@ -11,16 +11,16 @@
 
 html, body {
 	width: 100%;
-	height: 100%;
+	/* height: 100%; */
 	background: black;
 	color: rgb(70, 70, 70);
 	margin: 0;
 	padding: 0;
+	font-family: 'Typewriter';
 }
 
 header{
 	font-family: 'Capture';
-	size: 1.5em;
 	margin: 10px;
 	position: absolute;
 	user-select: none;
@@ -54,7 +54,7 @@ h2{
 	margin: 0;
 	color: rgba(255, 204, 0, 0.4);
 	letter-spacing: .5rem;
-	margin: 0 0 35px 0;
+	/* margin: 0 0 35px 0; */
 	font-weight: 400;
 	user-select: none;
 }
@@ -78,11 +78,11 @@ p{
 	font-family: 'Typewriter';
 }
 
-p > a{
+a{
 	text-decoration: none;
 	color: rgba(255, 204, 0, 0.4);
 }
-p > a:hover{
+a:hover{
 	color: rgba(255, 204, 0, .99);
 	text-shadow:
 				0 -2px 8px, 
@@ -231,29 +231,28 @@ span#FPS{
 	text-shadow: 0 0 5px white;
 	display: none;
 	user-select: none;
+	transition: text-shadow 100ms linear;
 }
 
 
-/* SCROLLBAR */
+/* SCROLLBAR ***************************************************************/
 
-/* width */
-::-webkit-scrollbar {
+/* firefox *******/
+html{
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 204, 0, 0.4) rgba(45,45,45,1);
+}
+/* chrome *******/
+html::-webkit-scrollbar {
 	width: 7px;
 }
-
-/* Track */
-::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track {
 	background: rgba(45,45,45,1);
 }
-
-/* Handle */
-::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb {
 	background: rgba(255, 204, 0, 0.4);
-	border-radius: 2px;
 }
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover {
 	background: #ffcc00;
 	box-shadow:
 					0 0 5px #ff7e00, 
