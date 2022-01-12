@@ -34,7 +34,7 @@ export class GameAudio{
 		if(cond && this.audioBackground.paused){
 			this.audioBackground.loop=true;
 			this.audioBackground.volume = settings.globalVolume*settings.backgroundVolume;
-			return this.audioBackground.play().catch(()=>{});
+			return this.audioBackground.play();
 			// .catch((err)=>console.error(`L'utente ha ricaricato manualmente la pagina e l'audio non può essere avviato automaticamente.\n(${err})`));
 		}else if(!cond && !this.audioBackground.paused){
 			this.audioBackground.pause();
