@@ -34,7 +34,7 @@ export class GameAudio{
 		if(cond && this.audioBackground.paused){
 			this.audioBackground.loop=true;
 			this.audioBackground.volume = settings.globalVolume*settings.backgroundVolume;
-			return this.audioBackground.play();
+			return this.audioBackground.play().catch(()=>{});
 			// .catch((err)=>console.error(`L'utente ha ricaricato manualmente la pagina e l'audio non può essere avviato automaticamente.\n(${err})`));
 		}else if(!cond && !this.audioBackground.paused){
 			this.audioBackground.pause();
@@ -46,20 +46,20 @@ export class GameAudio{
 		this.audioShot.pause();
 		this.audioShot.currentTime = 0;
 		this.audioShot.volume = settings.globalVolume*settings.shotVolume;
-		this.audioShot.play();
+		this.audioShot.play().catch(()=>{});
 	}
 	punch(){
 		// audio dell'attacco degli zombie
 		this.audioPunch.pause();
 		this.audioPunch.currentTime = 0;
 		this.audioPunch.volume = settings.globalVolume*settings.punchVolume;
-		this.audioPunch.play();
+		this.audioPunch.play().catch(()=>{});
 	}
 	walk(cond=true){
 		// audio di camminata
 		if(cond && this.audioWalk.paused){
 			this.audioWalk.volume = settings.globalVolume*settings.walkVolume;
-			this.audioWalk.play();
+			this.audioWalk.play().catch(()=>{});
 			this.audioWalk.loop=true;
 		}else if(!cond && !this.audioWalk.paused){
 			this.audioWalk.pause();
@@ -71,7 +71,7 @@ export class GameAudio{
 		if(cond && this.audioUndead.paused){
 			this.audioUndead.currentTime = Math.floor(Math.random()*this.audioUndead.duration);
 			this.audioUndead.volume = settings.globalVolume*settings.undeadVolume;
-			this.audioUndead.play();
+			this.audioUndead.play().catch(()=>{});
 		}else if(!cond && !this.audioUndead.paused){
 			this.audioUndead.pause();
 			// 

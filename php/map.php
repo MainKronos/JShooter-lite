@@ -19,12 +19,6 @@ function map(){
 				$bl_map = json_decode($res[$bl][1]);
 				$br_map = json_decode($res[$br][1]);
 
-				// error_log($tl);
-				// error_log($tr);
-				// error_log($bl);
-				// error_log($br);
-
-
 				$map = [];
 
 				$map_size = 16*2-1;

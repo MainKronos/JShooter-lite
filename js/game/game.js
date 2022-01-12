@@ -130,7 +130,6 @@ export class GameBoard{
 		this.ctx.fillStyle = (val=='good')? 'rgba(255, 204, 0, .99)' : 'rgba(255, 204, 0, 0.4)';
 		this.ctx.shadowColor = '#ff7e00';
 		this.ctx.shadowBlur = (val=='good')? 2 : 0;
-		// this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.ctx.fillText((val=='good')? 'Win' : 'Game Over', this.canvas.width/2, this.canvas.height/2);
 
@@ -198,8 +197,7 @@ export class GameBoard{
 				gameID: this.id,
 				score: btoa(vettore)
 			})
-		})
-		.then(res=>console.log(res), err=>console.log(err));
+		});
 	}
 	
 }

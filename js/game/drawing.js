@@ -13,10 +13,6 @@ var wallImg = new Image();
 wallImg.src = './res/img/wall.png';
 
 export function draw(ctx){
-
-	// let bg = new Image();
-	// bg.src = './res/pattern.png';
-	// let bag = ctx.createPattern(bg, 'repeat');
 	
 	function human(x,y,angle){
 		const color = {
@@ -294,15 +290,11 @@ export function draw(ctx){
 	}
 	function deadUndead(x,y){
 
-		// undead(x,y,angle);
-
 		ctx.save();
 		
 		ctx.translate(x, y);
 
 		ctx.roundRect(-50,-95,100,155,10);
-		// ctx.shadowBlur = 5;
-		// ctx.shadowColor = '#542a00';
 		ctx.globalAlpha = 0.6;
 		ctx.fillStyle = '#542a00';
 		ctx.strokeStyle = '#331a00';
@@ -321,13 +313,10 @@ export function draw(ctx){
 		ctx.strokeStyle = 'black';
 		ctx.lineWidth = 1.5;
 		ctx.fillStyle = 'grey';
-		// ctx.shadowBlur = 10;
-		// ctx.shadowColor = '#542a00';
 		ctx.fill();
 		ctx.stroke();
 
 		// R.I.P.
-		// ctx.save();
 		ctx.fillStyle = 'black';
 		ctx.textAlign = 'center';
 		ctx.font = '25px serif';
@@ -335,7 +324,6 @@ export function draw(ctx){
 		ctx.strokeStyle = '#4d4d4d';
 		ctx.lineWidth = 1;
 		ctx.strokeText('R.I.P.', 0, -20);
-		// ctx.restore();
 
 		// scritte (liniette)
 		ctx.beginPath();
@@ -353,22 +341,6 @@ export function draw(ctx){
 		ctx.lineWidth = 3;
 		ctx.stroke();
 		
-		// terra
-		// ctx.save();
-		// let offset = Math.PI*0.3
-		// ctx.beginPath();
-		// ctx.arc(0,130,100,Math.PI+offset,-offset);
-		// ctx.closePath();
-		// ctx.shadowBlur = 5;
-		// ctx.shadowColor = '#542a00';
-		// ctx.fillStyle = '#542a00';
-		// ctx.strokeStyle = '#331a00';
-		// ctx.lineWidth = 2;
-		// ctx.fill();
-		// ctx.stroke();
-		// ctx.restore();
-
-
 		ctx.restore();
 	}
 	function bullet(x,y,angle){
@@ -376,7 +348,6 @@ export function draw(ctx){
 
 		ctx.translate(x, y);
 		ctx.rotate(angle-Math.PI/2);
-		// ctx.translate(0, 140);
 
 		// proiettile
 		ctx.beginPath();
@@ -437,8 +408,6 @@ export function draw(ctx){
 
 		let hColor = `hsl(${(health/100)*120}, 100%, 50%)`;
 		let grd = ctx.createLinearGradient(-60, -70, 60, -70);
-		// let grd = ctx.createLinearGradient(0, -70, 0, -60);
-		// let grd = ctx.createRadialGradient(0,-70,10, 0,-70,100);
 		grd.addColorStop(0, 'black');
 		grd.addColorStop(0.5, hColor);
 		grd.addColorStop(1, 'black');
@@ -447,7 +416,6 @@ export function draw(ctx){
 
 		ctx.beginPath();
 		ctx.roundRect(- 50, - 70, health, 10, 5);
-		// ctx.roundRect(- 50, - 70, health, 400, 500);
 		ctx.fillStyle = grd;
 		ctx.fill();
 
@@ -473,7 +441,6 @@ export function draw(ctx){
 		}
 
 		ctx.strokeStyle = 'black';
-		// ctx.fill();
 		ctx.stroke();
 
 		ctx.translate(-x, -y);
@@ -484,8 +451,6 @@ export function draw(ctx){
 		ctx.beginPath();
 		ctx.rect(x,y,width,height);
 		ctx.fillStyle = pattern;
-		// ctx.shadowColor = 'black';
-		// ctx.shadowBlur = 5;
 		ctx.fill();
 	}
 	function oldEffect(x,y,width,height){
@@ -508,7 +473,6 @@ export function draw(ctx){
 		gradient.addColorStop(1, 'rgba(0,0,0,0)');
 
 		ctx.save();
-		// ctx.translate(-radius,-radius);
 		ctx.beginPath();
 		ctx.arc(x,y,radius,0,Math.PI*2);
 		ctx.shadowColor = 'black';
@@ -522,7 +486,6 @@ export function draw(ctx){
 	function poiter(x,y){
 
 		ctx.lineWidth = 1;
-		// ctx.translate(-radius,-radius);
 		ctx.beginPath();
 		ctx.moveTo(x-12,y);
 		ctx.lineTo(x+12,y);

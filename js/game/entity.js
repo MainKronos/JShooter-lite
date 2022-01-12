@@ -9,7 +9,6 @@ class Entity{
 		this.y = y;
 		this.angle = 0;	
 		this.maxSpeed = 0;
-		// this.knockback = 0;
 		this.toBeDeleted = false;
 
 		this.audio = null; // audio
@@ -27,7 +26,6 @@ export class Player extends Entity{
 		this.angle = 0;
 
 		this.hitbox = new HitBox(this,'circle',{radius:60});
-		// this.hitbox.enable = false;
 
 		this.maxSpeed = 500; // px/s massima
 		this.resSpeed = {x:0,y:0} //velocità residua
@@ -62,8 +60,6 @@ export class Player extends Entity{
 
 		speed.x += this.resSpeed.x;
 		speed.y += this.resSpeed.y;
-
-		// console.log(this.hitbox.collision.filter(el=>el instanceof Wall).length);
 
 
 		// aggiornamento contraccolpo
@@ -109,24 +105,11 @@ export class Player extends Entity{
 			this.hitbox.collision = [];
 		}
 
-
-		// aggiornamento posizione
-
-		// this.resSpeed.x += Math.abs(this.resSpeed.x) < Math.abs(speed.x) ? speed.x : 0;
-		// this.resSpeed.y += Math.abs(this.resSpeed.y) < Math.abs(speed.y) ? speed.y : 0;
-		
-		
-		
-
 		let move = { // movimento
 			x: speed.x*dt,
 			y: speed.y*dt
 		}
 
-		
-		
-		// this.x += distance*((this.inputs.key.right - this.inputs.key.left)*Math.cos(this.inputs.mouse.angle)-(this.inputs.key.down - this.inputs.key.up)*Math.sin(this.inputs.mouse.angle));
-		// this.y += distance*((this.inputs.key.right - this.inputs.key.left)*Math.sin(this.inputs.mouse.angle)+(this.inputs.key.down - this.inputs.key.up)*Math.cos(this.inputs.mouse.angle));
 		this.x += move.x;
 		this.y += move.y;
 
@@ -198,8 +181,6 @@ export class Enemy extends Entity{
 	update(dt){
 		if (this.health <= 0) return this;
 		
-		let distance = this.maxSpeed * dt; // distanza percorsa
-
 		let distX = this.target.x - this.x;
 		let distY = this.target.y - this.y;
 		let tAngle = Math.atan2(distY, distX);
@@ -259,7 +240,8 @@ export class Enemy extends Entity{
 			this.hitbox.collision = [];
 		}
 
-		
+		if(Math.abs(speed.x) > this.maxSpeed) speed.x = Math.sign(speed.x)*this.maxSpeed;
+		if(Math.abs(speed.y) > this.maxSpeed) speed.x = Math.sign(speed.y)*this.maxSpeed;
 
 		// aggiornamento posizione
 		
@@ -361,18 +343,13 @@ export class HitBox{
 	constructor(entity,type='rect',args={}){
 
 		this.entity = entity;
-		this.type = type;
+		this.type = type; // rect o circle
 		this.width = (type=='rect') ? args['width'] : null;
 		this.height = (type=='rect') ? args['height'] : null;
 		this.radius = (type=='rect') ? Math.sqrt(Math.pow(this.width/2,2) + Math.pow(this.height/2,2)) : args['radius'];
-		// this.points = [];
 		this.enable = true; // hitbox attiva
-		// this.type = type; // arc or box
-		this.collision = [];
+		this.collision = []; // entità in collisione
 		
-	}
-	update(){ // aggiorna i punti dell'hitbox (aggiornare solo se strettamente necessario)
-		// this.points = this.getPoints();
 	}
 
 	render(ctx){
@@ -384,27 +361,5 @@ export class HitBox{
 			args = {radius:this.radius};
 		}
 		draw(ctx).hitBox(this.entity.x, this.entity.y, this.type, args);
-	}
-	
-	getPoints(){ 
-		// ritorna tutti i punti dell'hitbox
-		return [
-			{
-				x: this.entity.x + (this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
-				y: this.entity.y + (this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (this.entity.hitbox.height/2)*Math.cos(this.entity.angle),
-			},
-			{
-				x: this.entity.x + (this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (-this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
-				y: this.entity.y + (this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (-this.entity.hitbox.height/2)*Math.cos(this.entity.angle)
-			},
-			{
-				x: this.entity.x + (-this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (-this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
-				y: this.entity.y + (-this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (-this.entity.hitbox.height/2)*Math.cos(this.entity.angle)
-			},
-			{
-				x: this.entity.x + (-this.entity.hitbox.width/2)*Math.cos(this.entity.angle) - (this.entity.hitbox.height/2)*Math.sin(this.entity.angle),
-				y: this.entity.y + (-this.entity.hitbox.width/2)*Math.sin(this.entity.angle) + (this.entity.hitbox.height/2)*Math.cos(this.entity.angle)
-			}
-		];
 	}
 }
