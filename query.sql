@@ -44,27 +44,33 @@ BEGIN
 	DECLARE offset INTEGER DEFAULT 0;
 
 	SET offset = _page*_size;
+	SET @pos = 0;
 
-	SELECT 
-		k.username, 
-		ROUND(k.score,0) as score, 
-		k.matches
+
+	SELECT p.*
 	FROM (
 		SELECT 
-			u.username, 
-			u.registration, 
-			IF(ISNULL(s.score), 0, (3*POW(10,14))/POW(s.score/1000, 6)+LOG10(s.matches+10)*10) as score, 
-			IFNULL(s.matches,0) as matches
-		FROM 
-			User u LEFT OUTER JOIN (
-				SELECT s.username, MIN(s.score) as score, COUNT(*) as matches
-				FROM Score s
-				GROUP BY s.username
-			) as s on u.username = s.username
-	)as k
-	ORDER BY 
-		k.score DESC, 
-		k.registration ASC
+			k.username, 
+			ROUND(k.score,0) as score, 
+			k.matches,
+			(@pos:=@pos+1) as rank
+		FROM (
+			SELECT 
+				u.username, 
+				u.registration, 
+				IF(ISNULL(s.score), 0, (3*POW(10,14))/POW(s.score/1000, 6)+LOG10(s.matches+10)*10) as score, 
+				IFNULL(s.matches,0) as matches
+			FROM 
+				User u LEFT OUTER JOIN (
+					SELECT s.username, MIN(s.score) as score, COUNT(*) as matches
+					FROM Score s
+					GROUP BY s.username
+				) as s on u.username = s.username
+		)as k
+		ORDER BY 
+			k.score DESC, 
+			k.registration ASC
+	) as p
 	LIMIT offset, _size;
 END $$
 DELIMITER ;

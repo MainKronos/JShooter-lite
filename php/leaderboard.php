@@ -15,7 +15,8 @@ function leaderboard(){
 			$user = $row['username'];
 			$score = $row['score'];
 			$matches = $row['matches'];
-			array_push($res, array('user'=>$user , 'score'=>$score, 'matches'=>$matches));
+			$rank = $row['rank'];
+			array_push($res, array('user'=>$user , 'score'=>$score, 'matches'=>$matches, 'rank'=>$rank));
 		}
 		return json_encode(array(
 			'error' => false,

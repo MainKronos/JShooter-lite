@@ -16,9 +16,16 @@ function getData(page=0){
 
 			
 
-			for(let pro of ['user', 'score']){
+			for(let pro of ['rank', 'user', 'score']){
 				let td = document.createElement('td');
-				td.appendChild(document.createTextNode(row[pro]+((pro=='score') ? ` (${row['matches']})`: '')))
+				if(pro=='rank'){
+					td.appendChild(document.createTextNode(row[pro]+'°'));
+				}else if(pro=='score'){
+					td.appendChild(document.createTextNode(row[pro]+` (${row['matches']})`));
+				}else{
+					td.appendChild(document.createTextNode(row[pro]));
+				}
+				
 				tr.appendChild(td);
 			}			
 			tbl.appendChild(tr);

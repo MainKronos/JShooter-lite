@@ -243,6 +243,20 @@ div.container table{
 	margin: auto;
 }
 
+/* classifica */
+div.container tr:nth-child(1) td:nth-child(1){ /*primo*/
+	color:rgba(255, 204, 0, 0.70);
+	text-shadow:0 -2px 8px, 0 0 2px, 0 0 5px #ff7e00, 0 0 15px #ff4444, 0 0 2px #ff7e00, 0 2px 3px #000;
+}
+div.container tr:nth-child(2) td:nth-child(1){ /*secondo*/
+	color:rgba(204, 204, 204, 0.70);
+	text-shadow:0 -2px 8px, 0 0 2px, 0 0 5px #919191, 0 0 15px #414141, 0 0 2px #919191, 0 2px 3px #000;
+} 
+div.container tr:nth-child(3) td:nth-child(1){ /*terzo*/
+	color:rgba(136, 109, 0, 0.70);
+	text-shadow:0 -2px 8px, 0 0 2px, 0 0 5px #854200, 0 0 15px #572701, 0 0 2px #854200, 0 2px 3px #000;
+} 
+
 div.container th{
 	padding: 15px;
 	border-bottom: 1px solid rgba(45,45,45,1);
