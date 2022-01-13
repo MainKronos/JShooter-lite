@@ -5,7 +5,7 @@ function leaderboard(){
 		// prende lo score
 
 		$page_size = 30;
-		$page = $_GET["page"]; // inizia da 0
+		$page = filter_var($_GET["page"], FILTER_SANITIZE_NUMBER_INT); // inizia da 0
 
 		$result = db()->query("CALL GetScore($page, $page_size);");
 

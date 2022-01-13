@@ -16,6 +16,8 @@ function score(){
 				$score = base64_decode($data['score']);
 				$score = substr($score, $score[0], substr($score, -1));
 
+				$score = filter_var($score, FILTER_SANITIZE_NUMBER_INT);
+
 				// se la durata della partita inviata dal client è inferiore di 1 secondi alla differenza della durata calcolata dal server
 				if(($ricezione - $session['start'] - $score <= 1000) && ($ricezione - $session['start'] - $score > 0)){
 					$username = $_SESSION['username'];

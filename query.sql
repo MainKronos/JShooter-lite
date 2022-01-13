@@ -51,14 +51,14 @@ BEGIN
 	FROM (
 		SELECT 
 			k.username, 
-			ROUND(k.score,0) as score, 
+			IF(ISNULL(k.score), '-', ROUND(k.score,0)) as score, 
 			k.matches,
 			(@pos:=@pos+1) as rank
 		FROM (
 			SELECT 
 				u.username, 
 				u.registration, 
-				IF(ISNULL(s.score), 0, (3*POW(10,14))/POW(s.score/1000, 6)+LOG10(s.matches+10)*10) as score, 
+				s.score/1000 as score, 
 				IFNULL(s.matches,0) as matches
 			FROM 
 				User u LEFT OUTER JOIN (
@@ -68,7 +68,8 @@ BEGIN
 				) as s on u.username = s.username
 		)as k
 		ORDER BY 
-			k.score DESC, 
+			ISNULL(k.score) ASC,
+			k.score ASC, 
 			k.registration ASC
 	) as p
 	LIMIT offset, _size;
