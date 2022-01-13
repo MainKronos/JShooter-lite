@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'].'/php/db.php';
+require 'db.php';
 function login(){
 	// login
 	if($_SERVER["REQUEST_METHOD"] == "POST"){

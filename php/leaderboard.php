@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'].'/php/db.php';
+require 'db.php';
 function leaderboard(){
 	if($_SERVER["REQUEST_METHOD"] == "GET"){
 		// prende lo score

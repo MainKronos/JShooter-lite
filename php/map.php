@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'].'/php/db.php';
+require 'db.php';
 function map(){
 	if($_SERVER["REQUEST_METHOD"] == "GET"){
 		if(isset($_SESSION["username"])){
