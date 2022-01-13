@@ -1,8 +1,5 @@
 // file di home page
 
-
-
-
 function login(){
 	window.location.href='./login/';
 }

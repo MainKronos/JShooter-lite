@@ -35,10 +35,8 @@ export class GameAudio{
 			this.audioBackground.loop=true;
 			this.audioBackground.volume = settings.globalVolume*settings.backgroundVolume;
 			return this.audioBackground.play();
-			// .catch((err)=>console.error(`L'utente ha ricaricato manualmente la pagina e l'audio non può essere avviato automaticamente.\n(${err})`));
 		}else if(!cond && !this.audioBackground.paused){
 			this.audioBackground.pause();
-			// this.audioBackground.currentTime = 0;
 		}
 	}
 	shot(){
@@ -63,7 +61,6 @@ export class GameAudio{
 			this.audioWalk.loop=true;
 		}else if(!cond && !this.audioWalk.paused){
 			this.audioWalk.pause();
-			// this.audioWalk.currentTime = 0;
 		}
 	}
 	undead(cond=true){

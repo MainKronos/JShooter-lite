@@ -12,8 +12,6 @@ export class GameBoard{
 		this.canvas = document.querySelector('canvas#GameBoard');
 
 		this.ctx = this.canvas.getContext('2d', { alpha: false });
-		
-		// this.ctx.filter = `sepia(0)`;
 
 		fetch("./api/map/")
 		.then((response)=> response.json())
@@ -40,7 +38,6 @@ export class GameBoard{
 
 				if(!this.paused) this.start();
 				else this.stop();
-				// else this.render(); // per il render iniziale altrimenti lo schermo è grigio
 			}
 			
 		});
