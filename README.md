@@ -1,5 +1,5 @@
 # JShooter
-## INFO
+
 Progetto per l'esame di Progettazione WEB del corso di Ingegneria Informatica (Triennale) dell'università di Pisa (classe L-8).
 
 ## SETUP
