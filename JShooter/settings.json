@@ -1,19 +1,19 @@
 {
     "application": {
-        "single_instance_guid": "",
+        "single_instance_guid": "648715DD-E425-43F4-A814-1EC8B1F55495",
         "dpi_aware": true
     },
     "debugging": {
         "show_console": false,
         "subprocess_show_console": false,
-        "log_level": "DEBUG4",
+        "log_level": "INFO",
         "log_file": "debug.log"
     },
     "main_window": {
         "title": "JShooter",
         "icon": "./www/favicon.ico",
-        "default_size": [800, 600],
-        "minimum_size": [640, 480],
+        "default_size": [1024, 768],
+        "minimum_size": [800, 600],
         "maximum_size": [0, 0],
         "disable_maximize_button": false,
         "center_on_screen": true,
@@ -41,13 +41,13 @@
     },
     "chrome": {
         "log_file": "debug.log",
-        "log_severity": "default",
+        "log_severity": "disable",
         "cache_path": "webcache",
         "external_drag": false,
         "external_navigation": false,
         "reload_page_F5": true,
         "devtools_F12": false,
-        "remote_debugging_port": 0,
+        "remote_debugging_port": -1,
         "command_line_switches": {},
         "enable_downloads": false,
         "context_menu": {

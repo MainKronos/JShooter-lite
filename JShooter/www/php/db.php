@@ -16,7 +16,7 @@ function db(){
 			
 		}
 		catch(PDOException $exception){
-			error_log("Errore di connessione: " . $exception->getMessage());
+			error_log("Connection Error: " . $exception->getMessage());
 		}
 		return $GLOBALS['conn'];
 	}else{

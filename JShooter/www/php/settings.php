@@ -19,14 +19,14 @@ function settings(){
 				));
 			}
 			return json_encode(array(
-				'error' => 'Nessune impostazioni salvate.',
+				'error' => 'No settings saved.',
 			));
 		}
 		http_response_code(400);
 		return;
 	}
 	return json_encode(array(
-		'error' => 'Utente non loggato.'
+		'error' => 'User not logged in.'
 	));
 }
 ?>

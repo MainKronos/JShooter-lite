@@ -11,7 +11,7 @@ function signup(){
 			} catch (PDOException $e) {
 				if($e->getCode() == '23000'){
 					return json_encode(array(
-						'error' => 'Username non disponibile.'
+						'error' => 'Username not available.'
 					));
 				}
 				return json_encode(array(

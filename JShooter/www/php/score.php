@@ -30,17 +30,16 @@ function score(){
 						'error' => false
 					));
 				}
-				error_log('Errore trasmissione dati.');
 				return json_encode(array(
-					'error' => 'Errore trasmissione dati.'
+					'error' => 'Data transmission error.'
 				));
 			}
 			return json_encode(array(
-				'error' => 'Partita non precedentemente inizializzata.'
+				'error' => 'Game not previously initialized.'
 			));
 		}
 		return json_encode(array(
-			'error' => 'Utente non loggato.'
+			'error' => 'User not logged in.'
 		));
 	}
 	http_response_code(400);

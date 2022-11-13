@@ -8,7 +8,7 @@ function account(){
 			));
 		}else{
 			return json_encode(array(
-				'error' => 'Utente non loggato.'
+				'error' => 'User not logged in.'
 			));
 		}
 	}

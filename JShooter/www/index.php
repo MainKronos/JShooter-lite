@@ -3,7 +3,7 @@ session_start();
 ?>
 
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 	<head>
 		<title>JShooter</title>
 		<meta charset="UTF-8">
@@ -17,9 +17,9 @@ session_start();
 			<button id='play' disabled>PLAY</button>
 			<button id='login'>LOGIN</button>
 			<button id='leaderboard'>LEADERBOARD</button>
-			<p class="logsign">Prima volta? <a href="docs.html">Documentazione</a></p>
+			<p class="logsign">First time? <a href="docs.html">Documentation</a></p>
 		</section>
-		<footer>Made by Lorenzo Chesi</footer>
+		<footer>Made by MainKronos</footer>
 		<script src="./js/home.js"></script>
 	</body>
 </html>

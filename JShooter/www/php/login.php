@@ -18,7 +18,7 @@ function login(){
 				}
 			}
 			return json_encode(array(
-				'error' => 'Credenziali non valide.'
+				'error' => 'Incorrect username or password.'
 			));
 		}
 	}
